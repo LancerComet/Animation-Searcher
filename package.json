@@ -1,0 +1,16 @@
+{
+  "name": "animation-searcher",
+  "version": "2.0.0",
+  "description": "New Version Animation Searcher.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Animation",
+    "Searcher",
+    "LancerComet"
+  ],
+  "author": "LancerComet",
+  "license": "MIT"
+}
