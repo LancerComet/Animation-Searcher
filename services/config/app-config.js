@@ -25,9 +25,10 @@ configuration.consoleText = {
 
 // Meta Info in Pages. | 页面中的 Meta 信息.
 configuration.metaInfo = {
-	keywords: "",
-	description: "",
-	author: configuration.appInfo.author
+	keywords: "动画,漫画,动漫,音乐,二次元,宅,资源,搜索,下载,Animation,ACG,Download,Searcher,Resource,LancerComet",
+	description: "集中下载资源, 节约每滴生命.",
+	author: configuration.appInfo.author,
+	codeName: configuration.appInfo.codeName
 };
 
 module.exports = configuration;
