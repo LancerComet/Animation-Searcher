@@ -21,8 +21,9 @@ configuration.appInfo = {
 
 // Console Text Prefix. | 控制台文字前缀.
 configuration.consoleText = {
-	caution: "Animation Searcher Caution: ",
-	error: "Animation Searcher Error: "
+	info: "\n" + configuration.appInfo.appName + ": ",
+	caution: "\n" + configuration.appInfo.appName + " Caution: ",
+	error: "\n" + configuration.appInfo.appName + " Error: "
 };
 
 // Meta Info in Pages. | 页面中的 Meta 信息.

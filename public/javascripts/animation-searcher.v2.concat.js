@@ -39,7 +39,7 @@
 
         var userAgent = global.navigator.userAgent;
         var oldExpReg = /MSIE [1-8].*]/i;
-        oldExpReg.match(oldExpReg) ? oldBrowserHint () : 0;
+        userAgent.match(oldExpReg) ? oldBrowserHint () : void(0);
 
     })();
     /* =========================================================================================== */
@@ -72,7 +72,7 @@
         }
 
     };
-    /* =========================================== ================================================ */
+    /* =========================================================================================== */
 
 
 
@@ -81,6 +81,7 @@
      *  Internal Function Definition: Only used in Service Logic.
      *  内部方法定义: 仅在业务逻辑中使用, 不对外暴漏.
      */
+
     // Definition: Error Handler in console & for developers only. | 控制台内错误提示.
     // Please note that this function will block Explorer and all functions next won't be executed.
     // 请注意此函数将使用 throw New Error 阻塞浏览器执行接下来的代码.
@@ -123,14 +124,14 @@
      *  ---
      *  @ ngApp: Main Angular Application. (Internal Directive.)
      *  @ ngAppCtrls: Controllers Module of this Angular Application.
-     *  @ ngDirectives: Directives Module of this Angular Application.
+     *  @ ngAppDirectives: Directives Module of this Angular Application.
      */
 
-    // Definition: Angular Application Module.
+    // Definition: Angular Application Module. | ngApp 模块定义.
     var ngApp = angular.module("ngApp", ["ngAnimate", "ngMaterial", "ngSanitize", "ngRoute", "ngAppCtrls", "ngAppDirectives", "ngAppToastCtrl"]);
 
 
-    // Definition: Controllers Module & Configuration.
+    // Definition: Controllers Module & Configuration. | 总控制器模块定义.
     var ngAppCtrls = angular.module("ngAppCtrls", []);
 
     ngAppCtrls.config(["$compileProvider", function ($compileProvider) {
@@ -140,11 +141,11 @@
     }]);
 
 
-    // Definition: Directives Module.
-    var ngDirectives = angular.module("ngDirectives", []);
+    // Definition: Directives Module. | 指令模块定义.
+    var ngAppDirectives = angular.module("ngAppDirectives", []);
 
 
-    // Definition: Toast Module, from Material-Angular.
+    // Definition: Toast Module, from Material-Angular. | Material-Angular Toast 模块定义.
     var ngAppToastCtrl = angular.module("ngAppToastCtrl", ["ngMaterial"]);
     ngAppToastCtrl.controller("ToastCtrl", ["$scope", "$rootScope", "$mdToast", "$animate", function ($scope, $rootScope, $mdToast, $animate) {
 
@@ -251,8 +252,110 @@
      *  ngAppCtrls.directives("NAME", func...);
      */
 
+    // Definition: ActionBar Directive. | ActionBar 指令.
+    ngAppDirectives.directive("actionBar", function () {
+        return {
+            restrict: "E",
+            scope: {},
+            controller: function ($scope, $element, $attrs) {
+
+            },
+            link: function (scope, element, attrs) {
+
+            }
+        }
+    });
+
+
+    // Definition: Left Navigator Drawer Button. | 左侧抽屉菜单按钮.
+    ngAppDirectives.directive("leftnavMenu", function () {
+        return {
+            restrict: "E",
+            scope: true,
+            controller: function ($scope, $element, $attrs) {
+            },
+            link: function (scope, element, attrs) {
+
+                // 以下函数为按钮背景变换所需的函数.
+                // Definition: 背景图片 X 轴动画播放函数.
+                var isRunning = false;
+                function imageAnimationX (targetDom, configure) {
+
+                    /*
+                     @ Configure: {
+                         startPosition: Number,
+                         width: Number,
+                         step: Numner,
+                         interval: Numbuer
+                       }
+                     */
+                    isRunning = true;
+                    targetDom.style.backgroundPositionX = configure.startPosition + "px";  // Reset Background Image Position.
+
+                    var runStep = 1;
+                    var animationInterval = setInterval(function () {
+                        if(runStep > configure.step){
+                            configure.endPosition != undefined ? targetDom.style.backgroundPositionX = configure.endPosition + "px" : void(0);
+                            clearInterval(animationInterval);
+                            isRunning = false;
+                            return;
+                        }
+                        targetDom.style.backgroundPositionX = configure.startPosition + (configure.width * runStep) + "px";
+                        runStep++;
+                    }, configure.interval);
+                }
+
+                // Definition: 按钮点击事件.
+                scope.buttonMotion = function ($event) {
+                    if (isRunning) {
+                        return false;
+                    }
+                    var targetDom = $event.target;
+                    var attr = targetDom.getAttribute("data-status");
+                    var configure = {
+                        start: {
+                            startPosition: 0,
+                            width: 33.3,
+                            step: 16,
+                            interval: 20
+                        },
+                        end: {
+                            startPosition: 532.8,
+                            endPosition: -1,
+                            width: 33.3,
+                            step: 16,
+                            interval: 20
+                        }
+                    };
+
+                    var animationProgress = {
+                        toArrow: function () {
+                            imageAnimationX(targetDom, configure.start);
+                            targetDom.setAttribute("data-status", "arrow");
+                        },
+                        toMenu: function () {
+                            imageAnimationX(targetDom, configure.end);
+                            targetDom.setAttribute("data-status", "menu");
+                        }
+                    };
+
+                    switch (attr) {
+                        case "menu":
+                            animationProgress.toArrow();
+                            break;
+                        case "arrow":
+                            animationProgress.toMenu();
+                            break;
+                    }
+                };
+
+            }
+        }
+    });
+
+
     // Definition: Search Directive. | 搜索模块指令定义.
-    ngDirectives.directive("searchModule", function () {
+    ngAppDirectives.directive("searchModule", function () {
         return {
             restrict: "E",
             scope: true,
@@ -291,7 +394,7 @@
 
 
     // Definition: Site Switcher Directive. | 搜索结果切换按钮指令.
-    ngDirectives.directive("siteSwitcher", function () {
+    ngAppDirectives.directive("siteSwitcher", function () {
         return {
             restrict: "E",
             scope: true,
@@ -322,7 +425,7 @@
 
 
     // Definition: Result Panel Directive. | 结果面板指令.
-    ngDirectives.directive("resultPanel", function () {
+    ngAppDirectives.directive("resultPanel", function () {
         return {
             restrict: "E",
             scope: true,
@@ -370,31 +473,73 @@
    Required Libs:
     - mCustomScrollbar.
  */
-(function (global, $) {
+//(function (global, $) {
+//
+//    // Configure mCustomScrollbar.
+//    function mCustomScrollbar () {
+//        var $targetDom = $("#searchable-sites-list");
+//        $targetDom.mCustomScrollbar({
+//            theme: "dark",
+//            axis: "y",
+//            autoHideScrollbar: true,
+//            scrollButtons: { enable: false },
+//            mouseWheel: { scrollAmount: 300 },
+//            advanced: { updateOnContentResize: true }
+//        });
+//    }
+//
+//    // Remove Loading Splash.
+//    function bodyProgressOut () {
+//        $(".body-merge").addClass("loaded");
+//    }
+//
+//    //Window Loaded Event.
+//    $(window).on("load", function () {
+//        mCustomScrollbar();
+//        bodyProgressOut();
+//    });
+//
+//
+//})(window, window.jQuery);
+/*
+ *  Animation Searcher WebSocket Service By LancerComet at 15:27, 2015/10/9.
+ *  # Carry Your World #
+ *  ---
+ *
+ *  Description:
+ *  ---
+ *  Animation Searcher 的 WebSocket 服务逻辑.
+ *
+ *  Log:
+ *  ---
+ *  V0.1.0 - 15:27, 2015.10.09.
+ *   - 初版.
+ *
+ */
 
-    // Configure mCustomScrollbar.
-    function mCustomScrollbar () {
-        var $targetDom = $("#searchable-sites-list");
-        $targetDom.mCustomScrollbar({
-            theme: "dark",
-            axis: "y",
-            autoHideScrollbar: true,
-            scrollButtons: { enable: false },
-            mouseWheel: { scrollAmount: 300 },
-            advanced: { updateOnContentResize: true }
+(function (global, angular, undefined) {
+
+    var consoleTextPrefix = "Animation Searcher ";
+
+    // Definition: WebSocket event handler for window. | WebSocket 服务逻辑.
+    function socketService () {
+
+        // Error Handler: No Socket.io. | Socket.io 未载入.
+        if(!global.io){
+            throw new Error(consoleTextPrefix + "Error: Socket.io isn't loaded yet, scripts has been stoped.");
+        }
+
+        // Definition: WebSocket Object.
+        var socket = global.io();
+
+        // Connected.
+        socket.on("greeting", function (data) {
+            console.log(consoleTextPrefix + "Info: WebSocket from now on. :)");
+            socket.emit("thank-you-sir", {info: "啊♂啊♂Thank♂You♂Sir"});
         });
+
     }
 
-    // Remove Loading Splash.
-    function bodyProgressOut () {
-        $(".body-merge").addClass("loaded");
-    }
+    angular.element(window).on("load", socketService);
 
-    //Window Loaded Event.
-    $(window).on("load", function () {
-        mCustomScrollbar();
-        bodyProgressOut();
-    });
-
-
-})(window, window.jQuery);
+})(window, window.angular);

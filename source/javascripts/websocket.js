@@ -30,8 +30,9 @@
         var socket = global.io();
 
         // Connected.
-        socket.on("connect", function () {
+        socket.on("greeting", function (data) {
             console.log(consoleTextPrefix + "Info: WebSocket from now on. :)");
+            socket.emit("thank-you-sir", {info: "啊♂啊♂Thank♂You♂Sir"});
         });
 
     }

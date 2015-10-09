@@ -8,15 +8,33 @@
   <head>
     <% include ejs-meta.html %>
     <title><%= title %></title>
+
+    <%# Third-Part Libs Stylesheets. | 三方库样式引用. %>
+    <link href="//cdn.bootcss.com/normalize/3.0.3/normalize.min.css" rel="stylesheet">
+    <link href="/libs/angular-material/angular-material.min.css" rel="stylesheet">
+    <link href="/libs/fontello/css/fontello.css" rel="stylesheet">
+
+    <%# Custom Stylesheets. | 自定义样式表. %>
+    <link rel="stylesheet" href="/stylesheets/animation-searcher.v2.min.css?<%=appConfig.appInfo.version%>"/>
+
   </head>
   
   <body class="w-100 h-100">
 
-  <div class="body-container w-100 h-100" ng-controller="main-controller">
+  <div class="body-container w-100 h-100" ng-controller="mainController">
 
       <%# Header. | 头部区域. %>
-      <header class="header">
-          <nav></nav>
+      <header class="header pd-common bk-test" layout="column">
+
+          <%# Action bar in Header. | 顶部 Action bar. %>
+          <action-bar class="action-bar" layout="row" flex>
+
+              <%# Left Navigator drawer Button. | 左侧抽屉菜单按钮. %>
+              <leftnav-menu class="left-nav-menu bk-cover no-outline" ng-click="buttonMotion($event)" data-status="menu">
+              </leftnav-menu>
+
+          </action-bar>
+
       </header>
 
       <%# Main Part. | 主体部分. %>
