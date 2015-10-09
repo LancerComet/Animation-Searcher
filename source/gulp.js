@@ -15,6 +15,7 @@ var autoprefixer = require("gulp-autoprefixer");
 // Definition: Path of source files. | 源文件路径设置.
 var sourcePath = {
     stylus: "stylus/**/*.styl",
+    oldBrowsers: "stylus-old-browsers/**/*.styl",
     javascripts: "javascripts/**/*"
 };
 
@@ -22,7 +23,7 @@ var sourcePath = {
 var distPath = {
     stylesheets: "../public/stylesheets",
     javascripts: "../public/javascripts"
-}
+};
 
 
 // Stylus Task Definition.
@@ -38,10 +39,23 @@ gulp.task("stylus", function () {
         .pipe(gulp.dest(distPath.stylesheets));
 });
 
+// Stylus: Old Browsers Page Stylesheet.
+gulp.task("stylus-old-browsers", function () {
+    gulp.src(sourcePath.oldBrowsers)
+        .pipe(stylus({
+            compress: true
+        }))
+        .pipe(autoprefixer({
+            browsers: ['> 1%', 'last 3 versions', 'Firefox ESR', 'Opera 12', "ie 8", "ie 9"]
+        }))
+        .pipe(rename("old-browsers.min.css"))
+        .pipe(gulp.dest(distPath.stylesheets));
+});
+
 
 // Stylus Watching Task.
 gulp.task("stylus-watch", function () {
-    gulp.watch(sourcePath.stylus, ["stylus"]);
+    gulp.watch(sourcePath.stylus, ["stylus", "stylus-old-browsers"]);
 });
 
 
@@ -65,4 +79,4 @@ gulp.task("JS-watch", function () {
 
 
 
-gulp.task("default", ["stylus", "stylus-watch", "JS-uglify", "JS-watch"]);
+gulp.task("default", ["stylus", "stylus-old-browsers", "stylus-watch", "JS-uglify", "JS-watch"]);

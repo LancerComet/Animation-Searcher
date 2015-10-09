@@ -2,7 +2,15 @@
     Animation Searcher V2.0 Application.js Edited By LancerComet at 22:02, 2015.10.08.
     # Carry Your World #
     ---
+
+    Description:
+    ---
     程序主入口文件.
+
+    Caution:
+    ---
+    程序引用了 Socket.io, 为了正常使用其内置路由 "/socket.io", 已不再使用 Express 框架的 www 文件, 转在 app.js 中直接设置服务器.
+
 */
 
 // Third-part libs Requirement. | 三方库引用.
@@ -14,16 +22,33 @@ var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var ejs = require("ejs");
 var app = express();
+var appConfig = require("./services/config/app-config");
 
-// Socket.io Setup.
+
+// Socket.io & Server Setup.
+var port = process.env.PORT || 3000;
+app.set("port", port);
+
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
+
+
+// WebSocket Service Initialization.
+require("./services/controllers/ctrl-index-websocket")(io);
+
+http.listen(port, function () {
+    console.log(appConfig.appInfo.appName + " By © 2015 " + appConfig.appInfo.appName + ".");
+    console.log(appConfig.appInfo.sign);
+    console.log("Server is running at port " + app.get("port") + ".");
+});
+
 
 // View Engine Setup. Using ".html" as extend name.
 // 模板设置, 使用 ".html" 作为扩展名.
 app.set("views", path.join(__dirname, "views"));
 app.engine("html", ejs.__express);
 app.set("view engine", "html");
+
 
 // Middle-ware configuration. | 中间件设置.
 app.use(favicon(__dirname + "/public/favicon.ico"));
@@ -37,12 +62,6 @@ app.use(express.static(path.join(__dirname, "public")));
 var routes = require("./services/main-route");
 app.use("/", routes);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error("Not Found");
-  err.status = 404;
-  next(err);
-});
 
 // error handlers
 

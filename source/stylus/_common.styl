@@ -1,0 +1,111 @@
+/*
+    Animation Searcher Stylus @ Common Part By LancerComet at 14:02, 2015.10.09.
+    # Carry Your World #
+    ---
+    样式表通用样式定义.
+
+    Log:
+    ---
+    V0.1.0 - 14:02, 2015.10.09.
+     - 初版.
+*/
+
+
+
+
+// Variables Definition. | 变量定义.
+// ===================================================================
+
+/* Box-Sizing. */
+// ...
+
+/* Texting-node. */
+$basedFontSize = 16px;
+$fontFamily = "微软雅黑", "Microsoft Yahei", "Microsoft Sans Serif";
+
+/* Animation. */
+$cubicEase = cubic-bezier(.22, .58, .12, .98);
+
+
+
+
+// Class-based Common Style Definition. | 通用类样式定义.
+// ===================================================================
+
+/* Box-Sizing. */
+.w-100
+  width: 100%
+
+.h-100
+  height: 100%
+
+/* Position. */
+.p-absolute
+  position: absolute
+
+.p-relative
+  position: relative
+
+.p-fixed
+  position: fixed;
+
+.p-zero
+  left: 0
+  top: 0
+
+/* Texting. */
+.text-left
+  text-align: left
+
+.text-center
+  text-align: center
+
+.text-right
+  text-align: right
+
+.font-based
+  font-size: $basedFontSize
+
+/* Visual Style. */
+.bk-fixed
+  background-attachment: fixed
+
+.bk-scroll
+  background-attachment: scroll
+
+.bk-no-repeat
+  background-repeat: no-repeat
+
+.bk-center
+  background-position: center center
+
+.bk-cover
+  background-size: cover
+
+.bk-contain
+  background-size: contain
+
+/* Animation. */
+.transition-dot-2
+  transition: all $cubicEase .2s
+
+.transition-dot-4
+  transition: all $cubicEase .4s
+
+.transition-dot-6
+  transition: all $cubicEase .6s
+
+.transition-dot-8
+  transition: all $cubicEase .8s
+
+.transition-1
+  transition: all $cubicEase 1s
+
+
+
+
+// Elements Restyling. | 元素样式重写.
+// ===================================================================
+body
+  font-family: $fontFamily
+  font-weight: 100

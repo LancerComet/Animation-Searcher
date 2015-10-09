@@ -32,7 +32,7 @@
 
         // Old Browser Detection.
         function oldBrowserHint () {
-            // TODO...
+            global.location.href = "/old-browser";
             throw new Error("Animation Searcher Error: Your Browser is too old, time to change! :)");
             // Using "throw new Error" to block application.
         }

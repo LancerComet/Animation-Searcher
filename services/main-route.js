@@ -10,6 +10,8 @@
 var express = require("express");
 var router = express.Router();
 
+
+
 // Definition: Controllers Requirements. | 控制器引用定义.  
 var modules = {
     index: require("./controllers/ctrl-index"),
@@ -17,9 +19,11 @@ var modules = {
     error: require("./controllers/ctrl-error")
 };
 
+
+
 // Definition: Routers Setup. | 路由设置.
 
-// Main Page Router.
+// Index Page Router.
 router.get("/", modules.index);
 
 // Search Module.
@@ -33,5 +37,7 @@ router.post("/search/dmhy", modules.search);
 
 // Other Requests Return 404.
 router.all("*", modules.error[404]);
+
+
 
 module.exports = router;

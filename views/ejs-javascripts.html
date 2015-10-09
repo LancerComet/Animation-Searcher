@@ -11,5 +11,8 @@
 <script src="/libs/angular-route/angular-route.min.js"></script>
 <script src="/libs/angular-material/angular-material.min.js"></script>
 
+<%# Socket.io %>
+<script src="/socket.io/socket.io.js"></script>
+
 <%# Custom Scripts. %>
-<script src="/javascripts/animation-searcher.v2.min.js"></script>
+<script src="/javascripts/animation-searcher.v2.<% if(appConfig.appInfo.devStatus) { %>concat<% } else { %>min<% } %>.js?<%= appConfig.appInfo.version %>"></script>

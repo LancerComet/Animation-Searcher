@@ -3,16 +3,33 @@
     Animation Searcher V2.0 By © 2015 LancerComet.
     # Carry Your World #
 -->
-<html lang="zh-cmn-Hans">
+<html lang="zh-cmn-Hans" ng-app="ngApp">
+
   <head>
     <% include ejs-meta.html %>
     <title><%= title %></title>
   </head>
   
-  <body>
-    
-    
-    <% include ejs-javascripts.html %>
+  <body class="w-100 h-100">
+
+  <div class="body-container w-100 h-100" ng-controller="main-controller">
+
+      <%# Header. | 头部区域. %>
+      <header class="header">
+          <nav></nav>
+      </header>
+
+      <%# Main Part. | 主体部分. %>
+      <main class="main">
+
+          <aside class="aside left-controller-bar"></aside>
+
+      </main>
+
+      <%# JavaScripts Requirement. | JavaScript 文件引用. %>
+      <% include ejs-javascripts.html %>
+  </div>
+
   </body>
   
 </html>

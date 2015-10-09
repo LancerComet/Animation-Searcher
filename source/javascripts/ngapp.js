@@ -32,7 +32,7 @@
 
         // Old Browser Detection.
         function oldBrowserHint () {
-            // TODO...
+            global.location.href = "/old-browser";
             throw new Error("Animation Searcher Error: Your Browser is too old, time to change! :)");
             // Using "throw new Error" to block application.
         }
@@ -72,7 +72,7 @@
         }
 
     };
-    /* =========================================== ================================================ */
+    /* =========================================================================================== */
 
 
 
@@ -81,6 +81,7 @@
      *  Internal Function Definition: Only used in Service Logic.
      *  内部方法定义: 仅在业务逻辑中使用, 不对外暴漏.
      */
+
     // Definition: Error Handler in console & for developers only. | 控制台内错误提示.
     // Please note that this function will block Explorer and all functions next won't be executed.
     // 请注意此函数将使用 throw New Error 阻塞浏览器执行接下来的代码.
