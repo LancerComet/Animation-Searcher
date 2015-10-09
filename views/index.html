@@ -10,7 +10,7 @@
     <title><%= title %></title>
 
     <%# Third-Part Libs Stylesheets. | 三方库样式引用. %>
-    <!--<link href="//cdn.bootcss.com/normalize/3.0.3/normalize.min.css" rel="stylesheet">-->
+    <link href="/libs/normalize/normalize.min.css" rel="stylesheet">
     <link href="/libs/angular-material/angular-material.min.css" rel="stylesheet">
     <link href="/libs/fontello/css/fontello.css" rel="stylesheet">
 
@@ -54,7 +54,9 @@
       <div class="left-side-nav-ctrl" ng-controller="LeftNavCtrl">
           <md-sidenav ng-cloak class="md-sidenav-left md-whiteframe-z2" md-component-id="leftside" ng-click="onChange()">
               <md-toolbar class="md-toolbar-tools author-cover bk-cover"></md-toolbar>
-              <md-content class="content w-100 over-hidden-x over-auto-y bk-test"></md-content>
+              <md-content class="content w-100 text-center over-hidden-x over-auto-y">
+
+              </md-content>
           </md-sidenav>
       </div>
 

@@ -15,6 +15,7 @@ var autoprefixer = require("gulp-autoprefixer");
 // Definition: Path of source files. | 源文件路径设置.
 var sourcePath = {
     stylus: "stylus/animation-searcher.styl",
+    allStylus: "stylus/**/*",
     oldBrowsers: "stylus-old-browsers/**/*.styl",
     javascripts: "javascripts/**/*"
 };
@@ -55,7 +56,7 @@ gulp.task("stylus-old-browsers", function () {
 
 // Stylus Watching Task.
 gulp.task("stylus-watch", function () {
-    gulp.watch(sourcePath.stylus, ["stylus", "stylus-old-browsers"]);
+    gulp.watch(sourcePath.allStylus, ["stylus", "stylus-old-browsers"]);
 });
 
 
