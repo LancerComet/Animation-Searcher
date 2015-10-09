@@ -10,7 +10,7 @@
     <title><%= title %></title>
 
     <%# Third-Part Libs Stylesheets. | 三方库样式引用. %>
-    <link href="//cdn.bootcss.com/normalize/3.0.3/normalize.min.css" rel="stylesheet">
+    <!--<link href="//cdn.bootcss.com/normalize/3.0.3/normalize.min.css" rel="stylesheet">-->
     <link href="/libs/angular-material/angular-material.min.css" rel="stylesheet">
     <link href="/libs/fontello/css/fontello.css" rel="stylesheet">
 
@@ -21,32 +21,45 @@
   
   <body class="w-100 h-100">
 
-  <div class="body-container w-100 h-100" ng-controller="mainController">
+      <%# Body Container. | 总容器节点. %>
+      <div class="body-container w-100 h-100" ng-controller="mainController">
 
-      <%# Header. | 头部区域. %>
-      <header class="header pd-common bk-test" layout="column">
+          <%# Header. | 头部区域. %>
+          <header class="header p-relative z-9000 pd-common md-whiteframe-z1 bk-test" layout="column">
 
-          <%# Action bar in Header. | 顶部 Action bar. %>
-          <action-bar class="action-bar" layout="row" flex>
+              <%# Action bar in Header. | 顶部 Action bar. %>
+              <action-bar class="action-bar" layout="row">
 
-              <%# Left Navigator drawer Button. | 左侧抽屉菜单按钮. %>
-              <leftnav-menu class="left-nav-menu bk-cover no-outline" ng-click="buttonMotion($event)" data-status="menu">
-              </leftnav-menu>
+                  <%# Left Navigator drawer Button. | 左侧抽屉菜单按钮. %>
+                  <leftnav-menu class="left-nav-menu bk-cover no-outline" ng-click="buttonMotion()" data-status="menu">
+                  </leftnav-menu>
 
-          </action-bar>
+              </action-bar>
 
-      </header>
+          </header>
 
-      <%# Main Part. | 主体部分. %>
-      <main class="main">
+          <%# Main Part. | 主体部分. %>
+          <main class="main">
 
-          <aside class="aside left-controller-bar"></aside>
+              <aside class="aside left-controller-bar"></aside>
 
-      </main>
+          </main>
+
+      </div>
+
+      <%# Material Service Modules Nodes. | Angular-Material 服务组件节点. %>
+      <%# 节点定义在 Body Container 之外以减少干扰. %>
+
+      <%# LeftSide Navigator. | 左侧导航抽屉. %>
+      <div class="left-side-nav-ctrl" ng-controller="LeftNavCtrl">
+          <md-sidenav ng-cloak class="md-sidenav-left md-whiteframe-z2" md-component-id="leftside" ng-click="onChange()">
+              <md-toolbar class="md-toolbar-tools author-cover bk-cover"></md-toolbar>
+              <md-content class="content w-100 over-hidden-x over-auto-y bk-test"></md-content>
+          </md-sidenav>
+      </div>
 
       <%# JavaScripts Requirement. | JavaScript 文件引用. %>
       <% include ejs-javascripts.html %>
-  </div>
 
   </body>
   

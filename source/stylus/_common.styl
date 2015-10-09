@@ -45,11 +45,6 @@ $cubicEase = cubic-bezier(.22, .58, .12, .98);
 .pd-common
   padding: $commonPadding
 
-.no-outline
-  outline: none !important
-  &:focus
-    outline: none !important
-
 /* Position. */
 .p-absolute
   position: absolute
@@ -63,6 +58,36 @@ $cubicEase = cubic-bezier(.22, .58, .12, .98);
 .p-zero
   left: 0
   top: 0
+
+.over-hidden
+  overflow: hidden
+
+.over-hidden-x
+  overflow-x: hidden
+
+.over-hidden-y
+  overflow-y: hidden
+
+.over-scroll
+  overflow: scroll
+
+.over-scroll-x
+  overflow-x: scroll
+
+.over-scroll-y
+  overflow-y: scroll
+
+.over-auto
+  overflow: auto
+
+.over-auto-x
+  overflow-x: auto
+
+.over-auto-y
+  overflow-y: auto
+
+.z-9000
+  z-index 9000
 
 /* Texting. */
 .text-left
@@ -98,6 +123,11 @@ $cubicEase = cubic-bezier(.22, .58, .12, .98);
 
 .bk-test
   background-color: darkcyan;
+
+.no-outline
+  outline: none !important
+  &:focus
+    outline: none !important
 
 /* Animation. */
 .transition-dot-2

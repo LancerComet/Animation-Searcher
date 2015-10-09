@@ -17,13 +17,27 @@
 
 // Top Header Area. | 顶部 Header 区域.
 // ==============================================================
+$headerMinHeight = 6em;
+.header
+    padding-top: $headerMinHeight
+
 .action-bar
     padding: 0 3%
 
 .left-nav-menu
-    width: 30px
-    height: 30px
+    width: 25px
+    height: 25px
     background-image: url("/images/top-leftnav-drawer-btn.png")
     cursor: pointer
 
 
+// Left Side Navigator. | 左侧导航.
+.left-side-nav-ctrl .md-sidenav-left
+    padding-top: $headerMinHeight + 2.5em
+
+.left-side-nav-ctrl .author-cover
+    min-height: 14em
+    background-image: url("/images/left-leftnav-author.jpg")
+
+.left-side-nav-ctrl .content
+    max-height: calc(100% - 8.5em - 14em + 5em) // I don't why I msut plus 5em here.

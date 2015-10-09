@@ -128,7 +128,8 @@
      */
 
     // Definition: Angular Application Module. | ngApp 模块定义.
-    var ngApp = angular.module("ngApp", ["ngAnimate", "ngMaterial", "ngSanitize", "ngRoute", "ngAppCtrls", "ngAppDirectives", "ngAppToastCtrl"]);
+    var ngApp = angular.module("ngApp", ["ngAnimate", "ngMaterial", "ngSanitize", "ngRoute", "ngAppCtrls", "ngAppDirectives", "ngAppToastCtrl", "ngAppLeftNavCtrl"]);
+    // -------------------------------------------------------------------------------------------------
 
 
     // Definition: Controllers Module & Configuration. | 总控制器模块定义.
@@ -139,10 +140,12 @@
         // 将 "Https", "Ftp", "Mailto", "File", "Magnet" 设置为编译服务的可信字符串.
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|magnet):/);
     }]);
+    // -------------------------------------------------------------------------------------------------
 
 
     // Definition: Directives Module. | 指令模块定义.
     var ngAppDirectives = angular.module("ngAppDirectives", []);
+    // -------------------------------------------------------------------------------------------------
 
 
     // Definition: Toast Module, from Material-Angular. | Material-Angular Toast 模块定义.
@@ -188,6 +191,27 @@
         };
 
     }]);
+    // -------------------------------------------------------------------------------------------------
+
+
+    // Definition: Left Side Navigator Bar, from Material-Angular. | Material-Angular 左侧导航模块.
+    var ngAppLeftNavCtrl = angular.module("ngAppLeftNavCtrl", ["ngMaterial"]);
+    ngAppLeftNavCtrl.controller("LeftNavCtrl", function ($scope, $rootScope, $timeout, $mdSidenav, $mdUtil, $log) {
+
+        // Definition: Left Side Nav Toggle Function. | 左侧导航条 Toggle 函数.
+        function toggleLeft () {
+            $mdSidenav("leftside").toggle().then(function () {
+                // Execute when toggle is done. | 左侧导航切换成功后回调函数.
+                // eg. $log.debug("Toggle is done.");
+            });
+        }
+
+        // Definition: Set Left Side NavBar Module to rootScope to make it easy to execute.
+        // 将 Left Side NavBar 模块设置在 rootScope 下以方便调用.
+        $rootScope.toggleLeftSideNav = toggleLeft;
+
+    });
+
     /* =========================================================================================== */
 
 
@@ -258,17 +282,15 @@
             restrict: "E",
             scope: {},
             controller: function ($scope, $element, $attrs) {
-
             },
             link: function (scope, element, attrs) {
-
             }
         }
     });
 
 
     // Definition: Left Navigator Drawer Button. | 左侧抽屉菜单按钮.
-    ngAppDirectives.directive("leftnavMenu", function () {
+    ngAppDirectives.directive("leftnavMenu", function ($rootScope) {
         return {
             restrict: "E",
             scope: true,
@@ -278,6 +300,7 @@
 
                 // 以下函数为按钮背景变换所需的函数.
                 // Definition: 背景图片 X 轴动画播放函数.
+                var targetDom = element[0];
                 var isRunning = false;
                 function imageAnimationX (targetDom, configure) {
 
@@ -305,49 +328,48 @@
                     }, configure.interval);
                 }
 
-                // Definition: 按钮点击事件.
-                scope.buttonMotion = function ($event) {
-                    if (isRunning) {
-                        return false;
-                    }
-                    var targetDom = $event.target;
-                    var attr = targetDom.getAttribute("data-status");
-                    var configure = {
-                        start: {
+                // Definition: Left Navigator Drawer Button Animation Controller.
+                // 抽屉菜单按钮动画控制方法.
+                var setLeftNavMenu = {
+                    toArrow: function () {
+                        var configuration = {
                             startPosition: 0,
-                            width: 33.3,
+                            width: 27.75,
                             step: 16,
-                            interval: 20
-                        },
-                        end: {
-                            startPosition: 532.8,
+                            interval: 17
+                        };
+                        imageAnimationX(targetDom, configuration);
+                        targetDom.setAttribute("data-status", "arrow");
+                    },
+                    toMenu: function () {
+                        var configuration = {
+                            startPosition: 444,
                             endPosition: -1,
-                            width: 33.3,
+                            width: 27.75,
                             step: 16,
-                            interval: 20
-                        }
-                    };
-
-                    var animationProgress = {
-                        toArrow: function () {
-                            imageAnimationX(targetDom, configure.start);
-                            targetDom.setAttribute("data-status", "arrow");
-                        },
-                        toMenu: function () {
-                            imageAnimationX(targetDom, configure.end);
-                            targetDom.setAttribute("data-status", "menu");
-                        }
-                    };
-
-                    switch (attr) {
-                        case "menu":
-                            animationProgress.toArrow();
-                            break;
-                        case "arrow":
-                            animationProgress.toMenu();
-                            break;
+                            interval: 17
+                        };
+                        imageAnimationX(targetDom, configuration);
+                        targetDom.setAttribute("data-status", "menu");
                     }
                 };
+
+                // Definition: 按钮点击事件.
+                scope.buttonMotion = function () {
+                    if (isRunning) { return false; }
+                    var attr = targetDom.getAttribute("data-status");
+                    switch (attr) {
+                        case "menu":
+                            setLeftNavMenu.toArrow();
+                            break;
+                        case "arrow":
+                            setLeftNavMenu.toMenu();
+                            break;
+                    }
+                    $rootScope.toggleLeftSideNav();
+                };
+
+                $rootScope.setLeftNavMenu = setLeftNavMenu;
 
             }
         }
