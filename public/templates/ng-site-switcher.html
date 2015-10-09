@@ -1,0 +1,13 @@
+<!--
+    Site Switcher Template By LancerComet at 15:35, 2015.09.30.
+    # Carry Your World #
+-->
+<md-list-item ng-repeat="site in switcherList">
+    <md-tooltip>{{site.title}}</md-tooltip>
+    <md-button ng-disabled="{{site.disable}}" aria-label="{{site.title}}" ng-click="panelSwtich({{site.codeName}})">
+        <div class="siteIcon" style="background-image: url({{site.icon}})"></div>
+        <p ng-bind="site.name"></p>
+        <span ng-bind="site.url"></span>
+        <md-progress-linear md-mode="indeterminate" codename="{{site.codeName}}"></md-progress-linear>
+    </md-button>
+</md-list-item>

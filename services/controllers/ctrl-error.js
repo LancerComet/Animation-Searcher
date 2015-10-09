@@ -37,19 +37,19 @@ var text = {
 
 var errorEvent = {
 	400: function (req, res, next) {
-		res.json(createReturnJson(400, text[400].info, text[400].detail));
+		res.status(400).json(createReturnJson(400, text[400].info, text[400].detail));
 		return false;
 	},
 	403: function (req, res, next) {
-		res.json(createReturnJson(403, text[403].info, text[403].detail));
+		res.status(403).json(createReturnJson(403, text[403].info, text[403].detail));
 		return false;		
 	},
 	404: function (req, res, next) {
-		res.json(createReturnJson(404, text[404].info, text[404].detail));
+		res.status(404).json(createReturnJson(404, text[404].info, text[404].detail));
 		return false;
 	},
 	500: function (req, res, next) {
-		res.json(createReturnJson(500, text[500].info, text[500].detail));
+		res.status(500).json(createReturnJson(500, text[500].info, text[500].detail));
 		return false;
 	}
 };
@@ -60,4 +60,4 @@ module.exports = {
 	403: errorEvent[403],
 	404: errorEvent[404],
 	500: errorEvent[500]
-} 
+};

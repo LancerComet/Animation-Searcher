@@ -15,8 +15,8 @@ var cheerio = require("cheerio");
 
 var customPart = require("./ctrl-search-custom"); 
 
-function service (req, res, next) {
-	
+function searchService (req, res, next) {
+
 }
 
-module.exports = service;
+module.exports = searchService;

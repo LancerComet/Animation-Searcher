@@ -6,7 +6,7 @@
 */
 
 // Definition: Configuration Object. | 设置对象本体.
-// 对象为一个完全空白的对象, 不存在任何 prototype 方法.
+// Total a blank object.
 var configuration = Object.create(null);
 
 // Application Information. | 应用基本信息.
@@ -14,7 +14,8 @@ configuration.appInfo = {
 	appName: "Animation Seacher V2.0",
 	author: "LancerComet",
 	version: "0.1.0",
-	codeName: "Renascence."
+	codeName: "Renascence.",
+	sign: "# Carry Your Word #"
 };
 
 // Console Text Prefix. | 控制台文字前缀.

@@ -1,0 +1,24 @@
+<!--
+    Result Panel Template By LancerComet at 12:40, 2015.09.30.
+    # Carry Your World #
+    ---
+    结果面板模板文件.
+ -->
+
+<!-- MD Toolbar Node. -->
+<md-toolbar class="md-toolbar-tools"><h4>{{domInfo.name}} <small>{{domInfo.fullName}}</small></h4></md-toolbar>
+
+<!-- MD Content Node, all result nodes go here. -->
+<md-content>
+    <div class="result-list transition-dot-2" ng-repeat="popgoResult in popgoResults.Result.popgoResult.collection">
+        <md-checkbox aria-label="漫游搜索结果勾选" ng-click="resultCheckbox.Fn($event)" data-magnet="{{popgoResult.magnet}}"><md-tooltip>勾选结果</md-tooltip></md-checkbox>
+        <p class="resultList_Number" ng-bind="$index + 1"></p>
+        <a class="resultList_Title transition-dot-4" title="{{popgoResult.title}}" href="{{popgoResult.link}}" target="_blank">{{popgoResult.title}}</a>
+        <a class="resultList_Magnet" href="{{popgoResult.magnet}}"><i class="icon-magnet"></i>磁力链</a>
+    </div>
+</md-content>
+
+<!-- Pagination Container Node. -->
+<!-- Just a container, content may be different. -->
+<div id="pagination_popgo" class="text-center pagination">
+</div>

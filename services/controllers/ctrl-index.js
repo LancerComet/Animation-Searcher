@@ -11,17 +11,21 @@
 */
 
 var appConfig = require("../config/app-config");
+var randomTitle = require("../libs/random-title");
 
 
-function service (req, res, next) {
+// Definition: Main Service Function.
+function indexService (req, res, next) {
 	
 	// Definition: Rendering Variables. | 渲染用变量定义.
 	var renderVar = {
-		appConfig: appConfig
+		appConfig: appConfig,
+		title: appConfig.appInfo.appName + " | " + randomTitle()
 	};
 	
 	res.render("index.html", renderVar);
 }
 
 
-module.exports = service;
+// Export module to outside.
+module.exports = indexService;

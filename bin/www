@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('Animation-Searcher-V2.0:server');
 var http = require('http');
+var appConfig = require("../services/config/app-config");
 
 /**
  * Get port from environment and store in Express.
@@ -87,4 +88,7 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  console.log(appConfig.appInfo.appName + " By © 2015 " + appConfig.appInfo.appName + ".");
+  console.log(appConfig.appInfo.sign);
+  console.log("Server is running at port " + app.get("port") + ".");
 }

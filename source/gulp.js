@@ -48,12 +48,12 @@ gulp.task("stylus-watch", function () {
 // JavaScripts.
 gulp.task("JS-uglify", function () {
     gulp.src(sourcePath.javascripts)
-        .pipe(concat("animation-searcher.concat.js"))
+        .pipe(concat("animation-searcher.v2.concat.js"))
         .pipe(gulp.dest(distPath.javascripts))
         .pipe(uglify({
             compress: true
         }))
-        .pipe(rename("animation-searcher.min.js"))
+        .pipe(rename("animation-searcher.v2.min.js"))
         .pipe(gulp.dest(distPath.javascripts));
 });
 

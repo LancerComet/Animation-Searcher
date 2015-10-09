@@ -15,6 +15,10 @@ var bodyParser = require("body-parser");
 var ejs = require("ejs");
 var app = express();
 
+// Socket.io Setup.
+var http = require("http").Server(app);
+var io = require("socket.io")(http);
+
 // View Engine Setup. Using ".html" as extend name.
 // 模板设置, 使用 ".html" 作为扩展名.
 app.set("views", path.join(__dirname, "views"));
@@ -22,7 +26,7 @@ app.engine("html", ejs.__express);
 app.set("view engine", "html");
 
 // Middle-ware configuration. | 中间件设置.
-// app.use(favicon(__dirname + "/public/favicon.ico"));
+app.use(favicon(__dirname + "/public/favicon.ico"));
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -30,7 +34,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes Requirement. | 路由引用.
-var routes = require("./services/index");
+var routes = require("./services/main-route");
 app.use("/", routes);
 
 // catch 404 and forward to error handler

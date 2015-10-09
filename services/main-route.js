@@ -13,7 +13,8 @@ var router = express.Router();
 // Definition: Controllers Requirements. | 控制器引用定义.  
 var modules = {
     index: require("./controllers/ctrl-index"),
-    search: require("./controllers/ctrl-search")
+    search: require("./controllers/ctrl-search"),
+    error: require("./controllers/ctrl-error")
 };
 
 // Definition: Routers Setup. | 路由设置.
