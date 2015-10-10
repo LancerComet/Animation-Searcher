@@ -25,14 +25,28 @@
       <div class="body-container w-100 h-100" ng-controller="mainController">
 
           <%# Header. | 头部区域. %>
-          <header class="header p-relative z-9000 pd-common md-whiteframe-z1 bk-test" layout="column">
+          <header class="header p-relative z-9000 pd-common md-whiteframe-z1 bk-test" layout="column" ng-cloak>
 
               <%# Action bar in Header. | 顶部 Action bar. %>
               <action-bar class="action-bar" layout="row">
 
                   <%# Left Navigator drawer Button. | 左侧抽屉菜单按钮. %>
-                  <leftnav-menu class="left-nav-menu bk-cover no-outline" ng-click="buttonMotion()" data-status="menu">
-                  </leftnav-menu>
+                  <leftnav-menu class="left-nav-menu bk-cover no-outline" ng-click="buttonMotion()" data-status="menu"></leftnav-menu>
+
+                  <%# Search Bar Container. | 搜索条节点. %>
+                  <search-bar class="search-bar">
+                      <form name="search-form" layout="row">
+                          <md-input-container class="search-input-container" flex>
+                              <label class="search-bar-color"><%=randomTitle%></label>
+                              <input ng-model="keywords" aria-label="请在此处输入关键字" aria-labelledby="Insert keywords here." name="keywords">
+                          </md-input-container>
+
+                          <md-button class="md-icon-button search-bar-color" aria-label="点击搜索" aria-labelledby="Click it to search.">
+                              <i class="icon-search"></i>
+                              <md-tooltip>Rock n' Roll !</md-tooltip>
+                          </md-button>
+                      </form>
+                  </search-bar>
 
               </action-bar>
 
@@ -46,19 +60,31 @@
           </main>
 
       </div>
+      <%# ------------------------- Body Container Ends Here. ------------------------- %>
+
+
 
       <%# Material Service Modules Nodes. | Angular-Material 服务组件节点. %>
       <%# 节点定义在 Body Container 之外以减少干扰. %>
 
-      <%# LeftSide Navigator. | 左侧导航抽屉. %>
-      <div class="left-side-nav-ctrl" ng-controller="LeftNavCtrl">
-          <md-sidenav ng-cloak class="md-sidenav-left md-whiteframe-z2" md-component-id="leftside" ng-click="onChange()">
-              <md-toolbar class="md-toolbar-tools author-cover bk-cover"></md-toolbar>
-              <md-content class="content w-100 text-center over-hidden-x over-auto-y">
+      <div class="service-modules">
 
-              </md-content>
-          </md-sidenav>
+          <%# LeftSide Navigator. | 左侧导航抽屉. %>
+          <div class="left-side-nav-ctrl w-100 h-100" ng-controller="LeftNavCtrl">
+              <md-sidenav ng-cloak class="md-sidenav-left md-whiteframe-z2" md-component-id="leftside" ng-click="onChange()">
+                  <md-toolbar class="md-toolbar-tools author-cover bk-cover"></md-toolbar>
+                  <md-content class="content w-100 text-center over-hidden-x over-auto-y">
+
+                  </md-content>
+              </md-sidenav>
+          </div>
+
+          <%# Toast. | Toast 服务节点. %>
+          <div ng-controller="ToastCtrl"></div>
+
       </div>
+      <%# ------------------------- Service Modules Ends Here. ------------------------- %>
+
 
       <%# JavaScripts Requirement. | JavaScript 文件引用. %>
       <% include ejs-javascripts.html %>

@@ -57,6 +57,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(require("./services/middleware/mw-language"));  // Language Service. | 语言服务.
 
 // Routes Requirement. | 路由引用.
 var routes = require("./services/main-route");

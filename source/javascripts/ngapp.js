@@ -7,6 +7,17 @@
  *  ---
  *  Angular Application 程序逻辑.
  *
+ *
+ *
+ *  Some internal functions:
+ *  ---
+ *  @ throwError (text): 错误处理函数, 同时会阻断程序执行.
+ *  @ $toastFunc ($rootScope, type, content, action, callback):
+ *  @ $toastErr ():
+ *
+ *
+ *
+ *
  *  Log:
  *  ---
  *  V0.1.0 - 12:29, 2015.10.09.
@@ -90,27 +101,58 @@
     }
 
     // Definition: Packaging function of Angular-Material Toast. | Angular-Material 的 Toast 组件封装函数.
-    function $toastFunc ($rootScope, type, content, action, funcName) {
+    function $toastFunc ($rootScope, type, content, action, callback) {
         if(!$rootScope || !type){
             throwError('Argument "$rootScope" or "type" is not provided in $toastErr.')
         }
-        content = content || "";
-        switch(type){
+        if (!content) {
+            console.log(moduleSettings.text.prefix + "Caution: No toast content provided.");
+        }
+        content = content || "（木有提供提示消息~）";
+        callback = callback || void(0);
+        switch (type) {
             case "simple":
                 $rootScope.toast.showSimpleToast(content);
                 break;
             case "action":
-                action ? void(0) : throwError('Please provide parama "action" when calling ' + funcName);
-                $rootScope.toast.showActionToast(content, action);
+                action ? void(0) : throwError('Please provide parama "action" when calling ' + callback);
+                $rootScope.toast.showActionToast(content, action, callback);
                 break;
         }
     }
 
     // Definition: Packaged Function of Angular-Material Error Toast. | 错误 Toast 提示函数.
-    function $toastErr ($rootScope, type, content, action) {
-        $toastFunc($rootScope, type, content, action, "$toastErr");
+    function $toastErr ($rootScope, content, action) {
+        $toastFunc($rootScope, "action", content, action, throwError);
     }
 
+    // Definition: Background-animating in X axis function. | 背景图片 X 轴动画播放函数.
+    function imageAnimationX (targetDom, configure) {
+
+        /*
+         @ Configure: {
+             startPosition: Number,
+             width: Number,
+             step: Numner,
+             interval: Numbuer
+           }
+         */
+        imageAnimationX.isRunning = true;
+        targetDom.style.backgroundPositionX = configure.startPosition + "px";  // Reset Background Image Position.
+
+        var runStep = 1;
+        var animationInterval = setInterval(function () {
+            if(runStep > configure.step){
+                configure.endPosition != undefined ? targetDom.style.backgroundPositionX = configure.endPosition + "px" : void(0);
+                clearInterval(animationInterval);
+                imageAnimationX.isRunning = false;
+                return;
+            }
+            targetDom.style.backgroundPositionX = configure.startPosition + (configure.width * runStep) + "px";
+            runStep++;
+        }, configure.interval);
+    }
+    imageAnimationX.isRunning = false;
 
 
     /* =========================================================================================== */
@@ -171,7 +213,7 @@
 
         // Definition: Simple Toast Function. | 自消失弹窗方法定义.
         // A simple toast would be created when called.
-        toastModule.showSimpleToast = function () {
+        toastModule.showSimpleToast = function (toastContent) {
             $mdToast.show(
                 $mdToast.simple().content(toastContent).position($rootScope.toast.getToastPosition()).hideDelay(5000)
             );
@@ -179,7 +221,7 @@
 
         // Definition: Action Toast Function. | 可操作弹窗方法定义.
         // A Action-available toast would be created when called.
-        toastModule.showActionToast = function (callback) {
+        toastModule.showActionToast = function (toastContent, toastAction, callback) {
             callback = callback || function () {};
             var toast = $mdToast.simple().content(toastContent).action(toastAction).highlightAction(false).position($rootScope.toast.getToastPosition());
             $mdToast.show(toast).then(callback);
@@ -299,34 +341,7 @@
             link: function (scope, element, attrs) {
 
                 // 以下函数为按钮背景变换所需的函数.
-                // Definition: 背景图片 X 轴动画播放函数.
                 var targetDom = element[0];
-                var isRunning = false;
-                function imageAnimationX (targetDom, configure) {
-
-                    /*
-                     @ Configure: {
-                         startPosition: Number,
-                         width: Number,
-                         step: Numner,
-                         interval: Numbuer
-                       }
-                     */
-                    isRunning = true;
-                    targetDom.style.backgroundPositionX = configure.startPosition + "px";  // Reset Background Image Position.
-
-                    var runStep = 1;
-                    var animationInterval = setInterval(function () {
-                        if(runStep > configure.step){
-                            configure.endPosition != undefined ? targetDom.style.backgroundPositionX = configure.endPosition + "px" : void(0);
-                            clearInterval(animationInterval);
-                            isRunning = false;
-                            return;
-                        }
-                        targetDom.style.backgroundPositionX = configure.startPosition + (configure.width * runStep) + "px";
-                        runStep++;
-                    }, configure.interval);
-                }
 
                 // Definition: Left Navigator Drawer Button Animation Controller.
                 // 抽屉菜单按钮动画控制方法.
@@ -356,7 +371,7 @@
 
                 // Definition: 按钮点击事件.
                 scope.buttonMotion = function () {
-                    if (isRunning) { return false; }
+                    if (imageAnimationX.isRunning) { return false; }
                     var attr = targetDom.getAttribute("data-status");
                     switch (attr) {
                         case "menu":
@@ -369,6 +384,7 @@
                     $rootScope.toggleLeftSideNav();
                 };
 
+                // Expose setLeftNavMenu to $rootScope to make it executing easily in other controllers or directives.
                 $rootScope.setLeftNavMenu = setLeftNavMenu;
 
             }
@@ -377,19 +393,16 @@
 
 
     // Definition: Search Directive. | 搜索模块指令定义.
-    ngAppDirectives.directive("searchModule", function () {
+    ngAppDirectives.directive("searchBar", function ($rootScope) {
         return {
             restrict: "E",
             scope: true,
             controller: function ($scope, $element, $attrs, $http) {
-                // Explose $rootScope out to use it in link.
-                $scope.rootScope = $rootScope;
             },
             link: function (scope, element, attrs) {
-                var $rootScope = scope.rootScope;
 
                 // Definition: Search Keyword. | 搜索关键字变量定义.
-                scope.keyword = null;
+                scope.keywords = null;
 
                 // Definition: Searching function. | 搜索功能定义.
                 // Search and assignment. | 搜索、赋值逻辑主体.
@@ -398,7 +411,7 @@
                     // Fire Async Requesting. | 发起搜索请求.
                     Object.keys(moduleSettings.site).filter(function (prop) {
                         $http.post("/search/" + moduleSettings.site[prop].codeName, {
-                            keyword: scope.keyword
+                            keywords: scope.keywords
                         }).success(function (data, status, headers, config) {
                             $scope.searchResult[prop] = data.result;  // Attach result data to $scope.searchResult.
                             $rootScope.toast.showSimpleToast(data.info);  // Show simple toast after finished succesfully.

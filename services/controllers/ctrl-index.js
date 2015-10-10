@@ -20,7 +20,8 @@ function indexService (req, res, next) {
 	// Definition: Rendering Variables. | 渲染用变量定义.
 	var renderVar = {
 		appConfig: appConfig,
-		title: appConfig.appInfo.appName + " | " + randomTitle()
+		title: appConfig.appInfo.appName + " | " + randomTitle(),
+		randomTitle: randomTitle()
 	};
 	
 	res.render("index.html", renderVar);
