@@ -25,10 +25,10 @@
       <div class="body-container w-100 h-100" ng-controller="mainController">
 
           <%# Header. | 头部区域. %>
-          <header class="header p-relative z-9000 pd-common md-whiteframe-z1 bk-test" layout="column" ng-cloak>
+          <header class="header p-relative z-9000 pd-common md-whiteframe-z1 bk-test" layout="column">
 
               <%# Action bar in Header. | 顶部 Action bar. %>
-              <action-bar class="action-bar" layout="row">
+              <action-bar class="action-bar" layout="row" ng-cloak>
 
                   <%# Left Navigator drawer Button. | 左侧抽屉菜单按钮. %>
                   <leftnav-menu id="left-nav-menu" class="left-nav-menu bk-cover no-outline" ng-click="toggle()" data-status="menu"></leftnav-menu>
@@ -70,7 +70,7 @@
       <div class="service-modules">
 
           <%# LeftSide Navigator. | 左侧导航抽屉. %>
-          <div class="left-side-nav-ctrl w-100 h-100">
+          <div class="left-side-nav-ctrl">
               <md-sidenav ng-cloak class="md-sidenav-left md-whiteframe-z2" md-component-id="leftside" ng-click="onChange()">
                   <md-toolbar class="md-toolbar-tools author-cover bk-cover"></md-toolbar>
                   <md-content class="content w-100 text-center over-hidden-x over-auto-y">
@@ -82,8 +82,9 @@
                       <md-content class="button-container" ng-controller="leftNavButtonCtrl">
 
                           <md-button class="left-nav-button" ng-click="closeLeftNav()"><i class="icon-left-open"></i> 关闭侧栏</md-button>
-                          <md-button class="left-nav-button md-warn" ng-click="clearHistory()"><i class="icon-trash"></i> 清除历史</md-button>
+                          <md-button class="left-nav-button" ng-click="changeLog()"><i class="icon-refresh"></i> 更新日志</md-button>
                           <md-button class="left-nav-button" href="http://search.lancercomet.com" target="_blank" aria-label="search.lancercomet.com"><i class="icon-history"></i> 旧版链接</md-button>
+                          <md-button class="left-nav-button md-warn" ng-click="clearHistory()"><i class="icon-trash"></i> 清除历史</md-button>
 
                       </md-content>
 

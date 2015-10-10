@@ -20,7 +20,13 @@
  *
  *  Log:
  *  ---
- *  V0.1.1 - 14:26, 2015.10.10
+ *  V0.1.2 - 1:17, 2015.10.11.
+ *   - In Process.
+ *   - 修复左侧抽屉菜单的动画问题.
+ *   - 左侧抽屉打开时可按 ESC 关闭.
+ *   - 增加变色服务模块.
+ *
+ *  V0.1.1 - 14:26, 2015.10.10.
  *   - In Process.
  *   - 使用 service 代替 controller 模块.
  *
@@ -105,9 +111,9 @@
     }
 
     // Definition: Packaging function of Angular-Material Toast. | Angular-Material 的 Toast 组件封装函数.
-    function $toastFunc ($rootScope, type, content, action, callback) {
-        if (!$rootScope || !type) {
-            throwError('Argument "$rootScope" or "type" is not provided in $toastErr.')
+    function $toastFunc ($toast, type, content, action, callback) {
+        if (!$toast || !type) {
+            throwError('Argument "$toast" or "type" is not provided in $toastErr.')
         }
         if (!content) {
             console.log(moduleSettings.text.prefix + "Caution: No toast content provided.");
@@ -116,18 +122,18 @@
         callback = callback || void(0);
         switch (type) {
             case "simple":
-                $rootScope.toast.showSimpleToast(content);
+                $toast.showSimpleToast(content);
                 break;
             case "action":
                 action ? void(0) : throwError('Please provide parama "action" when calling ' + callback);
-                $rootScope.toast.showActionToast(content, action, callback);
+                $toast.showActionToast(content, action, callback);
                 break;
         }
     }
 
     // Definition: Packaged Function of Angular-Material Error Toast. | 错误 Toast 提示函数.
-    function $toastErr ($rootScope, content, action) {
-        $toastFunc($rootScope, "action", content, action, throwError);
+    function $toastErr ($toast, content, action) {
+        $toastFunc($toast, "action", content, action, throwError);
     }
 
     // Definition: Background-animating in X axis function. | 背景图片 X 轴动画播放函数.
@@ -207,7 +213,7 @@
     var ngApp = angular.module("ngApp", [
         "ngAnimate", "ngMaterial", "ngSanitize", "ngRoute",  // Angular Official Modules. | Angular.JS 官方模块.
         "ngAppCtrls", "ngAppDirectives",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
-        "ngAppToast", "ngCharMsg", "ngLeftNav", "ngLocalStorage"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
+        "ngAppToast", "ngCharMsg", "ngLeftNav", "ngColorChange", "ngLocalStorage"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
     ]);
 
 
@@ -371,7 +377,7 @@
 
     // Definition: LocalStorage Control Module. | LocalStorage 控制模块.
     var ngLocalStorage = angular.module("ngLocalStorage", []);
-    ngLocalStorage.factory("$localStorage", function () {
+    ngLocalStorage.factory("$localStorage", function ($toast) {
 
         function setItem (key, value) {
             // Error Handler.
@@ -404,6 +410,8 @@
             Object.keys(global.localStorage).filter(function (key) {
                 removeItem(key);
             });
+            $toast.showSimpleToast("搜索历史已成功清空!  (●'◡'●)ﾉ♥");
+            console.log(moduleSettings.text.prefix + "Info:\nAll items in Local Storage has been removed at " + new Date(Date.now()) + ".")
         }
 
         return {
@@ -420,6 +428,22 @@
     var ngLeftNav = angular.module("ngLeftNav", []);
     ngLeftNav.factory("$leftNav", function ($mdSidenav, $timeout) {
 
+        // Definition: $window Object.
+        var $window = angular.element(global);
+
+        // Definition: 键盘关闭左侧导航监听器.
+        function keyboardCloseLeftNav (event) {
+            if (event.keyCode === 27) {
+                toggleButton();
+                closeBar();
+            }
+        }
+
+        // Definition: Way to unbind "Press-ESC-To-Close-Left-Nav" Event.
+        function unbindKeyboardCloseLeftNav () {
+            $window.unbind("keyup", keyboardCloseLeftNav);
+        }
+
         // Definition: Left Side Nav Toggle Function. | 左侧导航条 Toggle 函数.
         function toggleBar () {
             $mdSidenav("leftside").toggle().then(function () {
@@ -435,15 +459,25 @@
                 var $mdBackdrop = angular.element(document.querySelector("md-backdrop"));
                 $mdBackdrop.unbind();
                 $timeout(function () {
-                    $mdBackdrop.bind("click", toggleFunc)
+                    $mdBackdrop.bind("click", toggleFunc);
                 }, 400);
+
+                // Action: 设置 KeyUp 事件使得可以使用 ESC 关闭左侧导航.
+                // Set Keyup Event to make it possible to close left nav by typing "ESC".
+                if ($mdSidenav("leftside").isOpen()) {
+                    $window.bind("keyup", keyboardCloseLeftNav);
+                }
+
             }, 1);
         }
 
+        // Definition: Left Side Nav Close Function. | 左侧导航条关闭函数.
+        function closeBar () {
+            $mdSidenav("leftside").close();
+        }
 
         // Definition: 按钮点击事件.
         function toggleButton () {
-            if (imageAnimationX.isRunning) { return false; }
 
             // 以下函数为按钮背景变换所需的函数.
             var targetDom = document.getElementById("left-nav-menu");
@@ -464,13 +498,14 @@
                 toMenu: function () {
                     var configuration = {
                         startPosition: 444,
-                        endPosition: -1,
+                        endPosition: 0,
                         width: 27.75,
                         step: 16,
                         interval: 17
                     };
                     imageAnimationX(targetDom, configuration);
                     targetDom.setAttribute("data-status", "menu");
+                    unbindKeyboardCloseLeftNav();
                 }
             };
 
@@ -486,6 +521,7 @@
         }
 
         function toggleFunc () {
+            if (imageAnimationX.isRunning) { return false; }
             toggleBar();
             toggleButton();
         }
@@ -494,6 +530,20 @@
             toggle: toggleFunc
         }
 
+    });
+
+
+    // Definition: Color Change Service Module. | 颜色变换服务模块.
+    var ngColorChange = angular.module("ngColorChange", []);
+    ngColorChange.factory("$colorChange", function () {
+
+        function colorChange (color) {
+
+        }
+
+        return {
+            change: colorChange
+        }
     });
     /* =========================================================================================== */
 
@@ -544,7 +594,7 @@
 
 
     // Definition: Left Side Navigator Buttons Controller. | 左侧导航按钮控制器.
-    ngAppCtrls.controller("leftNavButtonCtrl", function ($scope, $leftNav, $charMsg, $localStorage) {
+    ngAppCtrls.controller("leftNavButtonCtrl", function ($scope, $http, $toast, $leftNav, $charMsg, $localStorage) {
 
         // Close Left Nav.
         $scope.closeLeftNav = function () {
@@ -554,7 +604,18 @@
         // Clear All History Items in Local Storage.
         $scope.clearHistory = function () {
             $localStorage.empty();
-            $charMsg.show()
+        };
+
+        // Get change log.
+        $scope.changeLog = function () {
+            $http.get("/change-log").then(
+                function success (response) {
+                    $charMsg.show("更新日志", "aaaaa");
+                },
+                function error (response) {
+                    $toastErr($toast, "更新日志获取失败, 过一会再试试?", "(/= _ =)/~┴┴");
+                }
+            );
         };
 
     });
