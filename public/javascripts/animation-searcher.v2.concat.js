@@ -207,7 +207,7 @@
     var ngApp = angular.module("ngApp", [
         "ngAnimate", "ngMaterial", "ngSanitize", "ngRoute",  // Angular Official Modules. | Angular.JS 官方模块.
         "ngAppCtrls", "ngAppDirectives",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
-        "ngAppToast", "ngCharMsg", "ngLocalStorage"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
+        "ngAppToast", "ngCharMsg", "ngLeftNav", "ngLocalStorage"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
     ]);
 
 
@@ -225,7 +225,7 @@
 
 
     // Definition: Toast Module, from Material-Angular. | Material-Angular Toast 模块定义.
-    var ngAppToast = angular.module("ngAppToast", ["ngMaterial"]);
+    var ngAppToast = angular.module("ngAppToast", []);
     ngAppToast.factory("$toast", function ($mdToast) {
 
         var toastModule = {};
@@ -400,10 +400,98 @@
             global.localStorage.removeItem(key)
         }
 
+        function empty () {
+            Object.keys(global.localStorage).filter(function (key) {
+                removeItem(key);
+            });
+        }
+
         return {
             setItem: setItem,
             getItem: getItem,
-            removeItem: removeItem
+            removeItem: removeItem,
+            empty: empty
+        }
+
+    });
+
+
+    // Definition: Left Side Navigator Bar, from Material-Angular. | Material-Angular 左侧导航模块.
+    var ngLeftNav = angular.module("ngLeftNav", []);
+    ngLeftNav.factory("$leftNav", function ($mdSidenav, $timeout) {
+
+        // Definition: Left Side Nav Toggle Function. | 左侧导航条 Toggle 函数.
+        function toggleBar () {
+            $mdSidenav("leftside").toggle().then(function () {
+                // Execute when toggle is done. | 左侧导航切换成功后回调函数.
+                // eg. $log.debug("Toggle is done.");
+            });
+
+            // Unbind "md-backdrop" original event. | 移除 "md-backdrop" 固有方法.
+            // Bind a new method to close left nav. | 然后增加一个关闭 LeftNav 的自定义方法.
+            // Ensure animation of LeftNavMenu is undercontrol. | 这是为了保证 LeftNavMenu 动画受到控制.
+            // 使用计时器来确保 md-backdrop 能够获取.
+            $timeout(function () {
+                var $mdBackdrop = angular.element(document.querySelector("md-backdrop"));
+                $mdBackdrop.unbind();
+                $timeout(function () {
+                    $mdBackdrop.bind("click", toggleFunc)
+                }, 400);
+            }, 1);
+        }
+
+
+        // Definition: 按钮点击事件.
+        function toggleButton () {
+            if (imageAnimationX.isRunning) { return false; }
+
+            // 以下函数为按钮背景变换所需的函数.
+            var targetDom = document.getElementById("left-nav-menu");
+
+            // Definition: Left Navigator Drawer Button Animation Controller.
+            // 抽屉菜单按钮动画控制方法.
+            var setLeftNavMenu = {
+                toArrow: function () {
+                    var configuration = {
+                        startPosition: 0,
+                        width: 27.75,
+                        step: 16,
+                        interval: 17
+                    };
+                    imageAnimationX(targetDom, configuration);
+                    targetDom.setAttribute("data-status", "arrow");
+                },
+                toMenu: function () {
+                    var configuration = {
+                        startPosition: 444,
+                        endPosition: -1,
+                        width: 27.75,
+                        step: 16,
+                        interval: 17
+                    };
+                    imageAnimationX(targetDom, configuration);
+                    targetDom.setAttribute("data-status", "menu");
+                }
+            };
+
+            var attr = targetDom.getAttribute("data-status");
+            switch (attr) {
+                case "menu":
+                    setLeftNavMenu.toArrow();
+                    break;
+                case "arrow":
+                    setLeftNavMenu.toMenu();
+                    break;
+            }
+        }
+
+        function toggleFunc () {
+            toggleBar();
+            toggleButton();
+        }
+
+        return {
+            toggle: toggleFunc
         }
 
     });
@@ -454,24 +542,22 @@
 
     }]);
 
-    // Definition: Left Side Navigator Bar, from Material-Angular. | Material-Angular 左侧导航模块.
-    ngAppCtrls.controller("LeftNavCtrl", function ($scope, $rootScope, $timeout, $mdSidenav) {
 
-        // Definition: Left Side Nav Toggle Function. | 左侧导航条 Toggle 函数.
-        function toggleLeft () {
-            $mdSidenav("leftside").toggle().then(function () {
-                // Execute when toggle is done. | 左侧导航切换成功后回调函数.
-                // eg. $log.debug("Toggle is done.");
-            });
-        }
+    // Definition: Left Side Navigator Buttons Controller. | 左侧导航按钮控制器.
+    ngAppCtrls.controller("leftNavButtonCtrl", function ($scope, $leftNav, $charMsg, $localStorage) {
 
-        // Definition: Set Left Side NavBar Module to rootScope to make it easy to execute.
-        // 将 Left Side NavBar 模块设置在 rootScope 下以方便调用.
-        $rootScope.toggleLeftSideNav = toggleLeft;
+        // Close Left Nav.
+        $scope.closeLeftNav = function () {
+            $leftNav.toggle();
+        };
+
+        // Clear All History Items in Local Storage.
+        $scope.clearHistory = function () {
+            $localStorage.empty();
+            $charMsg.show()
+        };
 
     });
-
-
 
     /* =========================================================================================== */
 
@@ -503,61 +589,14 @@
 
 
     // Definition: Left Navigator Drawer Button. | 左侧抽屉菜单按钮.
-    ngAppDirectives.directive("leftnavMenu", function ($rootScope) {
+    ngAppDirectives.directive("leftnavMenu", function ($leftNav) {
         return {
             restrict: "E",
             scope: true,
             controller: function ($scope, $element, $attrs) {
             },
             link: function (scope, element, attrs) {
-
-                // 以下函数为按钮背景变换所需的函数.
-                var targetDom = element[0];
-
-                // Definition: Left Navigator Drawer Button Animation Controller.
-                // 抽屉菜单按钮动画控制方法.
-                var setLeftNavMenu = {
-                    toArrow: function () {
-                        var configuration = {
-                            startPosition: 0,
-                            width: 27.75,
-                            step: 16,
-                            interval: 17
-                        };
-                        imageAnimationX(targetDom, configuration);
-                        targetDom.setAttribute("data-status", "arrow");
-                    },
-                    toMenu: function () {
-                        var configuration = {
-                            startPosition: 444,
-                            endPosition: -1,
-                            width: 27.75,
-                            step: 16,
-                            interval: 17
-                        };
-                        imageAnimationX(targetDom, configuration);
-                        targetDom.setAttribute("data-status", "menu");
-                    }
-                };
-
-                // Definition: 按钮点击事件.
-                scope.buttonMotion = function () {
-                    if (imageAnimationX.isRunning) { return false; }
-                    var attr = targetDom.getAttribute("data-status");
-                    switch (attr) {
-                        case "menu":
-                            setLeftNavMenu.toArrow();
-                            break;
-                        case "arrow":
-                            setLeftNavMenu.toMenu();
-                            break;
-                    }
-                    $rootScope.toggleLeftSideNav();
-                };
-
-                // Expose setLeftNavMenu to $rootScope to make it executing easily in other controllers or directives.
-                $rootScope.setLeftNavMenu = setLeftNavMenu;
-
+                scope.toggle = $leftNav.toggle;
             }
         }
     });
@@ -659,23 +698,6 @@
             },
             link: function (scope, element, attrs) {
                 attrs.codename ? void(0) : throwError('Attribute "codename" must be defined.');
-            }
-        }
-    });
-
-
-    // For testing.
-    ngAppDirectives.directive("testButton", function ($charMsg) {
-        return {
-            restrict: "A",
-            scope: true,
-            controller: function ($scope, $element, $attrs) {
-
-            },
-            link: function (scope, element, attrs) {
-                scope.testing = function () {
-                    $charMsg.show("Title goes here.  Title goes here.  Title goes here.  Title goes here.  ", "Content goes here.  Content goes here.  Content goes here.  Content goes here.  Content goes here.  Content goes here.  Content goes here.  Content goes here.  ")
-                }
             }
         }
     });
