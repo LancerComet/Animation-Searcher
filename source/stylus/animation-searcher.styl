@@ -33,23 +33,24 @@ $headerMinHeight = 6em
 
 .search-bar
     width: 20em
-    margin-left: .5em
+    margin-left: 1.5em
     bottom: -.6em
     font-size: .9em
 
 .search-bar-color
-    color: rgba(255, 255, 255, .7)
+    color: rgba(255, 255, 255, .7) !important
     border-color: rgba(255, 255, 255, .7) !important
 
 .search-input-container
     padding: 0
 
  .search-input-container.md-input-focused .search-bar-color
-     color: #fff
+     color: #fff !important
      border-color: #fff !important
 
  .search-button
      top: 1em
+     width: 3em
 
 // Left Side Navigator. | 左侧导航.
 // ==============================================================
@@ -62,6 +63,11 @@ $headerMinHeight = 6em
 
 .left-side-nav-ctrl .content
     max-height: calc(100% - 8.5em - 14em - 3em + 5em) // I don't why I msut plus 5em here.
+
+.left-side-nav-ctrl .left-nav-button
+    width: 100%
+    margin: 0
+    padding: .8em
 
 .footer
     height: 1em
