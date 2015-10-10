@@ -207,7 +207,7 @@
     var ngApp = angular.module("ngApp", [
         "ngAnimate", "ngMaterial", "ngSanitize", "ngRoute",  // Angular Official Modules. | Angular.JS 官方模块.
         "ngAppCtrls", "ngAppDirectives",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
-        "ngAppToast", "ngcharMsg"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
+        "ngAppToast", "ngCharMsg", "ngLocalStorage"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
     ]);
 
 
@@ -269,8 +269,8 @@
 
 
     // Definition: charMsg Module. | 角色信息提示模块.
-    var ngcharMsg = angular.module("ngcharMsg", []);
-    ngcharMsg.factory("$charMsg", function ($timeout, $compile) {
+    var ngCharMsg = angular.module("ngCharMsg", []);
+    ngCharMsg.factory("$charMsg", function ($timeout) {
 
         // jqLite Object: body.
         var $body = angular.element(document.querySelector("body"));
@@ -300,11 +300,15 @@
                 // Start creating process.
                 isRunning = true;
 
-                // Container.
+                // Main Node.
                 charMsgNode = document.createElement("char-msg");
                 charMsgNode.className = "char-msg";
 
-                position = position || "right";
+                // Content Container.
+                var container = document.createElement("div");
+                container.className = "char-msg-container";
+
+                position = position || "left";
 
                 switch (position) {
                     case "left":
@@ -320,14 +324,14 @@
                     var titleNode = document.createElement("h2");
                     titleNode.className = "char-msg-title";
                     titleNode.innerHTML = title;
-                    charMsgNode.appendChild(titleNode);
+                    container.appendChild(titleNode);
                 }
 
                 // Content Node.
                 var contentNode = document.createElement("p");
                 contentNode.className = "char-msg-content";
                 contentNode.innerHTML = content;
-                charMsgNode.appendChild(contentNode);
+                container.appendChild(contentNode);
 
                 // Close Button.
                 var closeButton = document.createElement("button");
@@ -337,7 +341,8 @@
                 btnIcon.className = "icon-cancel";
                 closeButton.appendChild(btnIcon);
 
-                charMsgNode.appendChild(closeButton);
+                container.appendChild(closeButton);
+                charMsgNode.appendChild(container);
 
                 $body.append(charMsgNode);
 
@@ -360,6 +365,13 @@
             show: charMsg.create,
             hide: charMsg.remove
         }
+
+    });
+
+
+    // Definition: LocalStorage Control Module. | LocalStorage 控制模块.
+    var ngLocalStorage = angular.module("ngLocalStorage", []);
+    ngLocalStorage.factory("$localStorage", function () {
 
     });
     /* =========================================================================================== */
@@ -629,7 +641,7 @@
             },
             link: function (scope, element, attrs) {
                 scope.testing = function () {
-                    $charMsg.show("Title goes here.", "Content goes here.")
+                    $charMsg.show("Title goes here.  Title goes here.  Title goes here.  Title goes here.  ", "Content goes here.  Content goes here.  Content goes here.  Content goes here.  Content goes here.  Content goes here.  Content goes here.  Content goes here.  ")
                 }
             }
         }
