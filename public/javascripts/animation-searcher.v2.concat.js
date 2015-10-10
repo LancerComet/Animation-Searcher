@@ -106,7 +106,7 @@
 
     // Definition: Packaging function of Angular-Material Toast. | Angular-Material 的 Toast 组件封装函数.
     function $toastFunc ($rootScope, type, content, action, callback) {
-        if(!$rootScope || !type){
+        if (!$rootScope || !type) {
             throwError('Argument "$rootScope" or "type" is not provided in $toastErr.')
         }
         if (!content) {
@@ -146,7 +146,7 @@
 
         var runStep = 1;
         var animationInterval = setInterval(function () {
-            if(runStep > configure.step){
+            if (runStep > configure.step) {
                 configure.endPosition != undefined ? targetDom.style.backgroundPositionX = configure.endPosition + "px" : void(0);
                 clearInterval(animationInterval);
                 imageAnimationX.isRunning = false;
@@ -164,7 +164,7 @@
     }
 
     function addClass (element, className) {
-        if(!hasClass(element, className) ){
+        if (!hasClass(element, className) ) {
             element.className += " " + className;
         }
     }
@@ -180,7 +180,7 @@
     }
 
     function prependChild (parent,newChild) {
-        if(parent.firstChild){
+        if (parent.firstChild) {
             parent.insertBefore(newChild, parent.firstChild);
         } else {
             parent.appendChild(newChild);
@@ -372,6 +372,39 @@
     // Definition: LocalStorage Control Module. | LocalStorage 控制模块.
     var ngLocalStorage = angular.module("ngLocalStorage", []);
     ngLocalStorage.factory("$localStorage", function () {
+
+        function setItem (key, value) {
+            // Error Handler.
+            if (!key || !value) {
+                throwError('Params must be provided when calling "$localStorage.setItem()"!  (╯‵□′)╯︵┻━┻');
+            }
+            if (Object.prototype.toString.call(key) !== "[object String]") {
+               throwError('$localStorage.setItem(): Param "key" must be String.');
+            }
+            global.localStorage.setItem(key, value);
+        }
+
+        function getItem (key) {
+            // Error Handler.
+            if (!key || Object.prototype.toString.call(key) !== "[object String]") {
+                throwError('$localStorage.getItem(): Params "key" is invalid, take a look.');
+            }
+            return global.localStorage.getItem(key);
+        }
+
+        function removeItem (key) {
+            // Error Handler.
+            if (!key || Object.prototype.toString.call(key) !== "[object String]") {
+                throwError('$localStorage.removeItem(): Params "key" is invalid, take a look.');
+            }
+            global.localStorage.removeItem(key)
+        }
+
+        return {
+            setItem: setItem,
+            getItem: getItem,
+            removeItem: removeItem
+        }
 
     });
     /* =========================================================================================== */
