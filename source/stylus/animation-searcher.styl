@@ -9,15 +9,15 @@
     V0.1.0 - 14:25, 2015.10.09.
      - 初版.
 */
-@import "_common.styl";
-@import "_libs-restyling.styl";
+@import "_common.styl"
+@import "_libs-restyling.styl"
 
 // Index Stylesheet. | Index 页样式定义.
 
 
 // Top Header Area. | 顶部 Header 区域.
 // ==============================================================
-$headerMinHeight = 6em;
+$headerMinHeight = 6em
 .header
     padding-top: $headerMinHeight
 
@@ -27,6 +27,7 @@ $headerMinHeight = 6em;
 .left-nav-menu
     width: 25px
     height: 25px
+    margin-top: 1.5em
     background-image: url("/images/top-leftnav-drawer-btn.png")
     cursor: pointer
 
@@ -38,11 +39,20 @@ $headerMinHeight = 6em;
 
 .search-bar-color
     color: rgba(255, 255, 255, .7)
+    border-color: rgba(255, 255, 255, .7) !important
 
 .search-input-container
     padding: 0
 
+ .search-input-container.md-input-focused .search-bar-color
+     color: #fff
+     border-color: #fff !important
+
+ .search-button
+     top: 1em
+
 // Left Side Navigator. | 左侧导航.
+// ==============================================================
 .left-side-nav-ctrl .md-sidenav-left
     padding-top: $headerMinHeight + 2.5em
 
@@ -51,4 +61,123 @@ $headerMinHeight = 6em;
     background-image: url("/images/left-leftnav-author.jpg")
 
 .left-side-nav-ctrl .content
-    max-height: calc(100% - 8.5em - 14em + 5em) // I don't why I msut plus 5em here.
+    max-height: calc(100% - 8.5em - 14em - 3em + 5em) // I don't why I msut plus 5em here.
+
+.footer
+    height: 1em
+    line-height: 1em
+    font-size: .8em
+
+@media screen and (max-height: 640px) {
+    .left-side-nav-ctrl .content {
+        max-height: calc(100% - 8.5em  + 5em) // I don't why I msut plus 5em here.
+    }
+
+   .author-cover {
+       display: none !important
+   }
+
+   .left-side-nav-ctrl .md-sidenav-left {
+       padding-top: $headerMinHeight + 4em
+   }
+}
+
+// Character Message Module. | 左侧导航.
+// ==============================================================
+$charMsgBK = #539cff
+.char-msg
+    /* Position. */
+    position: fixed
+    bottom: 6em
+    z-index: 10000
+
+    /* Box-sizing. */
+    margin: 1em
+    padding: 1em
+
+    /* Visual. */
+    background-color: $charMsgBK
+    border-radius: 2em
+
+    /* Texting. */
+    color: #fff
+
+    /* Animation. */
+    animation: move-in-bottom $cubicEase .4s
+
+    /* Others. */
+    &:before
+        content: ""
+        display: block
+        width: 200px
+        height: 200px
+        position: absolute
+        left: -12em
+        bottom: -7em
+        background-position: center center
+        backgrond-repeat: no-repeat
+        background-image: url("/images/char-msg-22.png")
+
+    &:after
+         content: ""
+         display: block
+         position: absolute
+         bottom: -1em
+         left: 2em
+         background-color: $charMsgBK
+         border-left: 1em solid $charMsgBK
+         border-bottom: 1em solid
+
+.char-msg.left
+    left: 10em
+
+.char-msg.right
+    right: 10em
+
+.char-msg.out-animation
+    animation: move-out-bottom $cubicEase .4s forwards
+
+.char-msg-title
+    font-size: 1.2em
+    font-weight: 400
+
+.char-msg-content
+    font-size: .9em
+    
+.char-msg-close-btn
+    background-color: transparent
+    position: absolute
+    top: .3em
+    right: .4em
+    width: 2em
+    height: 2em
+    padding: 0
+    border: none
+    text-align: center
+    border-radius: 50%
+    outline: none
+    transition: all $cubicEase .3s
+    &:hover
+        transform: rotate(90deg)
+    &:active
+        transform: rotate(270deg)
+
+@keyframes move-in-bottom {
+    from {
+        transform: translate(0, 7em)
+    }
+    to {
+        transform: translate(0, 0)
+    }
+}
+
+@keyframes move-out-bottom {
+    form {
+        transform: translate(0, 0)
+        opacity: 1
+    }
+    to {
+        transform: translate(0, 7em)
+        opacity: 0
+    }
+}

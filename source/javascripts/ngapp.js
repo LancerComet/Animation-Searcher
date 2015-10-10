@@ -20,6 +20,10 @@
  *
  *  Log:
  *  ---
+ *  V0.1.1 - 14:26, 2015.10.10
+ *   - In Process.
+ *   - 使用 service 代替 controller 模块.
+ *
  *  V0.1.0 - 12:29, 2015.10.09.
  *   - 来自之前编写的初版.
  *
@@ -30,7 +34,7 @@
     "use strict";
 
     /*
-     *  Error Handler.
+     *  Error Handler when Initialization.
      *  错误处理机: No Angular, Old Browser, ect.
      */
     (function errorHandler () {
@@ -154,6 +158,36 @@
     }
     imageAnimationX.isRunning = false;
 
+    // Definition: Native JavaScript Function extension. | 原生方法扩展函数.
+    function hasClass (element, className) {
+        return !!element.className.match(new RegExp( "(\\s|^)" + className + "(\\s|$)"));
+    }
+
+    function addClass (element, className) {
+        if(!hasClass(element, className) ){
+            element.className += " " + className;
+        }
+    }
+
+    function removeClass (element, className) {
+        if (hasClass(element, className)) {
+            element.className = element.className.replace(new RegExp("(\\s|^)" + className + "(\\s|$)"), " ");
+        }
+    }
+
+    function setClass (element, className) {
+        element.className = className;
+    }
+
+    function prependChild (parent,newChild) {
+        if(parent.firstChild){
+            parent.insertBefore(newChild, parent.firstChild);
+        } else {
+            parent.appendChild(newChild);
+        }
+        return parent;
+    }
+
 
     /* =========================================================================================== */
 
@@ -170,34 +204,31 @@
      */
 
     // Definition: Angular Application Module. | ngApp 模块定义.
-    var ngApp = angular.module("ngApp", ["ngAnimate", "ngMaterial", "ngSanitize", "ngRoute", "ngAppCtrls", "ngAppDirectives", "ngAppToastCtrl", "ngAppLeftNavCtrl"]);
-    // -------------------------------------------------------------------------------------------------
+    var ngApp = angular.module("ngApp", [
+        "ngAnimate", "ngMaterial", "ngSanitize", "ngRoute",  // Angular Official Modules. | Angular.JS 官方模块.
+        "ngAppCtrls", "ngAppDirectives",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
+        "ngAppToast", "ngcharMsg"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
+    ]);
 
 
     // Definition: Controllers Module & Configuration. | 总控制器模块定义.
     var ngAppCtrls = angular.module("ngAppCtrls", []);
-
     ngAppCtrls.config(["$compileProvider", function ($compileProvider) {
         // Set "Https", "Ftp", "Mailto", "File", "Magnet" as trusted string.
         // 将 "Https", "Ftp", "Mailto", "File", "Magnet" 设置为编译服务的可信字符串.
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|magnet):/);
     }]);
-    // -------------------------------------------------------------------------------------------------
 
 
     // Definition: Directives Module. | 指令模块定义.
     var ngAppDirectives = angular.module("ngAppDirectives", []);
-    // -------------------------------------------------------------------------------------------------
 
 
     // Definition: Toast Module, from Material-Angular. | Material-Angular Toast 模块定义.
-    var ngAppToastCtrl = angular.module("ngAppToastCtrl", ["ngMaterial"]);
-    ngAppToastCtrl.controller("ToastCtrl", ["$scope", "$rootScope", "$mdToast", "$animate", function ($scope, $rootScope, $mdToast, $animate) {
+    var ngAppToast = angular.module("ngAppToast", ["ngMaterial"]);
+    ngAppToast.factory("$toast", function ($mdToast) {
 
-        // Definition: Set Toast Module to rootScope to make it easy to execute.
-        // 将 toast 模块设置在 rootScope 下以方便调用.
-        $rootScope.toast = {};
-        var toastModule = $rootScope.toast;
+        var toastModule = {};
 
         // Definition: Set position of toast panel. | 设置 Toast 模块方位.
         toastModule.toastPosition = moduleSettings.toast.position;
@@ -215,7 +246,7 @@
         // A simple toast would be created when called.
         toastModule.showSimpleToast = function (toastContent) {
             $mdToast.show(
-                $mdToast.simple().content(toastContent).position($rootScope.toast.getToastPosition()).hideDelay(5000)
+                $mdToast.simple().content(toastContent).position(toastModule.getToastPosition()).hideDelay(5000)
             );
         };
 
@@ -223,7 +254,7 @@
         // A Action-available toast would be created when called.
         toastModule.showActionToast = function (toastContent, toastAction, callback) {
             callback = callback || function () {};
-            var toast = $mdToast.simple().content(toastContent).action(toastAction).highlightAction(false).position($rootScope.toast.getToastPosition());
+            var toast = $mdToast.simple().content(toastContent).action(toastAction).highlightAction(false).position(toastModule.getToastPosition());
             $mdToast.show(toast).then(callback);
         };
 
@@ -232,28 +263,105 @@
             $mdToast.hide();
         };
 
-    }]);
-    // -------------------------------------------------------------------------------------------------
-
-
-    // Definition: Left Side Navigator Bar, from Material-Angular. | Material-Angular 左侧导航模块.
-    var ngAppLeftNavCtrl = angular.module("ngAppLeftNavCtrl", ["ngMaterial"]);
-    ngAppLeftNavCtrl.controller("LeftNavCtrl", function ($scope, $rootScope, $timeout, $mdSidenav, $mdUtil, $log) {
-
-        // Definition: Left Side Nav Toggle Function. | 左侧导航条 Toggle 函数.
-        function toggleLeft () {
-            $mdSidenav("leftside").toggle().then(function () {
-                // Execute when toggle is done. | 左侧导航切换成功后回调函数.
-                // eg. $log.debug("Toggle is done.");
-            });
-        }
-
-        // Definition: Set Left Side NavBar Module to rootScope to make it easy to execute.
-        // 将 Left Side NavBar 模块设置在 rootScope 下以方便调用.
-        $rootScope.toggleLeftSideNav = toggleLeft;
+        return toastModule;
 
     });
 
+
+    // Definition: charMsg Module. | 角色信息提示模块.
+    var ngcharMsg = angular.module("ngcharMsg", []);
+    ngcharMsg.factory("$charMsg", function ($timeout, $compile) {
+
+        // jqLite Object: body.
+        var $body = angular.element(document.querySelector("body"));
+        var isRunning = false;
+
+        // Definition: charMsgNode Object. | charMsgNode 节点对象.
+        // 页面中只允许同时出现一个 charMsg 提示, 因此将此对象暴漏至外部直接进行操作, 避免使用即时遍历的方式以提高性能.
+        var charMsgNode = null;
+        var $removeTimeout = null;  // 提示清理延时计时器对象.
+
+        // Definition: charMsg 逻辑定义.
+        var charMsg = {
+            create: function (title, content, position) {
+                if (!content) {
+                    throwError('param "content" must be provided when calling "$charMsg.show()".');
+                }
+
+                if (charMsgNode) {
+                    throwError("\n\n Character Message Panel has been created, can't create anymore, so stop calling me before remove it! （╯－＿－）╯╧╧ \n");
+                }
+
+                if (isRunning) {
+                    return;
+                }
+
+                //$removeTimeout ? $removeTimeout.cancel() : void(0);  // Clear Removing Timeout. | 清理计时器以防止节点被意外清除.
+                // Start creating process.
+                isRunning = true;
+
+                // Container.
+                charMsgNode = document.createElement("char-msg");
+                charMsgNode.className = "char-msg";
+
+                position = position || "right";
+
+                switch (position) {
+                    case "left":
+                        addClass(charMsgNode, "left");
+                        break;
+                    case "right":
+                        addClass(charMsgNode, "right");
+                        break;
+                }
+
+                // Create title if there is. | 如果有标题, 创建标题节点.
+                if (title) {
+                    var titleNode = document.createElement("h2");
+                    titleNode.className = "char-msg-title";
+                    titleNode.innerHTML = title;
+                    charMsgNode.appendChild(titleNode);
+                }
+
+                // Content Node.
+                var contentNode = document.createElement("p");
+                contentNode.className = "char-msg-content";
+                contentNode.innerHTML = content;
+                charMsgNode.appendChild(contentNode);
+
+                // Close Button.
+                var closeButton = document.createElement("button");
+                closeButton.className = "char-msg-close-btn";
+                closeButton.onclick = charMsg.remove;
+                var btnIcon = document.createElement("i");
+                btnIcon.className = "icon-cancel";
+                closeButton.appendChild(btnIcon);
+
+                charMsgNode.appendChild(closeButton);
+
+                $body.append(charMsgNode);
+
+                // Set running status to false when animation finished.
+                $timeout(function () {
+                    isRunning = false;
+                }, 500);
+
+            },
+            remove: function () {
+                addClass(charMsgNode, "out-animation");
+                $removeTimeout = $timeout(function () {
+                    charMsgNode.parentNode.removeChild(charMsgNode);
+                    charMsgNode = null;
+                }, 500);
+            }
+        };
+
+        return {
+            show: charMsg.create,
+            hide: charMsg.remove
+        }
+
+    });
     /* =========================================================================================== */
 
 
@@ -283,7 +391,7 @@
 
         // Set $scope.progressStatus's properties refer to "moduleSettings.site". | 依据 "moduleSettings.site" 设置 $scope.progressStatus 的属性.
         // Individual module looks.
-        (function setProgressStatusData() {
+        (function setProgressStatusData () {
             Object.keys(moduleSettings.site).filter(function (prop) {
                 $scope.progressStatus[prop] = false;
             });
@@ -300,6 +408,24 @@
         $scope.searchResult = {};
 
     }]);
+
+    // Definition: Left Side Navigator Bar, from Material-Angular. | Material-Angular 左侧导航模块.
+    ngAppCtrls.controller("LeftNavCtrl", function ($scope, $rootScope, $timeout, $mdSidenav) {
+
+        // Definition: Left Side Nav Toggle Function. | 左侧导航条 Toggle 函数.
+        function toggleLeft () {
+            $mdSidenav("leftside").toggle().then(function () {
+                // Execute when toggle is done. | 左侧导航切换成功后回调函数.
+                // eg. $log.debug("Toggle is done.");
+            });
+        }
+
+        // Definition: Set Left Side NavBar Module to rootScope to make it easy to execute.
+        // 将 Left Side NavBar 模块设置在 rootScope 下以方便调用.
+        $rootScope.toggleLeftSideNav = toggleLeft;
+
+    });
+
 
 
     /* =========================================================================================== */
@@ -488,6 +614,23 @@
             },
             link: function (scope, element, attrs) {
                 attrs.codename ? void(0) : throwError('Attribute "codename" must be defined.');
+            }
+        }
+    });
+
+
+    // For testing.
+    ngAppDirectives.directive("testButton", function ($charMsg) {
+        return {
+            restrict: "A",
+            scope: true,
+            controller: function ($scope, $element, $attrs) {
+
+            },
+            link: function (scope, element, attrs) {
+                scope.testing = function () {
+                    $charMsg.show("Title goes here.", "Content goes here.")
+                }
             }
         }
     });

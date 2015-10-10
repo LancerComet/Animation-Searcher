@@ -38,15 +38,20 @@
                       <form name="search-form" layout="row">
                           <md-input-container class="search-input-container" flex>
                               <label class="search-bar-color"><%=randomTitle%></label>
-                              <input ng-model="keywords" aria-label="请在此处输入关键字" aria-labelledby="Insert keywords here." name="keywords">
+                              <input class="search-bar-color" ng-model="keywords" aria-label="请在此处输入关键字" aria-labelledby="Insert keywords here." name="keywords">
                           </md-input-container>
 
-                          <md-button class="md-icon-button search-bar-color" aria-label="点击搜索" aria-labelledby="Click it to search.">
+                          <md-button class="md-icon-button p-relative search-bar-color search-button" aria-label="点击搜索" aria-labelledby="Click it to search.">
                               <i class="icon-search"></i>
                               <md-tooltip>Rock n' Roll !</md-tooltip>
                           </md-button>
                       </form>
                   </search-bar>
+
+                  <%# A testing button. %>
+                  <md-button test-button class="md-icon-button" ng-click="testing()" aria-labelledby="Just a testing button so f@xk off." aria-label="Just a testing button so f@xk off.">
+                      <i class="icon-search"></i>
+                  </md-button>
 
               </action-bar>
 
@@ -74,13 +79,28 @@
               <md-sidenav ng-cloak class="md-sidenav-left md-whiteframe-z2" md-component-id="leftside" ng-click="onChange()">
                   <md-toolbar class="md-toolbar-tools author-cover bk-cover"></md-toolbar>
                   <md-content class="content w-100 text-center over-hidden-x over-auto-y">
-
+                      <h1>Test.</h1>
+                      <h1>Test.</h1>
+                      <h1>Test.</h1>
+                      <h1>Test.</h1>
+                      <h1>Test.</h1>
+                      <h1>Test.</h1>
+                      <h1>Test.</h1>
+                      <h1>Test.</h1>
+                      <h1>Test.</h1>
+                      <h1>Test.</h1>
+                      <h1>Test.</h1>
+                      <h1>Test.</h1>
+                      <h1>Test.</h1>
+                      <h1>Test.</h1>
+                      <h1>Test.</h1>
                   </md-content>
+                  <footer class="footer text-center">
+                      <p>© 2015 LancerComet.</p>
+                  </footer>
               </md-sidenav>
           </div>
 
-          <%# Toast. | Toast 服务节点. %>
-          <div ng-controller="ToastCtrl"></div>
 
       </div>
       <%# ------------------------- Service Modules Ends Here. ------------------------- %>
