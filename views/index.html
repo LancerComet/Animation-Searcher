@@ -6,16 +6,17 @@
 <html lang="zh-cmn-Hans" ng-app="ngApp">
 
   <head>
-    <% include ejs-meta.html %>
-    <title><%= title %></title>
+      <% include ejs-meta.html %>
+      <title><%= title %></title>
+      <base href="/">  <%# For Angular Route to solve some problem in IE9. See "https://docs.angularjs.org/error/$location/nobase" for more detail. %>
 
-    <%# Third-Part Libs Stylesheets. | 三方库样式引用. %>
-    <link href="/libs/normalize/normalize.min.css" rel="stylesheet">
-    <link href="/libs/angular-material/angular-material.min.css" rel="stylesheet">
-    <link href="/libs/fontello/css/fontello.css" rel="stylesheet">
+      <%# Third-Part Libs Stylesheets. | 三方库样式引用. %>
+      <link href="/libs/normalize/normalize.min.css" rel="stylesheet">
+      <link href="/libs/angular-material/angular-material.min.css" rel="stylesheet">
+      <link href="/libs/fontello/css/fontello.css" rel="stylesheet">
 
-    <%# Custom Stylesheets. | 自定义样式表. %>
-    <link rel="stylesheet" href="/stylesheets/animation-searcher.v2.min.css?<%=appConfig.appInfo.version%>"/>
+      <%# Custom Stylesheets. | 自定义样式表. %>
+      <link rel="stylesheet" href="/stylesheets/animation-searcher.v2.min.css?<%=appConfig.appInfo.version%>"/>
 
   </head>
   
@@ -81,8 +82,8 @@
 
                       <md-content class="button-container" ng-controller="leftNavButtonCtrl">
 
-                          <md-button class="left-nav-button" ng-click="closeLeftNav()"><i class="icon-left-open"></i> 关闭侧栏</md-button>
-                          <md-button class="left-nav-button" ng-click="changeLog()"><i class="icon-refresh"></i> 更新日志</md-button>
+                          <md-button class="left-nav-button" href="/"><i class="icon-left-open"></i> 关闭侧栏</md-button>
+                          <md-button class="left-nav-button" href="/change-log"><i class="icon-refresh"></i> 更新日志</md-button>
                           <md-button class="left-nav-button" href="http://search.lancercomet.com" target="_blank" aria-label="search.lancercomet.com"><i class="icon-history"></i> 旧版链接</md-button>
                           <md-button class="left-nav-button md-warn" ng-click="clearHistory()"><i class="icon-trash"></i> 清除历史</md-button>
 
@@ -94,6 +95,9 @@
                   </footer>
               </md-sidenav>
           </div>
+
+          <%# Frontend Router Blank Node. | 前端路由空白节点. %>
+          <div class="dp-none" ng-view></div>
 
 
       </div>

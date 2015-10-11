@@ -21,17 +21,18 @@
  *  Log:
  *  ---
  *  V0.1.2 - 1:17, 2015.10.11.
- *   - In Process.
- *   - 修复左侧抽屉菜单的动画问题.
- *   - 左侧抽屉打开时可按 ESC 关闭.
- *   - 增加变色服务模块.
+ *   + In Process.
+ *   + 修复左侧抽屉菜单的动画问题.
+ *   + 左侧抽屉打开时可按 ESC 关闭.
+ *   + 增加变色服务模块.
+ *   + 左侧抽屉与更新日志使用前端路由控制.
  *
  *  V0.1.1 - 14:26, 2015.10.10.
- *   - In Process.
- *   - 使用 service 代替 controller 模块.
+ *   + In Process.
+ *   + 使用 service 代替 controller 模块.
  *
  *  V0.1.0 - 12:29, 2015.10.09.
- *   - 来自之前编写的初版.
+ *   + 来自之前编写的初版.
  *
  */
 
@@ -132,8 +133,10 @@
     }
 
     // Definition: Packaged Function of Angular-Material Error Toast. | 错误 Toast 提示函数.
-    function $toastErr ($toast, content, action) {
-        $toastFunc($toast, "action", content, action, throwError);
+    function $toastErr ($toast, content, action, consoleErr) {
+        $toastFunc($toast, "action", content, action, function () {
+            throwError(consoleErr);
+        });
     }
 
     // Definition: Background-animating in X axis function. | 背景图片 X 轴动画播放函数.
@@ -426,7 +429,7 @@
 
     // Definition: Left Side Navigator Bar, from Material-Angular. | Material-Angular 左侧导航模块.
     var ngLeftNav = angular.module("ngLeftNav", []);
-    ngLeftNav.factory("$leftNav", function ($mdSidenav, $timeout) {
+    ngLeftNav.factory("$leftNav", function ($mdSidenav, $timeout, $location) {
 
         // Definition: $window Object.
         var $window = angular.element(global);
@@ -474,10 +477,17 @@
         // Definition: Left Side Nav Close Function. | 左侧导航条关闭函数.
         function closeBar () {
             $mdSidenav("leftside").close();
+            toggleButton("close");
+        }
+
+        // Definition: Left Side Nav Open Function. | 左侧导航条开启函数.
+        function openBar () {
+            $mdSidenav("leftside").open();
+            toggleButton("open");
         }
 
         // Definition: 按钮点击事件.
-        function toggleButton () {
+        function toggleButton (mode) {
 
             // 以下函数为按钮背景变换所需的函数.
             var targetDom = document.getElementById("left-nav-menu");
@@ -494,6 +504,7 @@
                     };
                     imageAnimationX(targetDom, configuration);
                     targetDom.setAttribute("data-status", "arrow");
+                    $location.path("/side-nav-open");
                 },
                 toMenu: function () {
                     var configuration = {
@@ -506,20 +517,36 @@
                     imageAnimationX(targetDom, configuration);
                     targetDom.setAttribute("data-status", "menu");
                     unbindKeyboardCloseLeftNav();
+                    $location.path("/");
                 }
             };
 
             var attr = targetDom.getAttribute("data-status");
-            switch (attr) {
-                case "menu":
-                    setLeftNavMenu.toArrow();
-                    break;
-                case "arrow":
-                    setLeftNavMenu.toMenu();
-                    break;
+
+            // 传入 mode 参数来直接控制按钮的状态.
+            if (mode) {
+                switch (mode) {
+                    case "open":
+                        setLeftNavMenu.toArrow();
+                        break;
+                    case "close":
+                        setLeftNavMenu.toMenu();
+                        break;
+
+                }
+            } else {
+                switch (attr) {
+                    case "menu":
+                        setLeftNavMenu.toArrow();
+                        break;
+                    case "arrow":
+                        setLeftNavMenu.toMenu();
+                        break;
+                }
             }
         }
 
+        // Definition: Main Toggle Function. | 总 Toggle 控制函数.
         function toggleFunc () {
             if (imageAnimationX.isRunning) { return false; }
             toggleBar();
@@ -527,7 +554,9 @@
         }
 
         return {
-            toggle: toggleFunc
+            toggle: toggleFunc,
+            open: openBar,
+            close: closeBar
         }
 
     });
@@ -545,6 +574,47 @@
             change: colorChange
         }
     });
+    /* =========================================================================================== */
+
+
+
+
+    /*
+     *  Frount Router Definition.
+     *  ---
+     *  Angular 前端路由定义.
+     */
+    ngApp.config(["$routeProvider", function ($routeProvider) {
+        $routeProvider.when("/change-log", {
+            template: "",
+            controller: function ($scope, $http, $toast, $charMsg, $leftNav) {
+                $http.get("/change-log").then(
+                    function success (response) {
+                        $charMsg.show("更新日志", "aaaaa");
+                    },
+                    function error (response) {
+                        $toastErr($toast, "更新日志获取失败, 过一会再试试?", "(/= _ =)/~┴┴", "Request for Change Log failed.");
+                    }
+                );
+            }
+        }).when("/side-nav-open", {
+            template: "",
+            controller: function ($leftNav) {
+                $leftNav.open();
+            }
+        }).when("/", {
+            template: "",
+            controller: function ($leftNav) {
+                $leftNav.close();
+            }
+        });
+    }]).config(["$locationProvider", function ($locationProvider) {
+        $locationProvider.html5Mode({
+            enabled: true
+        });
+    }]);
+
+
     /* =========================================================================================== */
 
 
@@ -596,26 +666,9 @@
     // Definition: Left Side Navigator Buttons Controller. | 左侧导航按钮控制器.
     ngAppCtrls.controller("leftNavButtonCtrl", function ($scope, $http, $toast, $leftNav, $charMsg, $localStorage) {
 
-        // Close Left Nav.
-        $scope.closeLeftNav = function () {
-            $leftNav.toggle();
-        };
-
         // Clear All History Items in Local Storage.
         $scope.clearHistory = function () {
             $localStorage.empty();
-        };
-
-        // Get change log.
-        $scope.changeLog = function () {
-            $http.get("/change-log").then(
-                function success (response) {
-                    $charMsg.show("更新日志", "aaaaa");
-                },
-                function error (response) {
-                    $toastErr($toast, "更新日志获取失败, 过一会再试试?", "(/= _ =)/~┴┴");
-                }
-            );
         };
 
     });
