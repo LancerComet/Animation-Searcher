@@ -614,7 +614,7 @@
                 controller: function ($scope, $http, $toast, $charMsg) {
                     $http.post("/change-log").then(
                         function success (response) {
-                            // response: {data, headers, status, config, statusText}
+                            // response: { data, headers, status, config, statusText }
                             $charMsg.show(response.data.title, response.data.content);
                         },
                         function error (response) {
