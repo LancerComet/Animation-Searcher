@@ -24,7 +24,8 @@ var modules = {
 // Definition: Routers Setup. | 路由设置.
 
 // Index Page Router.
-router.get("/", modules.index);
+router.get("/", modules.index.indexService);
+router.get("/change-log", modules.index.changeLogService);
 
 // Search Module.
 router.post("/search/caso", modules.search);

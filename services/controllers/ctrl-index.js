@@ -6,8 +6,11 @@
 	
 	Log:
 	---
+	V0.1.2 - 13:40, 2015.10.11.
+	 + 增加更新日志控制器.
+
 	V0.1.0 - 22:44, 2015.10.08.
-	 - 新版的初版.
+	 + 新版的初版.
 */
 
 var appConfig = require("../config/app-config");
@@ -27,6 +30,17 @@ function indexService (req, res, next) {
 	res.render("index.html", renderVar);
 }
 
+// Definition: Change Log Service Function.
+function changeLogService (req, res, next) {
+	res.status(200).json({
+		status: 200,
+		data: global.changeLog
+	});
+}
+
 
 // Export module to outside.
-module.exports = indexService;
+module.exports = {
+	indexService: indexService,
+	changeLogService: changeLogService
+};
