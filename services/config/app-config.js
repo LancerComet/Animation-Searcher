@@ -16,7 +16,7 @@ configuration.appInfo = {
 	version: "0.1.0",
 	codeName: "Renascence.",
 	sign: "# Carry Your Word #",
-	devStatus: true  // If set to true, the application will require uncompressed javascript-files for debugging.
+	devStatus: global.devStatus  // If set to true, the application will require uncompressed javascript-files for debugging.
 };
 
 // Console Text Prefix. | 控制台文字前缀.

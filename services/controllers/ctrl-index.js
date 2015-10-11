@@ -30,17 +30,6 @@ function indexService (req, res, next) {
 	res.render("index.html", renderVar);
 }
 
-// Definition: Change Log Service Function.
-function changeLogService (req, res, next) {
-	res.status(200).json({
-		status: 200,
-		data: global.changeLog
-	});
-}
-
 
 // Export module to outside.
-module.exports = {
-	indexService: indexService,
-	changeLogService: changeLogService
-};
+module.exports = indexService;

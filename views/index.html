@@ -18,6 +18,18 @@
       <%# Custom Stylesheets. | 自定义样式表. %>
       <link rel="stylesheet" href="/stylesheets/animation-searcher.v2.min.css?<%=appConfig.appInfo.version%>"/>
 
+      <%# Color Change Stylesheets. | 色彩变换样式定义. %>
+      <style id="color-change">
+          .color-theme.bk-color {
+              /*background-color: #3bb2ca;*/
+              background-color: rgb(63, 68, 118);
+          }
+
+          .color-theme.text-color {
+              color: rgb(63, 68, 118);
+          }
+      </style>
+
   </head>
   
   <body class="w-100 h-100">
@@ -26,7 +38,7 @@
       <div class="body-container w-100 h-100" ng-controller="mainController">
 
           <%# Header. | 头部区域. %>
-          <header class="header p-relative z-9000 pd-common md-whiteframe-z1 bk-test" layout="column">
+          <header class="header p-relative z-9000 pd-common md-whiteframe-z1 color-theme bk-color" layout="column">
 
               <%# Action bar in Header. | 顶部 Action bar. %>
               <action-bar class="action-bar" layout="row" ng-cloak>
@@ -73,7 +85,12 @@
           <%# LeftSide Navigator. | 左侧导航抽屉. %>
           <div class="left-side-nav-ctrl">
               <md-sidenav ng-cloak class="md-sidenav-left md-whiteframe-z2" md-component-id="leftside" ng-click="onChange()">
-                  <md-toolbar class="md-toolbar-tools author-cover bk-cover"></md-toolbar>
+                  <md-toolbar class="md-toolbar-tools author-cover bk-cover">
+                      <div class="merge-node"></div>
+                      <div class="m-auto">
+                          <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                      </div>
+                  </md-toolbar>
                   <md-content class="content w-100 text-center over-hidden-x over-auto-y">
 
                       <div class="title">
@@ -81,17 +98,15 @@
                       </div>
 
                       <md-content class="button-container" ng-controller="leftNavButtonCtrl">
-
                           <md-button class="left-nav-button" href="/"><i class="icon-left-open"></i> 关闭侧栏</md-button>
                           <md-button class="left-nav-button" href="/change-log"><i class="icon-refresh"></i> 更新日志</md-button>
                           <md-button class="left-nav-button" href="http://search.lancercomet.com" target="_blank" aria-label="search.lancercomet.com"><i class="icon-history"></i> 旧版链接</md-button>
                           <md-button class="left-nav-button md-warn" ng-click="clearHistory()"><i class="icon-trash"></i> 清除历史</md-button>
-
                       </md-content>
 
                   </md-content>
                   <footer class="footer text-center">
-                      <p>© 2015 <%= appConfig.appInfo.author %>.</p>
+                      <p><i class="icon-emo-tongue"></i> © 2015 <%= appConfig.appInfo.author %>.</p>
                   </footer>
               </md-sidenav>
           </div>
@@ -99,6 +114,8 @@
           <%# Frontend Router Blank Node. | 前端路由空白节点. %>
           <div class="dp-none" ng-view></div>
 
+          <%# Main Progressbar in body-width. | Body 宽度进度条 %>
+          <md-progress-linear id="body-progress-bar" class="md-warn p-fixed p-bottom" md-mode="query"></md-progress-linear>
 
       </div>
       <%# ------------------------- Service Modules Ends Here. ------------------------- %>

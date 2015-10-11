@@ -22,8 +22,12 @@ var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var ejs = require("ejs");
 var app = express();
-var appConfig = require("./services/config/app-config");
 
+// Detective envouriment: "development" or not.
+// 获取当前机器是否为开发环境.
+// Windows 下在 cmd 中输入 "set NODE_ENV = development" 使得此机器进入开发环境. (定义了一个 NODE_ENV 环境变量.)
+global.devStatus = app.get("env") === "development";
+var appConfig = require("./services/config/app-config");
 
 // Socket.io & Server Setup.
 var port = process.env.PORT || 3000;
@@ -39,7 +43,7 @@ require("./services/controllers/ctrl-index-websocket")(io);
 http.listen(port, function () {
     console.log(appConfig.appInfo.appName + " By © 2015 " + appConfig.appInfo.appName + ".");
     console.log(appConfig.appInfo.sign);
-    console.log("Server is running at port " + app.get("port") + ".");
+    console.log("Server is running at port " + app.get("port") + " in " + app.get("env") + " enviroument.");
 });
 
 
