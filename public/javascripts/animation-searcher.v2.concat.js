@@ -428,7 +428,7 @@ ngLocalStorage.factory("$localStorage", function ($toast) {
 
 // Definition: Left Side Navigator Bar, from Material-Angular. | Material-Angular 左侧导航模块.
 var ngLeftNav = angular.module("ngLeftNav", []);
-ngLeftNav.factory("$leftNav", function ($mdSidenav, $timeout, $location) {
+ngLeftNav.factory("$leftNav", function ($mdSidenav, $timeout, $location, $splashLayout) {
 
     // Definition: $window Object.
     var $window = angular.element(global);
@@ -597,13 +597,10 @@ ngColorChange.factory("$colorChange", function () {
 var ngSplashLayout = angular.module("ngSplashLayout", []);
 ngSplashLayout.factory("$splashLayout", function ($rootScope) {
 
-    var layoutStatus = "splash";  // "initLayout" || "standby".
     var className = {
         initLayout: "init-layout",  // "init-layout".
         standBy: "stand-by-layout"  // Empty.
     };
-
-    console.log("aaa")
 
     $rootScope.layout = className.initLayout;  // Switch this class name to switch layout. | 通过改变此变量来控制布局.
     // Expose this variable to $rootScope to make it easy to get the value in HTML.
@@ -641,28 +638,36 @@ ngApp
     .config(["$routeProvider", function ($routeProvider) {
         $routeProvider.when("/change-log", {
             template: "",
-            controller: function ($scope, $http, $toast, $charMsg) {
+            controller: function ($scope, $http, $toast, $charMsg, $splashLayout) {
                 $http.post("/change-log").then(
                     function success (response) {
                         // response: { data, headers, status, config, statusText }
                         $charMsg.show(response.data.title, response.data.content);
+                        $splashLayout.toStandByLayout();
                     },
                     function error (response) {
                         $toastErr($toast, "更新日志获取失败, 过一会再试试?", "(/= _ =)/~┴┴", "Request for Change Log failed.");
                     }
                 );
             }
-        }).when("/init-layout", {
+        }).when("/welcome", {
                 template: "",
                 controller: function ($splashLayout) {
                     $splashLayout.toInitLayout();
                 }
             }
+        ).when("/stand-by", {
+                template: "",
+                controller: function ($splashLayout) {
+                    $splashLayout.toStandByLayout();
+                }
+            }
         ).when("/side-nav-open", {
                 template: "",
-                controller: function ($leftNav) {
-                $leftNav.open();
-            }
+                controller: function ($leftNav, $splashLayout) {
+                    $leftNav.open();
+                    $splashLayout.toStandByLayout();
+                }
         }).when("/", {
             template: "",
             controller: function ($leftNav) {

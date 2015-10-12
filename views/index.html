@@ -38,28 +38,38 @@
       <div class="body-container w-100 h-100" ng-controller="mainController">
 
           <%# Header. | 头部区域. %>
-          <header class="header p-relative z-9000 pd-common md-whiteframe-z1 color-theme bk-color {{$root.layout}} transition-dot-4" layout="column">
+          <header class="header p-relative z-9000 pd-common md-whiteframe-z1 color-theme bk-color {{$root.layout}} transition-dot-6" layout="column">
+
+              <%# Greeting Area. | 欢迎内容节点. %>
+              <div class="greeting-area" layout-status="{{$root.layout}}">
+                  <h1 style="margin: 0; padding: 3em; color: #fff; font-weight: 100;" class="text-center">
+                      Hello, I'm Animation Searcher.<br>
+                      <small>Just have a try.</small>
+                  </h1>
+              </div>
 
               <%# Action bar in Header. | 顶部 Action bar. %>
-              <action-bar class="action-bar" layout="row" ng-cloak>
+              <action-bar class="action-bar transition-dot-4" layout="row" layout-status="{{$root.layout}}" ng-cloak>
 
-                  <%# Left Navigator drawer Button. | 左侧抽屉菜单按钮. %>
-                  <leftnav-menu id="left-nav-menu" class="left-nav-menu bk-cover no-outline" ng-click="toggle()" data-status="menu"></leftnav-menu>
+                  <div flex layout="row" class="action-bar-center-flex transition-dot-4">
+                      <%# Left Navigator drawer Button. | 左侧抽屉菜单按钮. %>
+                      <leftnav-menu id="left-nav-menu" class="left-nav-menu bk-cover no-outline" ng-click="toggle()" data-status="menu"></leftnav-menu>
 
-                  <%# Search Bar Container. | 搜索条节点. %>
-                  <search-bar class="search-bar">
-                      <form name="search-form" layout="row">
-                          <md-input-container class="search-input-container" flex>
-                              <label class="search-bar-color"><%=randomTitle%></label>
-                              <input class="search-bar-color" ng-model="keywords" aria-label="请在此处输入关键字" aria-labelledby="Insert keywords here." name="keywords">
-                          </md-input-container>
+                      <%# Search Bar Container. | 搜索条节点. %>
+                      <search-bar class="search-bar">
+                          <form name="search-form" layout="row">
+                              <md-input-container class="search-input-container" flex>
+                                  <label class="search-bar-color"><%=randomTitle%></label>
+                                  <input class="search-bar-color" ng-model="keywords" aria-label="请在此处输入关键字" aria-labelledby="Insert keywords here." name="keywords">
+                              </md-input-container>
 
-                          <md-button class="md-button p-relative search-bar-color search-button" aria-label="点击搜索" aria-labelledby="Click it to search.">
-                              <i class="icon-search"></i>
-                              <md-tooltip>Rock n' Roll !</md-tooltip>
-                          </md-button>
-                      </form>
-                  </search-bar>
+                              <md-button class="md-button p-relative search-bar-color search-button" aria-label="点击搜索" aria-labelledby="Click it to search.">
+                                  <i class="icon-search"></i>
+                                  <md-tooltip>Rock n' Roll !</md-tooltip>
+                              </md-button>
+                          </form>
+                      </search-bar>
+                  </div>
 
               </action-bar>
 

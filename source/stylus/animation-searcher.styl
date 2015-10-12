@@ -26,13 +26,25 @@ $headerMinHeight = 6em
     height: 100%
     padding: 0
 
+.greeting-area
+    display: none
+
+.greeting-area[layout-status="init-layout"]
+    display: block
+
 .action-bar
     padding: 0 3%
+
+.action-bar[layout-status="init-layout"]
+    display: block
+    width: 26.5em
+    margin: 0 auto
 
 .left-nav-menu
     width: 25px
     height: 25px
     margin-top: 1.5em
+    z-index: 1
     background-image: url("/images/top-leftnav-drawer-btn.png")
     cursor: pointer
 

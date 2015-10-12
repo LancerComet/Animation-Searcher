@@ -13,28 +13,36 @@ ngApp
     .config(["$routeProvider", function ($routeProvider) {
         $routeProvider.when("/change-log", {
             template: "",
-            controller: function ($scope, $http, $toast, $charMsg) {
+            controller: function ($scope, $http, $toast, $charMsg, $splashLayout) {
                 $http.post("/change-log").then(
                     function success (response) {
                         // response: { data, headers, status, config, statusText }
                         $charMsg.show(response.data.title, response.data.content);
+                        $splashLayout.toStandByLayout();
                     },
                     function error (response) {
                         $toastErr($toast, "更新日志获取失败, 过一会再试试?", "(/= _ =)/~┴┴", "Request for Change Log failed.");
                     }
                 );
             }
-        }).when("/init-layout", {
+        }).when("/welcome", {
                 template: "",
                 controller: function ($splashLayout) {
                     $splashLayout.toInitLayout();
                 }
             }
+        ).when("/stand-by", {
+                template: "",
+                controller: function ($splashLayout) {
+                    $splashLayout.toStandByLayout();
+                }
+            }
         ).when("/side-nav-open", {
                 template: "",
-                controller: function ($leftNav) {
-                $leftNav.open();
-            }
+                controller: function ($leftNav, $splashLayout) {
+                    $leftNav.open();
+                    $splashLayout.toStandByLayout();
+                }
         }).when("/", {
             template: "",
             controller: function ($leftNav) {

@@ -210,7 +210,7 @@ ngLocalStorage.factory("$localStorage", function ($toast) {
 
 // Definition: Left Side Navigator Bar, from Material-Angular. | Material-Angular 左侧导航模块.
 var ngLeftNav = angular.module("ngLeftNav", []);
-ngLeftNav.factory("$leftNav", function ($mdSidenav, $timeout, $location) {
+ngLeftNav.factory("$leftNav", function ($mdSidenav, $timeout, $location, $splashLayout) {
 
     // Definition: $window Object.
     var $window = angular.element(global);
@@ -379,13 +379,10 @@ ngColorChange.factory("$colorChange", function () {
 var ngSplashLayout = angular.module("ngSplashLayout", []);
 ngSplashLayout.factory("$splashLayout", function ($rootScope) {
 
-    var layoutStatus = "splash";  // "initLayout" || "standby".
     var className = {
         initLayout: "init-layout",  // "init-layout".
         standBy: "stand-by-layout"  // Empty.
     };
-
-    console.log("aaa")
 
     $rootScope.layout = className.initLayout;  // Switch this class name to switch layout. | 通过改变此变量来控制布局.
     // Expose this variable to $rootScope to make it easy to get the value in HTML.
