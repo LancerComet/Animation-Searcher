@@ -40,27 +40,22 @@
           <%# Header. | 头部区域. %>
           <header class="header p-relative z-9000 pd-common md-whiteframe-z1 color-theme bk-color {{$root.layout}} transition-dot-6" layout="column">
 
-              <%# Greeting Area. | 欢迎内容节点. %>
-              <div class="greeting-area" layout-status="{{$root.layout}}">
-                  <h1 style="margin: 0; padding: 3em; color: #fff; font-weight: 100;" class="text-center">
-                      Hello, I'm Animation Searcher.<br>
-                      <small>Just have a try.</small>
-                  </h1>
-              </div>
-
               <%# Action bar in Header. | 顶部 Action bar. %>
-              <action-bar class="action-bar transition-dot-4" layout="row" layout-status="{{$root.layout}}" ng-cloak>
+              <action-bar class="action-bar transition-dot-6" layout="row" layout-status="{{$root.layout}}" ng-cloak>
 
-                  <div flex layout="row" class="action-bar-center-flex transition-dot-4">
+                  <div flex class="action-bar-left-flex transition-dot-8" layout-status="{{$root.layout}}"></div>
+
+                  <div flex layout="row" class="action-bar-center-flex transition-dot-8" layout-status="{{$root.layout}}">
+
                       <%# Left Navigator drawer Button. | 左侧抽屉菜单按钮. %>
                       <leftnav-menu id="left-nav-menu" class="left-nav-menu bk-cover no-outline" ng-click="toggle()" data-status="menu"></leftnav-menu>
 
                       <%# Search Bar Container. | 搜索条节点. %>
-                      <search-bar class="search-bar">
+                      <search-bar class="search-bar" flex>
                           <form name="search-form" layout="row">
                               <md-input-container class="search-input-container" flex>
                                   <label class="search-bar-color"><%=randomTitle%></label>
-                                  <input class="search-bar-color" ng-model="keywords" aria-label="请在此处输入关键字" aria-labelledby="Insert keywords here." name="keywords">
+                                  <input class="search-bar-color" ng-model="keywords" aria-label="请在此处输入关键字" aria-labelledby="Insert keywords here." name="keywords" type="text">
                               </md-input-container>
 
                               <md-button class="md-button p-relative search-bar-color search-button" aria-label="点击搜索" aria-labelledby="Click it to search.">
@@ -71,7 +66,17 @@
                       </search-bar>
                   </div>
 
+                  <div flex class="action-bar-right-flex transition-dot-8" layout-status="{{$root.layout}}"></div>
+
               </action-bar>
+
+              <%# Greeting Area. | 欢迎内容节点. %>
+              <div class="greeting-area" layout-status="{{$root.layout}}">
+                  <h1 style="margin: 0; padding: 3em; color: #fff; font-weight: 100;" class="text-center">
+                      Hello, I'm <%=appConfig.appInfo.appName%><br>
+                      <small>Just have a try. <i class="icon-emo-happy"></i></small>
+                  </h1>
+              </div>
 
           </header>
 
@@ -102,12 +107,12 @@
                           <p><%= appConfig.appInfo.appName%><br><small>Version: <%= appConfig.appInfo.version %>  | <%= appConfig.appInfo.codeName %></small></p>
                       </div>
 
-                      <md-content class="button-container" ng-controller="leftNavButtonCtrl">
+                      <div class="button-container" ng-controller="leftNavButtonCtrl">
                           <md-button class="left-nav-button" href="/"><i class="icon-left-open"></i> 关闭侧栏</md-button>
                           <md-button class="left-nav-button" href="/change-log"><i class="icon-refresh"></i> 更新日志</md-button>
                           <md-button class="left-nav-button" href="http://search.lancercomet.com" target="_blank" aria-label="search.lancercomet.com"><i class="icon-history"></i> 旧版链接</md-button>
                           <md-button class="left-nav-button md-warn" ng-click="clearHistory()"><i class="icon-trash"></i> 清除历史</md-button>
-                      </md-content>
+                      </div>
 
                   </md-content>
                   <footer class="footer text-center">

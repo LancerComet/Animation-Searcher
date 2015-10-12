@@ -35,9 +35,18 @@ $headerMinHeight = 6em
 .action-bar
     padding: 0 3%
 
+.action-bar-left-flex[layout-status="stand-by-layout"]
+    flex: 1
+
+.action-bar-center-flex[layout-status="stand-by-layout"]
+    flex: 10
+
+.action-bar-right-flex[layout-status="stand-by-layout"]
+    flex: 20
+
 .action-bar[layout-status="init-layout"]
-    display: block
-    width: 26.5em
+    //width: 26.5em
+    padding-top: 15%
     margin: 0 auto
 
 .left-nav-menu
@@ -234,3 +243,8 @@ $charMsgBK = #539cff
         transform: scale(1)
     }
 }
+
+
+// Popup Article Panel Module. | 弹出文章面板模块.
+// ==============================================================
+.popup-article
