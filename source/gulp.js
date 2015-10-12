@@ -17,7 +17,14 @@ var sourcePath = {
     stylus: "stylus/animation-searcher.styl",
     allStylus: "stylus/**/*",
     oldBrowsers: "stylus-old-browsers/**/*.styl",
-    javascripts: "javascripts/**/*"
+    //javascripts: "javascripts/**/*"
+    javascripts: [
+        "./javascripts/_closure-start.js",
+        "./javascripts/00-error-handler.js", "./javascripts/01-application-settings.js", "./javascripts/02-internal-functions.js",
+        "./javascripts/03-ng-app-module.js", "./javascripts/03-ng-app-services.js", "./javascripts/04-ng-app-config.js", "./javascripts/05-ng-app-controllers.js", "./javascripts/06-ng-app-directives.js",
+        "./javascripts/_closure-end.js",
+        "./javascripts/07-jquery-based-event.js", "./javascripts/08-websocket.js"
+    ]
 };
 
 // Definition: Path of destination. | 目标路径设置.
