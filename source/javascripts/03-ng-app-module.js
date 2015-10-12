@@ -1,4 +1,4 @@
-/*
+f/*
  *  Animation Searcher Angular Application By LancerComet at 12:29, 2015/10/9.
  *  # Carry Your World #
  *
@@ -16,7 +16,7 @@
 var ngApp = angular.module("ngApp", [
     "ngAnimate", "ngMaterial", "ngSanitize", "ngRoute",  // Angular Official Modules. | Angular.JS 官方模块.
     "ngAppCtrls", "ngAppDirectives",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
-    "ngAppToast", "ngCharMsg", "ngLeftNav", "ngColorChange", "ngLocalStorage"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
+    "ngAppToast", "ngCharMsg", "ngLeftNav", "ngColorChange", "ngLocalStorage", "ngSplashLayout"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
 ]);
 
 

@@ -374,3 +374,49 @@ ngColorChange.factory("$colorChange", function () {
         change: colorChange
     }
 });
+
+// Definition: Splash Layout Service Module. | 启动布局服务模块.
+var ngSplashLayout = angular.module("ngSplashLayout", []);
+ngSplashLayout.factory("$splashLayout", function () {
+
+    var layoutStatus = "splash";  // "initLayout" || "standby".
+    var className = {
+        initLayout: "init-layout",  // "init-layout".
+        standBy: ""  // Empty.
+    };
+    var controlClassName = className.initLayout;  // Switch this class name to switch layout. | 通过改变此变量来控制布局.
+
+    // Switch to initial layout. | 变换为初始布局.
+    function toInitLayout () {
+        controlClassName = className.initLayout;
+    }
+
+    // Switch to stand-by layout. | 变换为正常布局.
+    function toStandByLayout () {
+        controlClassName = className.standBy;
+    }
+
+    return {
+        toInitLayout: toInitLayout,
+        toStandByLayout: toStandByLayout,
+        layout: controlClassName
+    };
+
+
+});
+
+// Test.
+ngSplashLayout.controller("test", function ($scope, $splashLayout) {
+    $scope.splashClass = $splashLayout.aa;
+
+    $scope.$watch(function () {
+        return $splashLayout.aa
+    }, function (newVal, oldVal) {
+        $scope.splashClass = newVal;
+        console.log(newVal)
+    });
+
+    $scope.toBB = function () {
+        $splashLayout.toBB();
+    };
+});

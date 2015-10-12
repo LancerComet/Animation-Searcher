@@ -180,7 +180,7 @@ function prependChild (parent,newChild) {
 var ngApp = angular.module("ngApp", [
     "ngAnimate", "ngMaterial", "ngSanitize", "ngRoute",  // Angular Official Modules. | Angular.JS 官方模块.
     "ngAppCtrls", "ngAppDirectives",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
-    "ngAppToast", "ngCharMsg", "ngLeftNav", "ngColorChange", "ngLocalStorage"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
+    "ngAppToast", "ngCharMsg", "ngLeftNav", "ngColorChange", "ngLocalStorage", "ngSplashLayout"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
 ]);
 
 
@@ -570,6 +570,47 @@ ngColorChange.factory("$colorChange", function () {
     return {
         change: colorChange
     }
+});
+
+// Definition: Splash Layout Service Module. | 启动布局服务模块.
+var ngSplashLayout = angular.module("ngSplashLayout", []);
+ngSplashLayout.factory("$splashLayout", function () {
+
+    // Switch to initial layout. | 变换为初始布局.
+    function toInitLayout () {
+
+    }
+
+    // Switch to stand-by layout. | 变换为正常布局.
+    function toStandByLayout () {
+
+    }
+
+    var returnObj = {
+        toInitLayout: toInitLayout,
+        toStandByLayout: toStandByLayout,
+        }
+    };
+
+    return returnObj;
+
+
+});
+
+// Test.
+ngSplashLayout.controller("test", function ($scope, $splashLayout) {
+    $scope.splashClass = $splashLayout.aa;
+
+    $scope.$watch(function () {
+        return $splashLayout.aa
+    }, function (newVal, oldVal) {
+        $scope.splashClass = newVal;
+        console.log(newVal)
+    });
+
+    $scope.toBB = function () {
+        $splashLayout.toBB();
+    };
 });
 /*
  *  Animation Searcher Angular Application By LancerComet at 12:29, 2015/10/9.
