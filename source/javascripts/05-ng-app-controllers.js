@@ -17,7 +17,9 @@
 
 // Definition: Main Controller. | 页面主控制器.
 // Transferring data between direvtives.
-ngAppCtrls.controller("mainController", ["$scope", "$rootScope", function ($scope) {
+ngAppCtrls.controller("mainController", ["$scope", "$rootScope", "$splashLayout", function ($scope, $rootScope, $splashLayout) {
+
+    console.log($rootScope.layout);
 
     // Definition: Status of Progressbar (on the left). | 左侧切换列表的搜索条状态.
     // ---------------------------------------------

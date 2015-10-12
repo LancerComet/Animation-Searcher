@@ -38,7 +38,7 @@
       <div class="body-container w-100 h-100" ng-controller="mainController">
 
           <%# Header. | 头部区域. %>
-          <header class="header p-relative z-9000 pd-common md-whiteframe-z1 color-theme bk-color" layout="column">
+          <header class="header p-relative z-9000 pd-common md-whiteframe-z1 color-theme bk-color {{$root.layout}} transition-dot-4" layout="column">
 
               <%# Action bar in Header. | 顶部 Action bar. %>
               <action-bar class="action-bar" layout="row" ng-cloak>
@@ -67,8 +67,6 @@
 
           <%# Main Part. | 主体部分. %>
           <main class="main">
-
-              <p class="" ng-controller="test" ng-click="toBB()">{{splashClass}}</p>
 
               <aside class="aside left-controller-bar"></aside>
 

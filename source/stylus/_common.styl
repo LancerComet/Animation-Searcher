@@ -146,23 +146,26 @@ $cubicEase = cubic-bezier(.22, .58, .12, .98);
 
 /* Animation. */
 .transition-dot-2
-  transition: all $cubicEase .2s
+  transition: all $cubicEase .2s !important
 
 .transition-dot-4
-  transition: all $cubicEase .4s
+  transition: all $cubicEase .4s !important
 
 .transition-dot-6
-  transition: all $cubicEase .6s
+  transition: all $cubicEase .6s !important
 
 .transition-dot-8
-  transition: all $cubicEase .8s
+  transition: all $cubicEase .8s !important
 
 .transition-1
-  transition: all $cubicEase 1s
+  transition: all $cubicEase 1s !important
 
 /* Color Theme. */
 .color-theme
-  transition:all $cubicEase 1s;
+  transition: background-color $cubicEase 1s;
+
+.color-theme.text-color
+  transition: color $cubicEase 1s;
 
 /* Merge Node. */
 .merge-node

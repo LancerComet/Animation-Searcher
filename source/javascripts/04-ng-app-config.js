@@ -24,9 +24,15 @@ ngApp
                     }
                 );
             }
-        }).when("/side-nav-open", {
-            template: "",
-            controller: function ($leftNav) {
+        }).when("/init-layout", {
+                template: "",
+                controller: function ($splashLayout) {
+                    $splashLayout.toInitLayout();
+                }
+            }
+        ).when("/side-nav-open", {
+                template: "",
+                controller: function ($leftNav) {
                 $leftNav.open();
             }
         }).when("/", {

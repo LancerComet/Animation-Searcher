@@ -174,6 +174,27 @@ function prependChild (parent,newChild) {
  *  @ ngApp: Main Angular Application. (Internal Directive.)
  *  @ ngAppCtrls: Controllers Module of this Angular Application.
  *  @ ngAppDirectives: Directives Module of this Angular Application.
+ *
+ *
+ *  Log:
+ *  ---
+ *  V0.1.3 - 13:51, 2015.10.12.
+ *   + ngApp.js 拆解成模块文件.
+ *
+ *  V0.1.2 - 1:17, 2015.10.11.
+ *   + In Process.
+ *   + 修复左侧抽屉菜单的动画问题.
+ *   + 左侧抽屉打开时可按 ESC 关闭.
+ *   + 增加变色服务模块.
+ *   + 左侧抽屉与更新日志使用前端路由控制.
+ *
+ *  V0.1.1 - 14:26, 2015.10.10.
+ *   + In Process.
+ *   + 使用 service 代替 controller 模块.
+ *
+ *  V0.1.0 - 12:29, 2015.10.09.
+ *   + 来自之前编写的初版.
+ *
  */
 
 // Definition: Angular Application Module. | ngApp 模块定义.
@@ -339,11 +360,11 @@ ngCharMsg.factory("$charMsg", function ($timeout, $location) {
 
         },
         remove: function (callback) {
-            console.log($location);
             addClass(charMsgNode, "out-animation");
             $removeTimeout = $timeout(function () {
                 charMsgNode.parentNode.removeChild(charMsgNode);
                 charMsgNode = null;
+                callback ? callback() : void(0);
             }, 500);
         }
     };
@@ -574,44 +595,37 @@ ngColorChange.factory("$colorChange", function () {
 
 // Definition: Splash Layout Service Module. | 启动布局服务模块.
 var ngSplashLayout = angular.module("ngSplashLayout", []);
-ngSplashLayout.factory("$splashLayout", function () {
+ngSplashLayout.factory("$splashLayout", function ($rootScope) {
+
+    var layoutStatus = "splash";  // "initLayout" || "standby".
+    var className = {
+        initLayout: "init-layout",  // "init-layout".
+        standBy: "stand-by-layout"  // Empty.
+    };
+
+    console.log("aaa")
+
+    $rootScope.layout = className.initLayout;  // Switch this class name to switch layout. | 通过改变此变量来控制布局.
+    // Expose this variable to $rootScope to make it easy to get the value in HTML.
 
     // Switch to initial layout. | 变换为初始布局.
     function toInitLayout () {
-
+        $rootScope.layout = className.initLayout;
     }
 
     // Switch to stand-by layout. | 变换为正常布局.
     function toStandByLayout () {
-
+        $rootScope.layout = className.standBy;
     }
 
-    var returnObj = {
+    return {
         toInitLayout: toInitLayout,
         toStandByLayout: toStandByLayout,
-        }
-    };
-
-    return returnObj;
-
+        layout: $rootScope.layout
+    }
 
 });
 
-// Test.
-ngSplashLayout.controller("test", function ($scope, $splashLayout) {
-    $scope.splashClass = $splashLayout.aa;
-
-    $scope.$watch(function () {
-        return $splashLayout.aa
-    }, function (newVal, oldVal) {
-        $scope.splashClass = newVal;
-        console.log(newVal)
-    });
-
-    $scope.toBB = function () {
-        $splashLayout.toBB();
-    };
-});
 /*
  *  Animation Searcher Angular Application By LancerComet at 12:29, 2015/10/9.
  *  # Carry Your World #
@@ -638,9 +652,15 @@ ngApp
                     }
                 );
             }
-        }).when("/side-nav-open", {
-            template: "",
-            controller: function ($leftNav) {
+        }).when("/init-layout", {
+                template: "",
+                controller: function ($splashLayout) {
+                    $splashLayout.toInitLayout();
+                }
+            }
+        ).when("/side-nav-open", {
+                template: "",
+                controller: function ($leftNav) {
                 $leftNav.open();
             }
         }).when("/", {
@@ -674,7 +694,9 @@ ngApp
 
 // Definition: Main Controller. | 页面主控制器.
 // Transferring data between direvtives.
-ngAppCtrls.controller("mainController", ["$scope", "$rootScope", function ($scope) {
+ngAppCtrls.controller("mainController", ["$scope", "$rootScope", "$splashLayout", function ($scope, $rootScope, $splashLayout) {
+
+    console.log($rootScope.layout);
 
     // Definition: Status of Progressbar (on the left). | 左侧切换列表的搜索条状态.
     // ---------------------------------------------

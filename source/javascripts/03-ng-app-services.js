@@ -142,11 +142,11 @@ ngCharMsg.factory("$charMsg", function ($timeout, $location) {
 
         },
         remove: function (callback) {
-            console.log($location);
             addClass(charMsgNode, "out-animation");
             $removeTimeout = $timeout(function () {
                 charMsgNode.parentNode.removeChild(charMsgNode);
                 charMsgNode = null;
+                callback ? callback() : void(0);
             }, 500);
         }
     };
@@ -377,46 +377,33 @@ ngColorChange.factory("$colorChange", function () {
 
 // Definition: Splash Layout Service Module. | 启动布局服务模块.
 var ngSplashLayout = angular.module("ngSplashLayout", []);
-ngSplashLayout.factory("$splashLayout", function () {
+ngSplashLayout.factory("$splashLayout", function ($rootScope) {
 
     var layoutStatus = "splash";  // "initLayout" || "standby".
     var className = {
         initLayout: "init-layout",  // "init-layout".
-        standBy: ""  // Empty.
+        standBy: "stand-by-layout"  // Empty.
     };
-    var controlClassName = className.initLayout;  // Switch this class name to switch layout. | 通过改变此变量来控制布局.
+
+    console.log("aaa")
+
+    $rootScope.layout = className.initLayout;  // Switch this class name to switch layout. | 通过改变此变量来控制布局.
+    // Expose this variable to $rootScope to make it easy to get the value in HTML.
 
     // Switch to initial layout. | 变换为初始布局.
     function toInitLayout () {
-        controlClassName = className.initLayout;
+        $rootScope.layout = className.initLayout;
     }
 
     // Switch to stand-by layout. | 变换为正常布局.
     function toStandByLayout () {
-        controlClassName = className.standBy;
+        $rootScope.layout = className.standBy;
     }
 
     return {
         toInitLayout: toInitLayout,
         toStandByLayout: toStandByLayout,
-        layout: controlClassName
-    };
+        layout: $rootScope.layout
+    }
 
-
-});
-
-// Test.
-ngSplashLayout.controller("test", function ($scope, $splashLayout) {
-    $scope.splashClass = $splashLayout.aa;
-
-    $scope.$watch(function () {
-        return $splashLayout.aa
-    }, function (newVal, oldVal) {
-        $scope.splashClass = newVal;
-        console.log(newVal)
-    });
-
-    $scope.toBB = function () {
-        $splashLayout.toBB();
-    };
 });
