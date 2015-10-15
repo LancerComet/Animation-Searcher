@@ -40,9 +40,9 @@ router.post("/search/dmhy", modules.search);
 // Other Requests Return 404.
 //router.all("*", modules.error[404]);
 
-// Other Requests will be handled by Index Controller in order to use Angular's Frontend Router.
-// 将其他所有请求交给 Index 控制器, 这样就可以使用 Angular 的前端路由.
-router.all("*", modules.index);
+// Other Get Requests will be handled by Index Controller in order to use Angular's Frontend Router.
+// 将其他所有 Get 请求交给 Index 控制器, 这样就可以使用 Angular 的前端路由.
+router.get("*", modules.index);
 
 
 module.exports = router;

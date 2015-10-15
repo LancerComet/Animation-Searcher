@@ -53,6 +53,16 @@ app.engine("html", ejs.__express);
 app.set("view engine", "html");
 
 
+// CORS is allowed.
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    next();
+});
+
+
+
 // Middle-ware configuration. | 中间件设置.
 app.use(favicon(__dirname + "/public/favicon.ico"));
 app.use(logger("dev"));

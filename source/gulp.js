@@ -18,12 +18,13 @@ var sourcePath = {
     allStylus: "stylus/**/*",
     oldBrowsers: "stylus-old-browsers/**/*.styl",
     //javascripts: "javascripts/**/*"
+    //javascripts: [
+    //    "./javascripts/error-handler.js", "./javascripts/ng-app-config.js", "./javascripts/ng-mods-internal-function.js",
+    //    "./javascripts/ng-app.js", "./javascripts/ng-mods-services.js", "./javascripts/ng-mods-router.js", "./javascripts/ng-mods-controllers.js", "./javascripts/ng-mods-directives.js",
+    //    "./javascripts/z-jquery-based-event.js", "./javascripts/websocket.js"
+    //]
     javascripts: [
-        "./javascripts/_closure-start.js",
-        "./javascripts/00-error-handler.js", "./javascripts/01-application-settings.js", "./javascripts/02-internal-functions.js",
-        "./javascripts/03-ng-app-module.js", "./javascripts/03-ng-app-services.js", "./javascripts/04-ng-app-config.js", "./javascripts/05-ng-app-controllers.js", "./javascripts/06-ng-app-directives.js",
-        "./javascripts/_closure-end.js",
-        "./javascripts/07-jquery-based-event.js", "./javascripts/08-websocket.js"
+        "./javascripts/error-handler.js", "javascripts/**/*"
     ]
 };
 

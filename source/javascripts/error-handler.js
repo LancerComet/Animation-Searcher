@@ -7,7 +7,7 @@
  *
  */
 
-;(function errorHandler () {
+;(function errorHandler (global, undefined) {
 
     // Angular incorrect.
     if (!angular) {
@@ -26,4 +26,4 @@
     var oldExpReg = /MSIE [1-8].*]/i;
     userAgent.match(oldExpReg) ? oldBrowserHint () : void(0);
 
-})();
+})(window);

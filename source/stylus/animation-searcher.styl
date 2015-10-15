@@ -27,24 +27,25 @@ $headerMinHeight = 6em
     padding: 0
 
 .greeting-area
-    display: none
+    //display: none
+    display: block
 
-.greeting-area[layout-status="init-layout"]
+.greeting-area.init-layout
     display: block
 
 .action-bar
     padding: 0 3%
 
-.action-bar-left-flex[layout-status="stand-by-layout"]
+.action-bar-left-flex.stand-by-layout
     flex: 1
 
-.action-bar-center-flex[layout-status="stand-by-layout"]
+.action-bar-center-flex.stand-by-layout
     flex: 10
 
-.action-bar-right-flex[layout-status="stand-by-layout"]
+.action-bar-right-flex.stand-by-layout
     flex: 20
 
-.action-bar[layout-status="init-layout"]
+.action-bar.init-layout
     //width: 26.5em
     padding-top: 15%
     margin: 0 auto
@@ -62,6 +63,9 @@ $headerMinHeight = 6em
     margin-left: 1.5em
     bottom: -.6em
     font-size: .9em
+
+.search-bar.stand-by-layout
+    max-width: 24em;
 
 .search-bar-color
     color: rgba(255, 255, 255, .7) !important
@@ -247,4 +251,3 @@ $charMsgBK = #539cff
 
 // Popup Article Panel Module. | 弹出文章面板模块.
 // ==============================================================
-.popup-article
