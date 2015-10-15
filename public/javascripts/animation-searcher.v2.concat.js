@@ -142,12 +142,20 @@
     // Definition: Controllers Module & Configuration. | 总控制器模块定义.
     var ngAppCtrls = angular.module("ngAppCtrls", []);
     ngAppCtrls.config(["$compileProvider", function ($compileProvider) {
-        // Set "Https", "Ftp", "Mailto", "File", "Magnet" as trusted string.
-        // 将 "Https", "Ftp", "Mailto", "File", "Magnet" 设置为编译服务的可信字符串.
+        // Set "Https", "Ftp", "Mailto", "File", "Magnet" as trusted string. | 将 "Https", "Ftp", "Mailto", "File", "Magnet" 设置为编译服务的可信字符串.
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|magnet):/);
     }]);
 
-    ngAppCtrls.controller("mainController", ["$scope", "$rootScope", "appConfig", function ($scope, $rootScope, appConfig) {
+    ngAppCtrls.controller("mainController", ["$scope", "$rootScope", "$location", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, appConfig, $splashLayout) {
+
+        // Definition: Layout Controller. | 页面布局控制器.
+        // ---------------------------------------------
+        $scope.splashLayout = $splashLayout;  // $splashLayout service reference for $watch service. | 单独引用服务出来进行深度监视.
+        $scope.layout = $splashLayout.layout.status;  // Set default value. | 设置默认值.
+        $scope.$watch("splashLayout", function (newVal, oldVal) {
+            $scope.layout = newVal.layout.status;
+        }, true);  // 启动深度监视.
+
 
         // Definition: Status of Progressbar (on the left). | 左侧切换列表的搜索条状态.
         // ---------------------------------------------
@@ -172,6 +180,7 @@
         // 数据将在搜索完毕之后更变.
         // Auto two-way data bind. | 自动双向数据绑定,
         $scope.searchResult = {};
+
 
     }]);
 
@@ -898,26 +907,30 @@
     ngSplashLayout.factory("$splashLayout", function () {
 
         var className = {
-            initLayout: "init-layout",  // "init-layout".
-            standBy: "stand-by-layout"  // Empty.
+            initLayout: "init-layout",  // "True" stands by "init-layout".
+            standBy: "stand-by-layout"  // "False" stands by "stand-by-layout".
         };
 
-        var layoutNow = null;
-
-        // Switch to initial layout. | 变换为初始布局.
-        function toInitLayout () {
-
-        }
-
-        // Switch to stand-by layout. | 变换为正常布局.
-        function toStandByLayout () {
-
-        }
+        var layout = {
+            status: className.initLayout  // 设置为属性以便在控制器中深度监听.
+        };
 
         return {
             toInitLayout: toInitLayout,
             toStandByLayout: toStandByLayout,
-            layout: layoutNow
+            layout: layout
+        };
+
+        /* Services go below. */
+
+        // Switch to initial layout. | 变换为初始布局.
+        function toInitLayout () {
+            layout.status = className.initLayout;
+        }
+
+        // Switch to stand-by layout. | 变换为正常布局.
+        function toStandByLayout () {
+            layout.status = className.standBy;
         }
 
     });
@@ -925,9 +938,9 @@
 
     // Definition: Change Log Service. | 更新日志服务模块.
     var ngChangeLog = angular.module("ngChangeLog", []);
-    ngChangeLog.service("$changeLog", function ($http, $splashLayout, $leftNav, $toast, $internalFunc) {
-
-        var self = this;
+    ngChangeLog.factory("$changeLog", function ($http, $splashLayout, $leftNav, $toast, $internalFunc) {
+        var self = this;  // Self Reference.
+        var panelStatus = "hide";
 
         function showChangeLog () {
             $http.post("/change-log").then(
@@ -946,14 +959,12 @@
             self.panelStatus = "hide";
         }
 
-        //return {
-        //    show: showChangeLog,
-        //    hide: hideChangeLog,
-        //    status: panelStatus
-        //};
+        return {
+            show: showChangeLog,
+            hide: hideChangeLog,
+            status: panelStatus
+        };
 
-        this.show = showChangeLog;
-        this.hide = hideChangeLog;
     });
 })(window);
 /*

@@ -38,14 +38,14 @@
       <div class="body-container w-100 h-100" ng-controller="mainController">
 
           <%# Header. | 头部区域. %>
-          <header class="header p-relative z-9000 pd-common md-whiteframe-z1 color-theme bk-color {{$root.layout}} transition-dot-6" layout="column">
+          <header class="header p-relative z-9000 pd-common md-whiteframe-z1 color-theme bk-color transition-dot-6" layout="column" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
 
               <%# Action bar in Header. | 顶部 Action bar. %>
-              <action-bar class="action-bar transition-dot-6" layout="row" layout-status="{{$root.layout}}" ng-cloak>
+              <action-bar class="action-bar transition-dot-6" layout="row" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]" ng-cloak>
 
-                  <div flex class="action-bar-left-flex transition-dot-8" layout-status="{{$root.layout}}"></div>
+                  <div flex class="action-bar-left-flex transition-dot-8" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]"></div>
 
-                  <div flex layout="row" class="action-bar-center-flex transition-dot-8" layout-status="{{$root.layout}}">
+                  <div flex layout="row" class="action-bar-center-flex transition-dot-8" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
 
                       <%# Left Navigator drawer Button. | 左侧抽屉菜单按钮. %>
                       <leftnav-menu id="left-nav-menu" class="left-nav-menu bk-cover no-outline" ng-click="toggle()" data-status="menu"></leftnav-menu>
@@ -66,12 +66,12 @@
                       </search-bar>
                   </div>
 
-                  <div flex class="action-bar-right-flex transition-dot-8" layout-status="{{$root.layout}}"></div>
+                  <div flex class="action-bar-right-flex transition-dot-8" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]"></div>
 
               </action-bar>
 
               <%# Greeting Area. | 欢迎内容节点. %>
-              <div class="greeting-area" layout-status="{{$root.layout}}">
+              <div class="greeting-area" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
                   <h1 style="margin: 0; padding: 3em; color: #fff; font-weight: 100;" class="text-center">
                       Hello, I'm <%=appConfig.appInfo.appName%><br>
                       <small>Just have a try. <i class="icon-emo-happy"></i></small>
@@ -120,6 +120,9 @@
                   </footer>
               </md-sidenav>
           </div>
+
+          <%# Information Panel Module. | 文字展示面板节点. %>
+          
 
           <%# Frontend Router Blank Node. | 前端路由空白节点. %>
           <div class="dp-none" ng-view></div>

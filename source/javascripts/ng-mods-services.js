@@ -381,26 +381,30 @@
     ngSplashLayout.factory("$splashLayout", function () {
 
         var className = {
-            initLayout: "init-layout",  // "init-layout".
-            standBy: "stand-by-layout"  // Empty.
+            initLayout: "init-layout",  // "True" stands by "init-layout".
+            standBy: "stand-by-layout"  // "False" stands by "stand-by-layout".
         };
 
-        var layoutNow = null;
-
-        // Switch to initial layout. | 变换为初始布局.
-        function toInitLayout () {
-
-        }
-
-        // Switch to stand-by layout. | 变换为正常布局.
-        function toStandByLayout () {
-
-        }
+        var layout = {
+            status: className.initLayout  // 设置为属性以便在控制器中深度监听.
+        };
 
         return {
             toInitLayout: toInitLayout,
             toStandByLayout: toStandByLayout,
-            layout: layoutNow
+            layout: layout
+        };
+
+        /* Services go below. */
+
+        // Switch to initial layout. | 变换为初始布局.
+        function toInitLayout () {
+            layout.status = className.initLayout;
+        }
+
+        // Switch to stand-by layout. | 变换为正常布局.
+        function toStandByLayout () {
+            layout.status = className.standBy;
         }
 
     });
@@ -408,9 +412,9 @@
 
     // Definition: Change Log Service. | 更新日志服务模块.
     var ngChangeLog = angular.module("ngChangeLog", []);
-    ngChangeLog.service("$changeLog", function ($http, $splashLayout, $leftNav, $toast, $internalFunc) {
-
-        var self = this;
+    ngChangeLog.factory("$changeLog", function ($http, $splashLayout, $leftNav, $toast, $internalFunc) {
+        var self = this;  // Self Reference.
+        var panelStatus = "hide";
 
         function showChangeLog () {
             $http.post("/change-log").then(
@@ -429,13 +433,11 @@
             self.panelStatus = "hide";
         }
 
-        //return {
-        //    show: showChangeLog,
-        //    hide: hideChangeLog,
-        //    status: panelStatus
-        //};
+        return {
+            show: showChangeLog,
+            hide: hideChangeLog,
+            status: panelStatus
+        };
 
-        this.show = showChangeLog;
-        this.hide = hideChangeLog;
     });
 })(window);

@@ -17,10 +17,11 @@ var sourcePath = {
     stylus: "stylus/animation-searcher.styl",
     allStylus: "stylus/**/*",
     oldBrowsers: "stylus-old-browsers/**/*.styl",
-    //javascripts: "javascripts/**/*"
     //javascripts: [
-    //    "./javascripts/error-handler.js", "./javascripts/ng-app-config.js", "./javascripts/ng-mods-internal-function.js",
-    //    "./javascripts/ng-app.js", "./javascripts/ng-mods-services.js", "./javascripts/ng-mods-router.js", "./javascripts/ng-mods-controllers.js", "./javascripts/ng-mods-directives.js",
+    //    "./javascripts/error-handler.js",
+    //    "./javascripts/ng-app.js",
+    //    "./javascripts/ng-app-config.js", "./javascripts/ng-mods-router.js",
+    //    "./javascripts/ng-mods-internal-function.js", "./javascripts/ng-mods-services.js", "./javascripts/ng-mods-controllers.js", "./javascripts/ng-mods-directives.js",
     //    "./javascripts/z-jquery-based-event.js", "./javascripts/websocket.js"
     //]
     javascripts: [
