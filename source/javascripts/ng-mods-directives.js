@@ -146,16 +146,16 @@
     });
 
     // Definition: Text Panel Directive. | 文字面板指令.
-    ngAppDirectives.directive("textPanel", function () {
+    ngAppDirectives.directive("textPanel", ["$compile", "$timeout", "$window", "$toast", "$clearMDToast", function ($compile, $timeout, $window, $toast, $clearMDToast) {
         return {
             restrict: "E",
-            controller: ["$scope", "$element", "$attrs", "$compile", "$timeout", "$window", "$toast", function ($scope, $element, $attrs, $compile, $timeout, $window, $toast) {
-
-                $scope.closePanel = null;  // Close Panel Function.
-                $scope.panelStatus = "out";  // Panel Status.
+            controller: ["$scope", "$element", "$attrs", function ($scope, $element, $attrs) {}],
+            link: function (scope, element, attrs) {
+                scope.closePanel = null;  // Close Panel Function.
+                scope.panelStatus = "out";  // Panel Status.
 
                 // Broadcast Listener.
-                $scope.$on("textPanelCreated", function (event, object) {
+                scope.$on("textPanelCreated", function (event, object) {
                     createPanel(object);
                 });
 
@@ -165,34 +165,32 @@
                     // No content handler.
                     !config.content ? $toast.showSimpleToast("Caution: No content provided.") : void(0);
 
-                    // 创建内容节点.
-                    var nodes = '<div class="main-container w-100 h-100 p-absolute p-zero" style="z-index: 10000">' +
+                    // Create Content Nodes. | 创建内容节点.
+                    var nodes = '<div class="main-container w-100 h-100 p-absolute p-zero bk-merge md-whiteframe-4dp" style="z-index: 10000">' +
                         '<div class="content-container p-relative">' +
-                            '<h2 class="title">' + config.title + '</h2>' +
-                            '<md-button class="md-icon-button close-btn" ng-click="closePanel()"><i class="icon-cancel"></i></md-button>' +
-                            '<div class="content">' + config.content + '</div>' +
-                            '</div>' +
+                        '<h2 class="title">' + config.title + '</h2>' +
+                        '<md-button class="md-icon-button close-btn transition-dot-4" style="margin-top: .5em;" ng-click="closePanel()" aria-label="Close this panel."><md-tooltip>关闭面板</md-tooltip><i class="icon-cancel"></i></md-button>' +
+                        '<div class="content">' + config.content + '</div>' +
+                        '</div>' +
                         '</div>';
 
-                    $element.append($compile(nodes)($scope));
-                    $scope.panelStatus = "in";
+                    // Append & Set ng-Class.
+                    element.append($compile(nodes)(scope));
+                    scope.panelStatus = "in";
 
                     // Close Panel Function. | 关闭面板函数.
-                    $scope.closePanel = function () {
+                    scope.closePanel = function () {
                         config.backward ? $window.history.back() : void(0);
-                        $scope.panelStatus = "out";
+                        scope.panelStatus = "out";
+                        $clearMDToast();
                         $timeout(function () {
-                            angular.element($element).empty();
+                            angular.element(element).empty();
                         }, 600);
                     }
 
                 }
-
-            }],
-            link: function (scope, element, attrs) {
-
             }
         }
-    })
+    }])
 
 })();

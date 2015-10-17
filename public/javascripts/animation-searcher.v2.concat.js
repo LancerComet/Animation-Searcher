@@ -118,12 +118,17 @@
         "appConfig",  // Angular Application Configuration. | Angular 实例模块设置.
         "internalFunc",  // Internal Functions Add-on Module. | 内部方法模块.
         "ngAppCtrls", "ngAppDirectives",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
-        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "changeLog", "textPanel"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
+        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
     ]);
 
-    ngApp.run(function ($textPanel) {
-        $textPanel.help();
-    });
+    ngApp.run(["$timeout", "$splashScreen", function ($timeout, $splashScreen) {
+        angular.element(window).on("load", function () {
+            $timeout(function () {
+                $splashScreen.hide();
+            }, 3000);
+        });
+    }]);
+
 
 })();
 
@@ -153,7 +158,7 @@
     ngAppCtrls.config(["$compileProvider", function ($compileProvider) {
         // Set "Https", "Ftp", "Mailto", "File", "Magnet" as trusted string. | 将 "Https", "Ftp", "Mailto", "File", "Magnet" 设置为编译服务的可信字符串.
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|magnet):/);
-    }]).controller("mainController", ["$scope", "$rootScope", "$location", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, appConfig, $splashLayout) {
+    }]).controller("mainController", ["$scope", "$rootScope", "$location", "$timeout", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, $timeout, appConfig, $splashLayout) {
 
         // Definition: Layout Controller. | 页面布局控制器.
         // ---------------------------------------------
@@ -162,6 +167,13 @@
         $scope.$watch("splashLayout", function (newVal, oldVal) {
             $scope.layout = newVal.layout.status;
         }, true);  // 启动深度监视.
+
+        // SplashScreen Listener. | 启动画面广播监听.
+        $scope.$on("splashScreen", function (event, value) {
+            $timeout(function () {
+                $scope.backgroundBlur = "blur";
+            }, 1000);
+        });
 
 
         // Definition: Status of Progressbar (on the left). | 左侧切换列表的搜索条状态.
@@ -188,8 +200,6 @@
         // 数据将在搜索完毕之后更变.
         // Auto two-way data bind. | 自动双向数据绑定,
         $scope.searchResult = {};
-
-        console.log($scope);
 
     }]);
 
@@ -228,6 +238,15 @@
         };
 
     }]);
+
+
+    // Definition: Splash Screen Controller. | 载入界面节点控制器.
+    ngAppCtrls.controller("splashScreenController", ["$scope", function ($scope) {
+        $scope.status = null;  // ngClass adjustment for splash node.
+        $scope.$on("splashScreen", function (event, value) {
+            $scope.status = value;
+        });
+    }])
 
 
 
@@ -381,16 +400,16 @@
     });
 
     // Definition: Text Panel Directive. | 文字面板指令.
-    ngAppDirectives.directive("textPanel", function () {
+    ngAppDirectives.directive("textPanel", ["$compile", "$timeout", "$window", "$toast", "$clearMDToast", function ($compile, $timeout, $window, $toast, $clearMDToast) {
         return {
             restrict: "E",
-            controller: ["$scope", "$element", "$attrs", "$compile", "$timeout", "$window", "$toast", function ($scope, $element, $attrs, $compile, $timeout, $window, $toast) {
-
-                $scope.closePanel = null;  // Close Panel Function.
-                $scope.panelStatus = "out";  // Panel Status.
+            controller: ["$scope", "$element", "$attrs", function ($scope, $element, $attrs) {}],
+            link: function (scope, element, attrs) {
+                scope.closePanel = null;  // Close Panel Function.
+                scope.panelStatus = "out";  // Panel Status.
 
                 // Broadcast Listener.
-                $scope.$on("textPanelCreated", function (event, object) {
+                scope.$on("textPanelCreated", function (event, object) {
                     createPanel(object);
                 });
 
@@ -400,35 +419,33 @@
                     // No content handler.
                     !config.content ? $toast.showSimpleToast("Caution: No content provided.") : void(0);
 
-                    // 创建内容节点.
-                    var nodes = '<div class="main-container w-100 h-100 p-absolute p-zero" style="z-index: 10000">' +
+                    // Create Content Nodes. | 创建内容节点.
+                    var nodes = '<div class="main-container w-100 h-100 p-absolute p-zero bk-merge md-whiteframe-4dp" style="z-index: 10000">' +
                         '<div class="content-container p-relative">' +
-                            '<h2 class="title">' + config.title + '</h2>' +
-                            '<md-button class="md-icon-button close-btn" ng-click="closePanel()"><i class="icon-cancel"></i></md-button>' +
-                            '<div class="content">' + config.content + '</div>' +
-                            '</div>' +
+                        '<h2 class="title">' + config.title + '</h2>' +
+                        '<md-button class="md-icon-button close-btn transition-dot-4" style="margin-top: .5em;" ng-click="closePanel()" aria-label="Close this panel."><md-tooltip>关闭面板</md-tooltip><i class="icon-cancel"></i></md-button>' +
+                        '<div class="content">' + config.content + '</div>' +
+                        '</div>' +
                         '</div>';
 
-                    $element.append($compile(nodes)($scope));
-                    $scope.panelStatus = "in";
+                    // Append & Set ng-Class.
+                    element.append($compile(nodes)(scope));
+                    scope.panelStatus = "in";
 
                     // Close Panel Function. | 关闭面板函数.
-                    $scope.closePanel = function () {
+                    scope.closePanel = function () {
                         config.backward ? $window.history.back() : void(0);
-                        $scope.panelStatus = "out";
+                        scope.panelStatus = "out";
+                        $clearMDToast();
                         $timeout(function () {
-                            angular.element($element).empty();
+                            angular.element(element).empty();
                         }, 600);
                     }
 
                 }
-
-            }],
-            link: function (scope, element, attrs) {
-
             }
         }
-    })
+    }])
 
 })();
 /*
@@ -1040,7 +1057,7 @@
                 function success (response) {
                     // response: { data, headers, status, config, statusText }
                    $textPanel.show({
-                       title: "更新日志",
+                       title: "更新日志 <small>Change Log.</small>",
                        content: response.data.content,
                        backward: true
                    });
@@ -1089,6 +1106,28 @@
         }
 
     }]);
+
+    // Definition: Clear Material Toast. | 清除可能残余的 Material Toast.
+    var clearMdToast = angular.module("clearMdToast", []);
+    clearMdToast.factory("$clearMDToast", function () {
+        return function () {
+            angular.element(document.querySelector(".md-content")).remove();
+        }
+    });
+
+    // Definition: Splash Screen Service. | 载入界面服务.
+    var splashScreen = angular.module("splashScreen", []);
+    splashScreen.factory("$splashScreen", ["$rootScope", function ($rootScope) {
+        return {
+            show: exec.bind(0, "show"),
+            hide: exec.bind(0, "hide")
+        };
+
+        function exec () {
+            $rootScope.$broadcast("splashScreen", arguments[0]);
+        }
+    }]);
+
 })(window);
 /*
  *  Animation Searcher WebSocket Service By LancerComet at 15:27, 2015/10/9.

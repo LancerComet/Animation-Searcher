@@ -51,11 +51,16 @@
         "appConfig",  // Angular Application Configuration. | Angular 实例模块设置.
         "internalFunc",  // Internal Functions Add-on Module. | 内部方法模块.
         "ngAppCtrls", "ngAppDirectives",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
-        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "changeLog", "textPanel"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
+        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
     ]);
 
-    ngApp.run(function ($textPanel) {
-        $textPanel.help();
-    });
+    ngApp.run(["$timeout", "$splashScreen", function ($timeout, $splashScreen) {
+        angular.element(window).on("load", function () {
+            $timeout(function () {
+                $splashScreen.hide();
+            }, 3000);
+        });
+    }]);
+
 
 })();

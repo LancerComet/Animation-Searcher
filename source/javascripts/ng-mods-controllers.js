@@ -24,7 +24,7 @@
     ngAppCtrls.config(["$compileProvider", function ($compileProvider) {
         // Set "Https", "Ftp", "Mailto", "File", "Magnet" as trusted string. | 将 "Https", "Ftp", "Mailto", "File", "Magnet" 设置为编译服务的可信字符串.
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|magnet):/);
-    }]).controller("mainController", ["$scope", "$rootScope", "$location", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, appConfig, $splashLayout) {
+    }]).controller("mainController", ["$scope", "$rootScope", "$location", "$timeout", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, $timeout, appConfig, $splashLayout) {
 
         // Definition: Layout Controller. | 页面布局控制器.
         // ---------------------------------------------
@@ -33,6 +33,13 @@
         $scope.$watch("splashLayout", function (newVal, oldVal) {
             $scope.layout = newVal.layout.status;
         }, true);  // 启动深度监视.
+
+        // SplashScreen Listener. | 启动画面广播监听.
+        $scope.$on("splashScreen", function (event, value) {
+            $timeout(function () {
+                $scope.backgroundBlur = "blur";
+            }, 1000);
+        });
 
 
         // Definition: Status of Progressbar (on the left). | 左侧切换列表的搜索条状态.
@@ -59,8 +66,6 @@
         // 数据将在搜索完毕之后更变.
         // Auto two-way data bind. | 自动双向数据绑定,
         $scope.searchResult = {};
-
-        console.log($scope);
 
     }]);
 
@@ -99,6 +104,15 @@
         };
 
     }]);
+
+
+    // Definition: Splash Screen Controller. | 载入界面节点控制器.
+    ngAppCtrls.controller("splashScreenController", ["$scope", function ($scope) {
+        $scope.status = null;  // ngClass adjustment for splash node.
+        $scope.$on("splashScreen", function (event, value) {
+            $scope.status = value;
+        });
+    }])
 
 
 

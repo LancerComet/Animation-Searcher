@@ -21,10 +21,31 @@ $headerMinHeight = 6em
 .header
     height: 10em
     padding-top: $headerMinHeight
+    z-index: 100
 
 .header.init-layout
     height: 100%
     padding: 0
+
+.greeting-background
+    background-size: cover
+    background-repeat: no-repeat
+    background-position: center center
+
+.greeting-background.blur
+    filter: blur(10px)
+    transition: all 5s
+
+.greeting-background.stand-by-layout
+    opacity: 0
+    transition: all ease .4s
+
+.greeting-color-merge
+    background-color: #000
+    opacity: .5
+
+.greeting-color-merge.stand-by-layout
+    opacity: 0
 
 .greeting-area
     display: none
@@ -210,50 +231,27 @@ $charMsgBK = #539cff
         transition: none !important
         transform: scale(.8)
 
-@keyframes move-in-bottom {
-    from {
-        opacity: 0
-        transform: translate(0, 10em)
-    }
-    to {
-        opacity: 1
-        transform: translate(0, 0)
-    }
-}
-
-@keyframes move-out-bottom {
-    form {
-        transform: translate(0, 0)
-        opacity: 1
-    }
-    to {
-        transform: translate(0, 7em)
-        opacity: 0
-    }
-}
-
-@keyframes scale-in-ease {
-    0% {
-        opacity: 0
-        transform: scale(0)
-    }
-    50% {
-        opacity: 1
-        transform: scale(1.2)
-    }
-    100% {
-        opacity: 1
-        transform: scale(1)
-    }
-}
 
 
 // Popup Article Panel Module. | 弹出文章面板模块.
 // ==============================================================
-.text-panel.panel-in .main-container
+.text-panel.panel-out .main-container
+    background-color: transparent
+    animation: background-transparent $cubicEase .4s
+
+@keyframes background-transparent {
+    from {
+        background-color: rgba(0, 0, 0, .5);
+    }
+    to {
+        background-color: transparent
+    }
+}
+
+.text-panel.panel-in .content-container
     animation: move-in-from-bottom-card $cubicEase .55s
 
-.text-panel.panel-out .main-container
+.text-panel.panel-out .content-container
     animation: scale-out $cubicEase .6s
 
 .text-panel .content-container
@@ -264,13 +262,22 @@ $charMsgBK = #539cff
     overflow: hidden
 
 .text-panel .title
+    width: 100%
+    padding: .7em 1em
+    margin: 0
     position: absolute
-    margin: .7em 1em
+    background-color: $themeColor
+    color: #fff
     font-weight: 100
 
 .text-panel .close-btn
     position: absolute
     right: 0
+    color: #fff
+    &:hover
+      transform: rotate(90deg)
+    &:active
+      transform: rotate(-90deg)
 
 .text-panel .content
     height: calc(100% - 6.9em)
@@ -279,4 +286,33 @@ $charMsgBK = #539cff
     overflow: auto
 
 .text-panel p
-    margin: 0
+    margin: 0 0 2em 0
+
+
+
+// Splash Screen. | 载入界面.
+// ==============================================================
+.splash-screen
+    background-color: #fff
+    z-index: 20000
+
+.splash-screen.out
+    transform: translate(0, 100%)
+
+.splash-screen .author-image
+    border-radius: 50%
+    transform: scale(0)
+    animation: scale-in $cubicEase .5s forwards
+
+.splash-screen .greeting-text
+    transform: scale(0)
+    animation: scale-in $cubicEase 1s forwards
+    animation-delay: .5s
+
+.splash-screen .progress
+    width: 20em
+    margin: 0 auto
+    border-radius: 50%
+    transform: scale(0)
+    animation: scale-in $cubicEase 1.5s forwards
+    animation-delay: 1.2s

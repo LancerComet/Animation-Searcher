@@ -420,7 +420,7 @@
                 function success (response) {
                     // response: { data, headers, status, config, statusText }
                    $textPanel.show({
-                       title: "更新日志",
+                       title: "更新日志 <small>Change Log.</small>",
                        content: response.data.content,
                        backward: true
                    });
@@ -469,4 +469,26 @@
         }
 
     }]);
+
+    // Definition: Clear Material Toast. | 清除可能残余的 Material Toast.
+    var clearMdToast = angular.module("clearMdToast", []);
+    clearMdToast.factory("$clearMDToast", function () {
+        return function () {
+            angular.element(document.querySelector(".md-content")).remove();
+        }
+    });
+
+    // Definition: Splash Screen Service. | 载入界面服务.
+    var splashScreen = angular.module("splashScreen", []);
+    splashScreen.factory("$splashScreen", ["$rootScope", function ($rootScope) {
+        return {
+            show: exec.bind(0, "show"),
+            hide: exec.bind(0, "hide")
+        };
+
+        function exec () {
+            $rootScope.$broadcast("splashScreen", arguments[0]);
+        }
+    }]);
+
 })(window);

@@ -38,10 +38,14 @@
       <div class="body-container w-100 h-100" ng-controller="mainController">
 
           <%# Header. | 头部区域. %>
-          <header class="header p-relative z-9000 pd-common md-whiteframe-z1 color-theme bk-color transition-dot-6" layout="column" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
+          <header class="header p-relative pd-common md-whiteframe-z1 color-theme bk-color transition-dot-6" layout="column" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
+
+              <%# Greeting images. | 欢迎背景图片. %>
+              <div class="greeting-background w-100 h-100 p-absolute p-zero {{backgroundBlur}}" style="background-image: url('/images/picked-up-background/01.jpg');" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]"></div>
+              <div class="greeting-color-merge w-100 h-100 p-absolute p-zero color-theme bk-color" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]"></div>
 
               <%# Action bar in Header. | 顶部 Action bar. %>
-              <action-bar class="action-bar transition-dot-6" layout="row" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]" ng-cloak>
+              <action-bar class="action-bar p-relative transition-dot-6" layout="row" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]" ng-cloak>
 
                   <div flex class="action-bar-left-flex transition-dot-8" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]"></div>
 
@@ -71,13 +75,13 @@
               </action-bar>
 
               <%# Greeting Area. | 欢迎内容节点. %>
-              <div class="greeting-area" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
+              <div class="greeting-area p-relative" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
                   <h1 style="margin: 0; padding: 3em; color: #fff; font-weight: 100;" class="text-center">
                       Hello, I'm <%=appConfig.appInfo.appName%><br>
                       <small>Just have a try. <i class="icon-emo-happy"></i></small>
                   </h1>
                   <p class="text-center">
-                      <md-button class="md-button" href="/powered-by" style="color: rgba(255, 255, 255, .5)" aria-label="Powered By."><md-tooltip>这些惊人的艺术.</md-tooltip><i class="icon-emo-devil"></i> Powered By ...</md-button>
+                      <md-button class="md-button" href="/powered-by" style="color: rgba(255, 255, 255, .5)" aria-label="Powered By."><md-tooltip>惊人的艺术.</md-tooltip><i class="icon-emo-devil"></i> Powered By ...</md-button>
                   </p>
               </div>
 
@@ -132,6 +136,21 @@
 
           <%# Main Progressbar in body-width. | Body 宽度进度条 %>
           <!--<md-progress-linear id="body-progress-bar" class="md-warn p-fixed p-bottom" md-mode="query"></md-progress-linear>-->
+
+          <%# Splash Screen. | 载入界面. %>
+          <div class="splash-screen w-100 h-100 p-absolute p-zero transition-dot-6" layout="column" ng-controller="splashScreenController" ng-class="{'show': 'in', 'hide': 'out'}[status]">
+              <div flex></div>
+              <div flex layout="row">
+                  <div class="flex"></div>
+                  <div class="flex splash-info text-center color-theme text-color ng-cloak">
+                      <img src="/images/left-leftnav-author.jpg" alt="Splash Logo." class="author-image">
+                      <p class="greeting-text">Carry Your World.</p>
+                      <md-progress-linear class="progress" md-mode="query"></md-progress-linear>
+                  </div>
+                  <div class="flex"></div>
+              </div>
+              <div flex></div>
+          </div>
 
       </div>
       <%# ------------------------- Service Modules Ends Here. ------------------------- %>

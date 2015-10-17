@@ -26,6 +26,9 @@ $fontFamily = "微软雅黑", "Microsoft Yahei", "Microsoft Sans Serif";
 /* Animation. */
 $cubicEase = cubic-bezier(.22, .58, .12, .98);
 
+/* Visual. */
+$themeColor = rgb(63, 68, 118);
+
 
 
 
@@ -144,6 +147,9 @@ $cubicEase = cubic-bezier(.22, .58, .12, .98);
 .dp-none
   display: none
 
+.ng-cloak
+  display: none !important
+
 /* Animation. */
 .transition-dot-2
   transition: all $cubicEase .2s !important
@@ -159,6 +165,12 @@ $cubicEase = cubic-bezier(.22, .58, .12, .98);
 
 .transition-1
   transition: all $cubicEase 1s !important
+
+.transition-3
+  transition: all $cubicEase 3s !important
+
+.transition-5
+  transition: all $cubicEase 5s !important
 
 /* Color Theme. */
 .color-theme
@@ -194,12 +206,15 @@ body
 // ===================================================================
 @keyframes scale-in-ease {
   0% {
+    opacity: 0
     transform: scale(0)
   }
   50% {
+    opacity: 1
     transform: scale(1.2)
   }
   100% {
+    opacity: 1
     transform: scale(1)
   }
 }
@@ -236,3 +251,26 @@ body
     transform: translate(0, 0) scale(1)
   }
 }
+
+@keyframes move-in-bottom {
+  from {
+    opacity: 0
+    transform: translate(0, 10em)
+  }
+  to {
+    opacity: 1
+    transform: translate(0, 0)
+  }
+}
+
+@keyframes move-out-bottom {
+  form {
+    transform: translate(0, 0)
+    opacity: 1
+  }
+  to {
+    transform: translate(0, 7em)
+    opacity: 0
+  }
+}
+
