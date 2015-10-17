@@ -26,7 +26,7 @@
           }
 
           .color-theme.text-color {
-              color: rgb(63, 68, 118);
+              color: rgb(63, 68, 118); !important;
           }
       </style>
 
@@ -41,7 +41,9 @@
           <header class="header p-relative pd-common md-whiteframe-z1 color-theme bk-color transition-dot-6" layout="column" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
 
               <%# Greeting images. | 欢迎背景图片. %>
-              <div class="greeting-background w-100 h-100 p-absolute p-zero {{backgroundBlur}}" style="background-image: url('/images/picked-up-background/01.jpg');" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]"></div>
+              <div class="greeting-background w-100 h-100 p-absolute p-zero {{backgroundBlur}}" style="background-image: url('/images/picked-up-background/02.jpg');" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
+                  <img id="greeting-background" src="/images/picked-up-background/02.jpg" class="dp-none"/>
+              </div>
               <div class="greeting-color-merge w-100 h-100 p-absolute p-zero color-theme bk-color" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]"></div>
 
               <%# Action bar in Header. | 顶部 Action bar. %>

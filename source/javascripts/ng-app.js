@@ -17,6 +17,8 @@
  *  V0.1.5 - 16:53, 2015.10.17.
  *   + 加入文字信息面板模块.
  *   + 使用广播机制替换部分不合理方法.
+ *   + 增加启动画面.
+ *   + 引入 Lokesh Dhakar 的 ColorThief.
  *
  *  V0.1.4 - 23:01, 2015.10.15.
  *   + 将全部 JavaScript 内容 Angular 模块化并使用 IFFE 封装.
@@ -51,14 +53,21 @@
         "appConfig",  // Angular Application Configuration. | Angular 实例模块设置.
         "internalFunc",  // Internal Functions Add-on Module. | 内部方法模块.
         "ngAppCtrls", "ngAppDirectives",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
+        "colorThief",  // colorThief Original By Lokesh Dhakar.
         "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
     ]);
 
-    ngApp.run(["$timeout", "$splashScreen", function ($timeout, $splashScreen) {
+    ngApp.run(["$timeout", "$splashScreen", "$colorChange", "$colorThief", function ($timeout, $splashScreen, $colorChange, $colorThief) {
         angular.element(window).on("load", function () {
+
+            var darkestColor = $colorThief.getDarkestColor(document.querySelector("#greeting-background"));
+
             $timeout(function () {
                 $splashScreen.hide();
             }, 3000);
+            $timeout(function () {
+                $colorChange.change(darkestColor)
+            }, 1000)
         });
     }]);
 

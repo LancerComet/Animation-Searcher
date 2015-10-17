@@ -168,7 +168,7 @@
                     // Create Content Nodes. | 创建内容节点.
                     var nodes = '<div class="main-container w-100 h-100 p-absolute p-zero bk-merge md-whiteframe-4dp" style="z-index: 10000">' +
                         '<div class="content-container p-relative">' +
-                        '<h2 class="title">' + config.title + '</h2>' +
+                        '<h2 class="title color-theme bk-color">' + config.title + '</h2>' +
                         '<md-button class="md-icon-button close-btn transition-dot-4" style="margin-top: .5em;" ng-click="closePanel()" aria-label="Close this panel."><md-tooltip>关闭面板</md-tooltip><i class="icon-cancel"></i></md-button>' +
                         '<div class="content">' + config.content + '</div>' +
                         '</div>' +
@@ -182,9 +182,9 @@
                     scope.closePanel = function () {
                         config.backward ? $window.history.back() : void(0);
                         scope.panelStatus = "out";
-                        $clearMDToast();
                         $timeout(function () {
                             angular.element(element).empty();
+                            $clearMDToast();
                         }, 600);
                     }
 

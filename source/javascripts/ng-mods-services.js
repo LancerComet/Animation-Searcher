@@ -366,7 +366,7 @@
                 "background-color:" + color +
                 "}" +
                 ".color-theme.text-color {" +
-                "color:" + color +
+                "color:" + color + " !important" +
                 "}";
             $colorThemeSheet.html(sheetString);
         }
