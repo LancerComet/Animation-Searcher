@@ -14,6 +14,10 @@
  *
  *  Log:
  *  ---
+ *  V0.1.5 - 16:53, 2015.10.17.
+ *   + 加入文字信息面板模块.
+ *   + 使用广播机制替换部分不合理方法.
+ *
  *  V0.1.4 - 23:01, 2015.10.15.
  *   + 将全部 JavaScript 内容 Angular 模块化并使用 IFFE 封装.
  *   + JavaScript 文件分类存放.
@@ -47,7 +51,11 @@
         "appConfig",  // Angular Application Configuration. | Angular 实例模块设置.
         "internalFunc",  // Internal Functions Add-on Module. | 内部方法模块.
         "ngAppCtrls", "ngAppDirectives",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
-        "ngAppToast", "ngCharMsg", "ngLeftNav", "ngColorChange", "ngLocalStorage", "ngSplashLayout", "ngChangeLog"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
+        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "changeLog", "textPanel"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
     ]);
+
+    ngApp.run(function ($textPanel) {
+        $textPanel.help();
+    });
 
 })();

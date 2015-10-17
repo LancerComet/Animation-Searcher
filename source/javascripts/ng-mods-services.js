@@ -15,8 +15,8 @@
     "use strict";
 
     // Definition: Toast Module, from Material-Angular. | Material-Angular Toast 模块定义.
-    var ngAppToast = angular.module("ngAppToast", []);
-    ngAppToast.factory("$toast", ["$mdToast", "appConfig", function ($mdToast, appConfig) {
+    var appToast = angular.module("appToast", []);
+    appToast.factory("$toast", ["$mdToast", "appConfig", function ($mdToast, appConfig) {
 
         var toastModule = {};
 
@@ -59,8 +59,8 @@
 
 
     // Definition: charMsg Module. | 角色信息提示模块.
-    var ngCharMsg = angular.module("ngCharMsg", []);
-    ngCharMsg.factory("$charMsg", function ($timeout, $internalFunc) {
+    var charMsg = angular.module("charMsg", []);
+    charMsg.factory("$charMsg", ["$timeout", "$window", "$internalFunc", function ($timeout, $window, $internalFunc) {
 
         // jqLite Object: body.
         var $body = angular.element(document.querySelector("body"));
@@ -102,10 +102,10 @@
 
                 switch (position) {
                     case "left":
-                        addClass(charMsgNode, "left");
+                        $internalFunc.addClass(charMsgNode, "left");
                         break;
                     case "right":
-                        addClass(charMsgNode, "right");
+                        $internalFunc.addClass(charMsgNode, "right");
                         break;
                 }
 
@@ -142,12 +142,12 @@
                 }, 500);
 
             },
-            remove: function (callback) {
-                addClass(charMsgNode, "out-animation");
+            remove: function () {
+                $internalFunc.addClass(charMsgNode, "out-animation");
+                $window.history.back();
                 $removeTimeout = $timeout(function () {
                     charMsgNode.parentNode.removeChild(charMsgNode);
                     charMsgNode = null;
-                    callback ? callback() : void(0);
                 }, 500);
             }
         };
@@ -157,12 +157,12 @@
             hide: charMsg.remove
         }
 
-    });
+    }]);
 
 
     // Definition: LocalStorage Control Module. | LocalStorage 控制模块.
-    var ngLocalStorage = angular.module("ngLocalStorage", []);
-    ngLocalStorage.factory("$localStorage", function ($toast, $internalFunc, appConfig) {
+    var localStorage = angular.module("localStorage", []);
+    localStorage.factory("$localStorage", function ($toast, $internalFunc, appConfig) {
 
         function setItem (key, value) {
             // Error Handler.
@@ -210,8 +210,8 @@
 
 
     // Definition: Left Side Navigator Bar, from Material-Angular. | Material-Angular 左侧导航模块.
-    var ngLeftNav = angular.module("ngLeftNav", []);
-    ngLeftNav.factory("$leftNav", function ($mdSidenav, $timeout, $location, $internalFunc) {
+    var leftNav = angular.module("leftNav", []);
+    leftNav.factory("$leftNav", function ($mdSidenav, $timeout, $location, $internalFunc) {
 
         // Definition: $window Object.
         var $window = angular.element(global);
@@ -355,8 +355,8 @@
 
 
     // Definition: Color Change Service Module. | 颜色变换服务模块.
-    var ngColorChange = angular.module("ngColorChange", []);
-    ngColorChange.factory("$colorChange", function () {
+    var colorChange = angular.module("colorChange", []);
+    colorChange.factory("$colorChange", function () {
 
         var colorThemeSheet = document.getElementById("color-change");
         var $colorThemeSheet = angular.element(colorThemeSheet);
@@ -376,9 +376,10 @@
         }
     });
 
+
     // Definition: Splash Layout Service Module. | 启动布局服务模块.
-    var ngSplashLayout = angular.module("ngSplashLayout", []);
-    ngSplashLayout.factory("$splashLayout", function () {
+    var splashLayout = angular.module("splashLayout", []);
+    splashLayout.factory("$splashLayout", function () {
 
         var className = {
             initLayout: "init-layout",  // "True" stands by "init-layout".
@@ -411,17 +412,18 @@
 
 
     // Definition: Change Log Service. | 更新日志服务模块.
-    var ngChangeLog = angular.module("ngChangeLog", []);
-    ngChangeLog.factory("$changeLog", function ($http, $splashLayout, $leftNav, $toast, $internalFunc) {
-        var self = this;  // Self Reference.
-        var panelStatus = "hide";
+    var changeLog = angular.module("changeLog", []);
+    changeLog.factory("$changeLog", ["$http", "$splashLayout", "$leftNav", "$toast", "$internalFunc", "$textPanel", function ($http, $splashLayout, $leftNav, $toast, $internalFunc, $textPanel) {
 
         function showChangeLog () {
             $http.post("/change-log").then(
                 function success (response) {
                     // response: { data, headers, status, config, statusText }
-                    $splashLayout.toStandByLayout();
-                    self.panelStatus = "show";
+                   $textPanel.show({
+                       title: "更新日志",
+                       content: response.data.content,
+                       backward: true
+                   });
                 },
                 function error (response) {
                     $internalFunc.toastErr($toast, "更新日志获取失败, 过一会再试试?", "(/= _ =)/~┴┴", "Request for Change Log failed.");
@@ -429,15 +431,42 @@
             );
         }
 
-        function hideChangeLog () {
-            self.panelStatus = "hide";
-        }
-
         return {
-            show: showChangeLog,
-            hide: hideChangeLog,
-            status: panelStatus
+            show: showChangeLog
         };
 
-    });
+    }]);
+
+    // Definition: Text Panel Service. | 文字面板服务模块.
+    var textPanel = angular.module("textPanel", []);
+    textPanel.factory("$textPanel", ["$rootScope", function ($rootScope) {
+
+        return {
+            show: show,
+            help: showHelp
+        };
+
+        // Helps for someone forgetful.
+        // 老了，撸不动了.
+        function showHelp () {
+            console.log("$textPanel Service: \n--- This is a invincible divider. ---");
+            console.log(' - $textPanel.show(config): Create a text panel and fill it with "content".');
+            console.log(' - $textPanel.help(): Here comes the help you loser! \n');
+        }
+
+        // Create & Show a new Text Panel. | 创建并显示一个新的文字面板.
+        function show (config) {
+            /*
+             *  config: {
+             *    title: String,
+             *    content: String,
+             *    backward: Boolean  // @ True: Go backward when close button is clicked.
+             *  }
+             *
+             */
+            config = config || "";
+            $rootScope.$broadcast("textPanelCreated", config);
+        }
+
+    }]);
 })(window);

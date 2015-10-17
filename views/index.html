@@ -32,7 +32,7 @@
 
   </head>
   
-  <body class="w-100 h-100">
+  <body class="w-100 h-100 over-hidden">
 
       <%# Body Container. | 总容器节点. %>
       <div class="body-container w-100 h-100" ng-controller="mainController">
@@ -51,7 +51,7 @@
                       <leftnav-menu id="left-nav-menu" class="left-nav-menu bk-cover no-outline" ng-click="toggle()" data-status="menu"></leftnav-menu>
 
                       <%# Search Bar Container. | 搜索条节点. %>
-                      <search-bar class="search-bar" flex>
+                      <search-bar class="search-bar" flex ng-controller="searchController">
                           <form name="search-form" layout="row">
                               <md-input-container class="search-input-container" flex>
                                   <label class="search-bar-color"><%=randomTitle%></label>
@@ -76,6 +76,9 @@
                       Hello, I'm <%=appConfig.appInfo.appName%><br>
                       <small>Just have a try. <i class="icon-emo-happy"></i></small>
                   </h1>
+                  <p class="text-center">
+                      <md-button class="md-button" href="/powered-by" style="color: rgba(255, 255, 255, .5)" aria-label="Powered By."><md-tooltip>这些惊人的艺术.</md-tooltip><i class="icon-emo-devil"></i> Powered By ...</md-button>
+                  </p>
               </div>
 
           </header>
@@ -110,7 +113,7 @@
                       <div class="button-container" ng-controller="leftNavButtonCtrl">
                           <md-button class="left-nav-button" href="/"><i class="icon-left-open"></i> 关闭侧栏</md-button>
                           <md-button class="left-nav-button" href="/change-log"><i class="icon-refresh"></i> 更新日志</md-button>
-                          <md-button class="left-nav-button" href="http://search.lancercomet.com" target="_blank" aria-label="search.lancercomet.com"><i class="icon-history"></i> 旧版链接</md-button>
+                          <md-button class="left-nav-button" href="http://search.lancercomet.com" target="_ blank" aria-label="search.lancercomet.com"><i class="icon-history"></i> 旧版链接</md-button>
                           <md-button class="left-nav-button md-warn" ng-click="clearHistory()"><i class="icon-trash"></i> 清除历史</md-button>
                       </div>
 
@@ -121,14 +124,14 @@
               </md-sidenav>
           </div>
 
-          <%# Information Panel Module. | 文字展示面板节点. %>
-          
+          <%# Information Panel Module Container. | 文字展示面板节点容器. %>
+          <text-panel class="text-panel" ng-class="{'in': 'panel-in', 'out': 'panel-out'}[panelStatus]"></text-panel>
 
           <%# Frontend Router Blank Node. | 前端路由空白节点. %>
           <div class="dp-none" ng-view></div>
 
           <%# Main Progressbar in body-width. | Body 宽度进度条 %>
-          <md-progress-linear id="body-progress-bar" class="md-warn p-fixed p-bottom" md-mode="query"></md-progress-linear>
+          <!--<md-progress-linear id="body-progress-bar" class="md-warn p-fixed p-bottom" md-mode="query"></md-progress-linear>-->
 
       </div>
       <%# ------------------------- Service Modules Ends Here. ------------------------- %>

@@ -7,16 +7,35 @@
  *
  */
 
-
-// Definition: Error Handler in console & for developers only. | 控制台内错误提示.
-// Please note that this function will block Explorer and all functions next won't be executed.
-// 请注意此函数将使用 throw New Error 阻塞浏览器执行接下来的代码.
 (function () {
+    "use strict";
+
+    // $internalFunc Service Definition. | $internalFunc 服务定义.
+    var internalFunc = angular.module("internalFunc", []);
+    internalFunc.factory("$internalFunc", function () {
+        return {
+            throwError: throwError,
+            toastFunc: $toastFunc,
+            toastErr: $toastErr,
+            imageAnimationX: imageAnimationX,
+            hasClass: hasClass,
+            addClass: addClass,
+            removeClass: removeClass,
+            setClass: setClass,
+            prependChild: prependChild
+        }
+    });
+
+    /* Functions go below. */
+
+    // Definition: Error Handler in console & for developers only. | 控制台内错误提示.
+    // Please note that this function will block Explorer and all functions next won't be executed.
+    // 请注意此函数将使用 throw New Error 阻塞浏览器执行接下来的代码.
     function throwError (text) {
         throw new Error(moduleSettings.text.prefix + "Error: " + text);
     }
 
-// Definition: Packaging function of Angular-Material Toast. | Angular-Material 的 Toast 组件封装函数.
+    // Definition: Packaging function of Angular-Material Toast. | Angular-Material 的 Toast 组件封装函数.
     function $toastFunc ($toast, type, content, action, callback) {
         if (!$toast || !type) {
             throwError('Argument "$toast" or "type" is not provided in $toastErr.')
@@ -37,22 +56,22 @@
         }
     }
 
-// Definition: Packaged Function of Angular-Material Error Toast. | 错误 Toast 提示函数.
+    // Definition: Packaged Function of Angular-Material Error Toast. | 错误 Toast 提示函数.
     function $toastErr ($toast, content, action, consoleErr) {
         $toastFunc($toast, "action", content, action, function () {
             throwError(consoleErr);
         });
     }
 
-// Definition: Background-animating in X axis function. | 背景图片 X 轴动画播放函数.
+    // Definition: Background-animating in X axis function. | 背景图片 X 轴动画播放函数.
     function imageAnimationX (targetDom, configure) {
 
         /*
          @ Configure: {
-         startPosition: Number,
-         width: Number,
-         step: Numner,
-         interval: Numbuer
+             startPosition: Number,
+             width: Number,
+             step: Numner,
+             interval: Numbuer
          }
          */
         imageAnimationX.isRunning = true;
@@ -72,7 +91,7 @@
     }
     imageAnimationX.isRunning = false;
 
-// Definition: Native JavaScript Function extension. | 原生方法扩展函数.
+    // Definition: Native JavaScript Function extension. | 原生方法扩展函数.
     function hasClass (element, className) {
         return !!element.className.match(new RegExp( "(\\s|^)" + className + "(\\s|$)"));
     }
@@ -101,20 +120,5 @@
         }
         return parent;
     }
-
-    var internalFunc = angular.module("internalFunc", []);
-    internalFunc.factory("$internalFunc", function () {
-        return {
-            throwError: throwError,
-            toastFunc: $toastFunc,
-            toastErr: $toastErr,
-            imageAnimationX: imageAnimationX,
-            hasClass: hasClass,
-            addClass: addClass,
-            removeClass: removeClass,
-            setClass: setClass,
-            prependChild: prependChild
-        }
-    });
 
 })();

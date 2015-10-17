@@ -145,4 +145,54 @@
         }
     });
 
+    // Definition: Text Panel Directive. | 文字面板指令.
+    ngAppDirectives.directive("textPanel", function () {
+        return {
+            restrict: "E",
+            controller: ["$scope", "$element", "$attrs", "$compile", "$timeout", "$window", "$toast", function ($scope, $element, $attrs, $compile, $timeout, $window, $toast) {
+
+                $scope.closePanel = null;  // Close Panel Function.
+                $scope.panelStatus = "out";  // Panel Status.
+
+                // Broadcast Listener.
+                $scope.$on("textPanelCreated", function (event, object) {
+                    createPanel(object);
+                });
+
+                // Create & Show a new Text Panel. | 创建并显示一个新的文字面板.
+                function createPanel (config) {
+
+                    // No content handler.
+                    !config.content ? $toast.showSimpleToast("Caution: No content provided.") : void(0);
+
+                    // 创建内容节点.
+                    var nodes = '<div class="main-container w-100 h-100 p-absolute p-zero" style="z-index: 10000">' +
+                        '<div class="content-container p-relative">' +
+                            '<h2 class="title">' + config.title + '</h2>' +
+                            '<md-button class="md-icon-button close-btn" ng-click="closePanel()"><i class="icon-cancel"></i></md-button>' +
+                            '<div class="content">' + config.content + '</div>' +
+                            '</div>' +
+                        '</div>';
+
+                    $element.append($compile(nodes)($scope));
+                    $scope.panelStatus = "in";
+
+                    // Close Panel Function. | 关闭面板函数.
+                    $scope.closePanel = function () {
+                        config.backward ? $window.history.back() : void(0);
+                        $scope.panelStatus = "out";
+                        $timeout(function () {
+                            angular.element($element).empty();
+                        }, 600);
+                    }
+
+                }
+
+            }],
+            link: function (scope, element, attrs) {
+
+            }
+        }
+    })
+
 })();

@@ -187,3 +187,52 @@ body
   border: 0
   font-family: $fontFamily
   font-weight: 100
+
+
+
+// Animation. | 动画定义.
+// ===================================================================
+@keyframes scale-in-ease {
+  0% {
+    transform: scale(0)
+  }
+  50% {
+    transform: scale(1.2)
+  }
+  100% {
+    transform: scale(1)
+  }
+}
+
+@keyframes scale-in {
+  from {
+    transform: scale(.7)
+    opacity: 0
+  }
+  to {
+    transform: scale(1)
+    opacity: 1
+  }
+}
+
+@keyframes scale-out {
+  from {
+    transform: scale(1)
+    opacity: 1
+  }
+  to {
+    transform: scale(.7)
+    opacity: 0
+  }
+}
+
+@keyframes move-in-from-bottom-card {
+  0% {
+    opacity: 0
+    transform: translate(0, 100%) scale(1.2)
+  }
+  100% {
+    opacity: 1
+    transform: translate(0, 0) scale(1)
+  }
+}

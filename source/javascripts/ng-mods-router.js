@@ -36,13 +36,23 @@
                         $leftNav.open();
                         $splashLayout.toStandByLayout();
                     }
-                }).when("/", {
+                }
+            ).when("/powered-by", {
+                    template: "",
+                    controller: function ($charMsg) {
+                        $charMsg.show("Powered By ...", "This site is powered by Angular.JS, Node.JS, Nginx @ Aliyun.");
+                    }
+                }
+            ).when("/", {
                     template: "",
                     controller: function ($leftNav, $changeLog) {
                         $leftNav.close();
-                        $changeLog.hide();
                     }
-                });
+                }
+            ).otherwise({
+                    redirectTo: "/"
+                }
+            );
         }])
         .config(["$locationProvider", function ($locationProvider) {
             $locationProvider.html5Mode({

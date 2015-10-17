@@ -81,6 +81,10 @@
  *
  *  Log:
  *  ---
+ *  V0.1.5 - 16:53, 2015.10.17.
+ *   + 加入文字信息面板模块.
+ *   + 使用广播机制替换部分不合理方法.
+ *
  *  V0.1.4 - 23:01, 2015.10.15.
  *   + 将全部 JavaScript 内容 Angular 模块化并使用 IFFE 封装.
  *   + JavaScript 文件分类存放.
@@ -114,8 +118,12 @@
         "appConfig",  // Angular Application Configuration. | Angular 实例模块设置.
         "internalFunc",  // Internal Functions Add-on Module. | 内部方法模块.
         "ngAppCtrls", "ngAppDirectives",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
-        "ngAppToast", "ngCharMsg", "ngLeftNav", "ngColorChange", "ngLocalStorage", "ngSplashLayout", "ngChangeLog"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
+        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "changeLog", "textPanel"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
     ]);
+
+    ngApp.run(function ($textPanel) {
+        $textPanel.help();
+    });
 
 })();
 
@@ -145,9 +153,7 @@
     ngAppCtrls.config(["$compileProvider", function ($compileProvider) {
         // Set "Https", "Ftp", "Mailto", "File", "Magnet" as trusted string. | 将 "Https", "Ftp", "Mailto", "File", "Magnet" 设置为编译服务的可信字符串.
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|magnet):/);
-    }]);
-
-    ngAppCtrls.controller("mainController", ["$scope", "$rootScope", "$location", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, appConfig, $splashLayout) {
+    }]).controller("mainController", ["$scope", "$rootScope", "$location", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, appConfig, $splashLayout) {
 
         // Definition: Layout Controller. | 页面布局控制器.
         // ---------------------------------------------
@@ -177,13 +183,40 @@
         // }
 
         // Definition: Result Data. | 搜索结果数据定义.
+        // ---------------------------------------------
         // Value will change after search requesting is finished successfully.
         // 数据将在搜索完毕之后更变.
         // Auto two-way data bind. | 自动双向数据绑定,
         $scope.searchResult = {};
 
+        console.log($scope);
 
     }]);
+
+
+    // Definition: Search Part Controller. | 搜索节点控制器.
+    ngAppCtrls.controller("searchController", ["$scope", function ($scope) {
+
+        $scope.searchBarFocus = searchBarFocus;
+        $scope.searchBarBlur = searchBarBlur;
+        $scope.searchBarKeyDown = searchBarKeyDown;
+
+        /* Definition go below. | 下方为定义部分. */
+
+        function searchBarFocus () {
+
+        }
+
+        function searchBarBlur () {
+
+        }
+
+        function searchBarKeyDown () {
+
+        }
+
+    }]);
+
 
 
     // Definition: Left Side Navigator Buttons Controller. | 左侧导航按钮控制器.
@@ -197,10 +230,6 @@
     }]);
 
 
-    // Definition: Change Log Panel Controller. | 更新日志面板控制器.
-    ngAppCtrls.controller("changeLogCtrl", ["$scope", "$changeLog", function ($scope, $changeLog) {
-
-    }]);
 
 })();
 
@@ -351,6 +380,56 @@
         }
     });
 
+    // Definition: Text Panel Directive. | 文字面板指令.
+    ngAppDirectives.directive("textPanel", function () {
+        return {
+            restrict: "E",
+            controller: ["$scope", "$element", "$attrs", "$compile", "$timeout", "$window", "$toast", function ($scope, $element, $attrs, $compile, $timeout, $window, $toast) {
+
+                $scope.closePanel = null;  // Close Panel Function.
+                $scope.panelStatus = "out";  // Panel Status.
+
+                // Broadcast Listener.
+                $scope.$on("textPanelCreated", function (event, object) {
+                    createPanel(object);
+                });
+
+                // Create & Show a new Text Panel. | 创建并显示一个新的文字面板.
+                function createPanel (config) {
+
+                    // No content handler.
+                    !config.content ? $toast.showSimpleToast("Caution: No content provided.") : void(0);
+
+                    // 创建内容节点.
+                    var nodes = '<div class="main-container w-100 h-100 p-absolute p-zero" style="z-index: 10000">' +
+                        '<div class="content-container p-relative">' +
+                            '<h2 class="title">' + config.title + '</h2>' +
+                            '<md-button class="md-icon-button close-btn" ng-click="closePanel()"><i class="icon-cancel"></i></md-button>' +
+                            '<div class="content">' + config.content + '</div>' +
+                            '</div>' +
+                        '</div>';
+
+                    $element.append($compile(nodes)($scope));
+                    $scope.panelStatus = "in";
+
+                    // Close Panel Function. | 关闭面板函数.
+                    $scope.closePanel = function () {
+                        config.backward ? $window.history.back() : void(0);
+                        $scope.panelStatus = "out";
+                        $timeout(function () {
+                            angular.element($element).empty();
+                        }, 600);
+                    }
+
+                }
+
+            }],
+            link: function (scope, element, attrs) {
+
+            }
+        }
+    })
+
 })();
 /*
  *  Animation Searcher Angular Application By LancerComet at 12:29, 2015/10/9.
@@ -361,16 +440,35 @@
  *
  */
 
-
-// Definition: Error Handler in console & for developers only. | 控制台内错误提示.
-// Please note that this function will block Explorer and all functions next won't be executed.
-// 请注意此函数将使用 throw New Error 阻塞浏览器执行接下来的代码.
 (function () {
+    "use strict";
+
+    // $internalFunc Service Definition. | $internalFunc 服务定义.
+    var internalFunc = angular.module("internalFunc", []);
+    internalFunc.factory("$internalFunc", function () {
+        return {
+            throwError: throwError,
+            toastFunc: $toastFunc,
+            toastErr: $toastErr,
+            imageAnimationX: imageAnimationX,
+            hasClass: hasClass,
+            addClass: addClass,
+            removeClass: removeClass,
+            setClass: setClass,
+            prependChild: prependChild
+        }
+    });
+
+    /* Functions go below. */
+
+    // Definition: Error Handler in console & for developers only. | 控制台内错误提示.
+    // Please note that this function will block Explorer and all functions next won't be executed.
+    // 请注意此函数将使用 throw New Error 阻塞浏览器执行接下来的代码.
     function throwError (text) {
         throw new Error(moduleSettings.text.prefix + "Error: " + text);
     }
 
-// Definition: Packaging function of Angular-Material Toast. | Angular-Material 的 Toast 组件封装函数.
+    // Definition: Packaging function of Angular-Material Toast. | Angular-Material 的 Toast 组件封装函数.
     function $toastFunc ($toast, type, content, action, callback) {
         if (!$toast || !type) {
             throwError('Argument "$toast" or "type" is not provided in $toastErr.')
@@ -391,22 +489,22 @@
         }
     }
 
-// Definition: Packaged Function of Angular-Material Error Toast. | 错误 Toast 提示函数.
+    // Definition: Packaged Function of Angular-Material Error Toast. | 错误 Toast 提示函数.
     function $toastErr ($toast, content, action, consoleErr) {
         $toastFunc($toast, "action", content, action, function () {
             throwError(consoleErr);
         });
     }
 
-// Definition: Background-animating in X axis function. | 背景图片 X 轴动画播放函数.
+    // Definition: Background-animating in X axis function. | 背景图片 X 轴动画播放函数.
     function imageAnimationX (targetDom, configure) {
 
         /*
          @ Configure: {
-         startPosition: Number,
-         width: Number,
-         step: Numner,
-         interval: Numbuer
+             startPosition: Number,
+             width: Number,
+             step: Numner,
+             interval: Numbuer
          }
          */
         imageAnimationX.isRunning = true;
@@ -426,7 +524,7 @@
     }
     imageAnimationX.isRunning = false;
 
-// Definition: Native JavaScript Function extension. | 原生方法扩展函数.
+    // Definition: Native JavaScript Function extension. | 原生方法扩展函数.
     function hasClass (element, className) {
         return !!element.className.match(new RegExp( "(\\s|^)" + className + "(\\s|$)"));
     }
@@ -455,21 +553,6 @@
         }
         return parent;
     }
-
-    var internalFunc = angular.module("internalFunc", []);
-    internalFunc.factory("$internalFunc", function () {
-        return {
-            throwError: throwError,
-            toastFunc: $toastFunc,
-            toastErr: $toastErr,
-            imageAnimationX: imageAnimationX,
-            hasClass: hasClass,
-            addClass: addClass,
-            removeClass: removeClass,
-            setClass: setClass,
-            prependChild: prependChild
-        }
-    });
 
 })();
 /*
@@ -510,13 +593,23 @@
                         $leftNav.open();
                         $splashLayout.toStandByLayout();
                     }
-                }).when("/", {
+                }
+            ).when("/powered-by", {
+                    template: "",
+                    controller: function ($charMsg) {
+                        $charMsg.show("Powered By ...", "This site is powered by Angular.JS, Node.JS, Nginx @ Aliyun.");
+                    }
+                }
+            ).when("/", {
                     template: "",
                     controller: function ($leftNav, $changeLog) {
                         $leftNav.close();
-                        $changeLog.hide();
                     }
-                });
+                }
+            ).otherwise({
+                    redirectTo: "/"
+                }
+            );
         }])
         .config(["$locationProvider", function ($locationProvider) {
             $locationProvider.html5Mode({
@@ -542,8 +635,8 @@
     "use strict";
 
     // Definition: Toast Module, from Material-Angular. | Material-Angular Toast 模块定义.
-    var ngAppToast = angular.module("ngAppToast", []);
-    ngAppToast.factory("$toast", ["$mdToast", "appConfig", function ($mdToast, appConfig) {
+    var appToast = angular.module("appToast", []);
+    appToast.factory("$toast", ["$mdToast", "appConfig", function ($mdToast, appConfig) {
 
         var toastModule = {};
 
@@ -586,8 +679,8 @@
 
 
     // Definition: charMsg Module. | 角色信息提示模块.
-    var ngCharMsg = angular.module("ngCharMsg", []);
-    ngCharMsg.factory("$charMsg", function ($timeout, $internalFunc) {
+    var charMsg = angular.module("charMsg", []);
+    charMsg.factory("$charMsg", ["$timeout", "$window", "$internalFunc", function ($timeout, $window, $internalFunc) {
 
         // jqLite Object: body.
         var $body = angular.element(document.querySelector("body"));
@@ -629,10 +722,10 @@
 
                 switch (position) {
                     case "left":
-                        addClass(charMsgNode, "left");
+                        $internalFunc.addClass(charMsgNode, "left");
                         break;
                     case "right":
-                        addClass(charMsgNode, "right");
+                        $internalFunc.addClass(charMsgNode, "right");
                         break;
                 }
 
@@ -669,12 +762,12 @@
                 }, 500);
 
             },
-            remove: function (callback) {
-                addClass(charMsgNode, "out-animation");
+            remove: function () {
+                $internalFunc.addClass(charMsgNode, "out-animation");
+                $window.history.back();
                 $removeTimeout = $timeout(function () {
                     charMsgNode.parentNode.removeChild(charMsgNode);
                     charMsgNode = null;
-                    callback ? callback() : void(0);
                 }, 500);
             }
         };
@@ -684,12 +777,12 @@
             hide: charMsg.remove
         }
 
-    });
+    }]);
 
 
     // Definition: LocalStorage Control Module. | LocalStorage 控制模块.
-    var ngLocalStorage = angular.module("ngLocalStorage", []);
-    ngLocalStorage.factory("$localStorage", function ($toast, $internalFunc, appConfig) {
+    var localStorage = angular.module("localStorage", []);
+    localStorage.factory("$localStorage", function ($toast, $internalFunc, appConfig) {
 
         function setItem (key, value) {
             // Error Handler.
@@ -737,8 +830,8 @@
 
 
     // Definition: Left Side Navigator Bar, from Material-Angular. | Material-Angular 左侧导航模块.
-    var ngLeftNav = angular.module("ngLeftNav", []);
-    ngLeftNav.factory("$leftNav", function ($mdSidenav, $timeout, $location, $internalFunc) {
+    var leftNav = angular.module("leftNav", []);
+    leftNav.factory("$leftNav", function ($mdSidenav, $timeout, $location, $internalFunc) {
 
         // Definition: $window Object.
         var $window = angular.element(global);
@@ -882,8 +975,8 @@
 
 
     // Definition: Color Change Service Module. | 颜色变换服务模块.
-    var ngColorChange = angular.module("ngColorChange", []);
-    ngColorChange.factory("$colorChange", function () {
+    var colorChange = angular.module("colorChange", []);
+    colorChange.factory("$colorChange", function () {
 
         var colorThemeSheet = document.getElementById("color-change");
         var $colorThemeSheet = angular.element(colorThemeSheet);
@@ -903,9 +996,10 @@
         }
     });
 
+
     // Definition: Splash Layout Service Module. | 启动布局服务模块.
-    var ngSplashLayout = angular.module("ngSplashLayout", []);
-    ngSplashLayout.factory("$splashLayout", function () {
+    var splashLayout = angular.module("splashLayout", []);
+    splashLayout.factory("$splashLayout", function () {
 
         var className = {
             initLayout: "init-layout",  // "True" stands by "init-layout".
@@ -938,17 +1032,18 @@
 
 
     // Definition: Change Log Service. | 更新日志服务模块.
-    var ngChangeLog = angular.module("ngChangeLog", []);
-    ngChangeLog.factory("$changeLog", function ($http, $splashLayout, $leftNav, $toast, $internalFunc) {
-        var self = this;  // Self Reference.
-        var panelStatus = "hide";
+    var changeLog = angular.module("changeLog", []);
+    changeLog.factory("$changeLog", ["$http", "$splashLayout", "$leftNav", "$toast", "$internalFunc", "$textPanel", function ($http, $splashLayout, $leftNav, $toast, $internalFunc, $textPanel) {
 
         function showChangeLog () {
             $http.post("/change-log").then(
                 function success (response) {
                     // response: { data, headers, status, config, statusText }
-                    $splashLayout.toStandByLayout();
-                    self.panelStatus = "show";
+                   $textPanel.show({
+                       title: "更新日志",
+                       content: response.data.content,
+                       backward: true
+                   });
                 },
                 function error (response) {
                     $internalFunc.toastErr($toast, "更新日志获取失败, 过一会再试试?", "(/= _ =)/~┴┴", "Request for Change Log failed.");
@@ -956,17 +1051,44 @@
             );
         }
 
-        function hideChangeLog () {
-            self.panelStatus = "hide";
-        }
-
         return {
-            show: showChangeLog,
-            hide: hideChangeLog,
-            status: panelStatus
+            show: showChangeLog
         };
 
-    });
+    }]);
+
+    // Definition: Text Panel Service. | 文字面板服务模块.
+    var textPanel = angular.module("textPanel", []);
+    textPanel.factory("$textPanel", ["$rootScope", function ($rootScope) {
+
+        return {
+            show: show,
+            help: showHelp
+        };
+
+        // Helps for someone forgetful.
+        // 老了，撸不动了.
+        function showHelp () {
+            console.log("$textPanel Service: \n--- This is a invincible divider. ---");
+            console.log(' - $textPanel.show(config): Create a text panel and fill it with "content".');
+            console.log(' - $textPanel.help(): Here comes the help you loser! \n');
+        }
+
+        // Create & Show a new Text Panel. | 创建并显示一个新的文字面板.
+        function show (config) {
+            /*
+             *  config: {
+             *    title: String,
+             *    content: String,
+             *    backward: Boolean  // @ True: Go backward when close button is clicked.
+             *  }
+             *
+             */
+            config = config || "";
+            $rootScope.$broadcast("textPanelCreated", config);
+        }
+
+    }]);
 })(window);
 /*
  *  Animation Searcher WebSocket Service By LancerComet at 15:27, 2015/10/9.

@@ -24,9 +24,7 @@
     ngAppCtrls.config(["$compileProvider", function ($compileProvider) {
         // Set "Https", "Ftp", "Mailto", "File", "Magnet" as trusted string. | 将 "Https", "Ftp", "Mailto", "File", "Magnet" 设置为编译服务的可信字符串.
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|magnet):/);
-    }]);
-
-    ngAppCtrls.controller("mainController", ["$scope", "$rootScope", "$location", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, appConfig, $splashLayout) {
+    }]).controller("mainController", ["$scope", "$rootScope", "$location", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, appConfig, $splashLayout) {
 
         // Definition: Layout Controller. | 页面布局控制器.
         // ---------------------------------------------
@@ -56,13 +54,40 @@
         // }
 
         // Definition: Result Data. | 搜索结果数据定义.
+        // ---------------------------------------------
         // Value will change after search requesting is finished successfully.
         // 数据将在搜索完毕之后更变.
         // Auto two-way data bind. | 自动双向数据绑定,
         $scope.searchResult = {};
 
+        console.log($scope);
 
     }]);
+
+
+    // Definition: Search Part Controller. | 搜索节点控制器.
+    ngAppCtrls.controller("searchController", ["$scope", function ($scope) {
+
+        $scope.searchBarFocus = searchBarFocus;
+        $scope.searchBarBlur = searchBarBlur;
+        $scope.searchBarKeyDown = searchBarKeyDown;
+
+        /* Definition go below. | 下方为定义部分. */
+
+        function searchBarFocus () {
+
+        }
+
+        function searchBarBlur () {
+
+        }
+
+        function searchBarKeyDown () {
+
+        }
+
+    }]);
+
 
 
     // Definition: Left Side Navigator Buttons Controller. | 左侧导航按钮控制器.
@@ -76,9 +101,5 @@
     }]);
 
 
-    // Definition: Change Log Panel Controller. | 更新日志面板控制器.
-    ngAppCtrls.controller("changeLogCtrl", ["$scope", "$changeLog", function ($scope, $changeLog) {
-
-    }]);
 
 })();
