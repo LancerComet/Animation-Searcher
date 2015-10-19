@@ -30,6 +30,10 @@
         // Toast Configuration. | 提示模块设置参数.
         toast: {
             position: { top: true, bottom: false, left: false, right: true }
+        },
+
+        settings: {
+            xhrTimeout: 1000 * 30  // Timeout for 30s.
         }
 
     });

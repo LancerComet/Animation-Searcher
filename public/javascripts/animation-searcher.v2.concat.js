@@ -59,6 +59,10 @@
         // Toast Configuration. | 提示模块设置参数.
         toast: {
             position: { top: true, bottom: false, left: false, right: true }
+        },
+
+        settings: {
+            xhrTimeout: 1000 * 30  // Timeout for 30s.
         }
 
     });
@@ -959,7 +963,7 @@
 
 
     // Definition: Search Directive. | 搜索模块指令定义.
-    ngAppDirectives.directive("searchBar", ["$toast", "appConifg", function ($toast, appConfig) {
+    ngAppDirectives.directive("searchBar", ["$http", "$toast", "appConfig", function ($http, $toast, appConfig) {
         return {
             restrict: "E",
             scope: true,
@@ -972,18 +976,32 @@
 
                 // Definition: Searching function. | 搜索功能定义.
                 // Search and assignment. | 搜索、赋值逻辑主体.
-                scope.searchExec = function () {
+                scope.searchExec = function ($event) {
+
+                    // 非回车事件滚粗.
+                    // This detective is useless now for using "ng-submit" instead of "ng-keyup" and "ng-click".
+                    if ($event.type === "keyup" && $event.keyCode !== 13) {
+                        return false;
+                    }
 
                     // Fire Async Requesting. | 发起搜索请求.
                     Object.keys(appConfig.site).filter(function (prop) {
-                        $http.post("/search/" + moduleSettings.site[prop].codeName, {
+                        $http.post("/search/" + appConfig.site[prop].codeName, {
                             keywords: scope.keywords
-                        }).success(function (data, status, headers, config) {
+                        }, {
+                            timeout: appConfig.settings.xhrTimeout  // Timeout for 30s.
+                        }).success(function (data, status, headers, config, statusText) {
                             $scope.searchResult[prop] = data.result;  // Attach result data to $scope.searchResult.
                             $toast.showSimpleToast(data.info);  // Show simple toast after finished succesfully.
-                        }).error(function (data, status, headers, config) {
-                            // Throw a ActionToast when error was caught. | 出错时进行提示.
-                            $toast.showActionToast(data.info, data.action);
+                        }).error(function (data, status, headers, config, statusText) {
+                            if (status === -1) {
+                                // Timeout Handler.
+                                $toast.showActionToast("您的搜索请求超时，不兹道四哪里粗了问题 ... ＞︿＜", "我知道了~");
+                            } else {
+                                // Throw a ActionToast when error was caught. | 出错时进行提示.
+                                $toast.showActionToast(data.info, data.action);
+                            }
+
                         });
                     });
 
@@ -995,7 +1013,7 @@
 
 
     // Definition: Site Switcher Directive. | 搜索结果切换按钮指令.
-    ngAppDirectives.directive("siteSwitcher", function () {
+    ngAppDirectives.directive("siteSwitcher", ["appConfig", function (appConfig) {
         return {
             restrict: "E",
             scope: true,
@@ -1012,7 +1030,7 @@
             link: function (scope, element, attrs) {
 
                 // Definition: Data of switcher list. | 搜索结果切换列表列表项数据.
-                scope.switcherList = moduleSettings.site;
+                scope.switcherList = appConfig.site;
 
                 // Attach "Title" property to $scope.searchableSite | 给 $scope.searchableSite 增加 title 属性.
                 // This property is prepared For "md-tooltip". | 此属性将用在 "md-tooltip" 指令中.
@@ -1022,7 +1040,7 @@
 
             }
         }
-    });
+    }]);
 
 
     // Definition: Result Panel Directive. | 结果面板指令.

@@ -58,13 +58,13 @@
 
                       <%# Search Bar Container. | 搜索条节点. %>
                       <search-bar class="search-bar" flex ng-controller="searchController">
-                          <form name="search-form" layout="row">
+                          <form name="search-form" layout="row" ng-submit="searchExec($event)">
                               <md-input-container class="search-input-container" flex>
                                   <label class="search-bar-color"><%=randomTitle%></label>
-                                  <input class="search-bar-color" ng-model="keywords" aria-label="请在此处输入关键字" aria-labelledby="Insert keywords here." name="keywords" type="text" >
+                                  <input class="search-bar-color" ng-model="keywords" aria-label="请在此处输入关键字" aria-labelledby="Insert keywords here." name="keywords" type="text">
                               </md-input-container>
 
-                              <md-button class="md-button p-relative search-bar-color search-button" aria-label="点击搜索" aria-labelledby="Click it to search.">
+                              <md-button class="md-button p-relative search-bar-color search-button" aria-label="点击搜索" aria-labelledby="Click it to search." type="submit">
                                   <i class="icon-search"></i>
                                   <md-tooltip>Rock n' Roll !</md-tooltip>
                               </md-button>
