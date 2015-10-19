@@ -46,7 +46,7 @@
 
 
     // Definition: Search Directive. | 搜索模块指令定义.
-    ngAppDirectives.directive("searchBar", function ($rootScope) {
+    ngAppDirectives.directive("searchBar", ["$toast", "appConifg", function ($toast, appConfig) {
         return {
             restrict: "E",
             scope: true,
@@ -62,15 +62,15 @@
                 scope.searchExec = function () {
 
                     // Fire Async Requesting. | 发起搜索请求.
-                    Object.keys(moduleSettings.site).filter(function (prop) {
+                    Object.keys(appConfig.site).filter(function (prop) {
                         $http.post("/search/" + moduleSettings.site[prop].codeName, {
                             keywords: scope.keywords
                         }).success(function (data, status, headers, config) {
                             $scope.searchResult[prop] = data.result;  // Attach result data to $scope.searchResult.
-                            $rootScope.toast.showSimpleToast(data.info);  // Show simple toast after finished succesfully.
+                            $toast.showSimpleToast(data.info);  // Show simple toast after finished succesfully.
                         }).error(function (data, status, headers, config) {
                             // Throw a ActionToast when error was caught. | 出错时进行提示.
-                            $rootScope.toast.showActionToast(data.info, data.action);
+                            $toast.showActionToast(data.info, data.action);
                         });
                     });
 
@@ -78,7 +78,7 @@
 
             }
         }
-    });
+    }]);
 
 
     // Definition: Site Switcher Directive. | 搜索结果切换按钮指令.
