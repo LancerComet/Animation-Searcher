@@ -145,6 +145,12 @@
       "src": "fontawesome"
     },
     {
+      "uid": "80451d627470ea7f977a263fdb771d7b",
+      "css": "palette",
+      "code": 59424,
+      "src": "entypo"
+    },
+    {
       "uid": "b95cfc96d48a72dd665e0ab109880b5e",
       "css": "clipboard",
       "code": 59399,

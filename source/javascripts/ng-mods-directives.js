@@ -112,7 +112,7 @@
             },
             link: function (scope, element, attrs) {
 
-                // Definition: Data of switcher list. | 搜索结果切换列表列表项数据.
+                // Definition: Data for switcher list. | 搜索结果切换列表列表项数据.
                 scope.switcherList = appConfig.site;
 
                 // Attach "Title" property to $scope.searchableSite | 给 $scope.searchableSite 增加 title 属性.
@@ -127,37 +127,34 @@
 
 
     // Definition: Result Panel Directive. | 结果面板指令.
-    ngAppDirectives.directive("resultPanel", function () {
+    ngAppDirectives.directive("resultPanel", ["$compile", "$sce", "appConfig", function ($compile, $sce, appConfig) {
         return {
             restrict: "E",
             scope: true,
             templateUrl: "/templates/ng-result-panel.html",
-            controller: function ($scope, $element, $attrs, $http, $sce, $compile) {
-
+            controller: function ($scope, $element, $attrs) {},
+            link: function (scope, element, attrs) {
                 // Error Handle: Attribute "codename" must be defined.
                 // 错误处理: 必须定义 "codename" 属性.
-                $attrs.codename ? void(0) : throwError('Attribute "codename" must be defined.');
+                attrs.codename ? void(0) : throwError('Attribute "codename" must be defined.');
 
                 // Definition: Dom Information Object.
-                var codeName = $attrs.codename;
-                $scope.domInfo = {  // Attach domInfo to $scope in order to import it in template.
+                var codeName = attrs.codename;
+                scope.domInfo = {  // Attach domInfo to $scope in order to import it in template.
                     // 将 domInfo 定义在 $scope 下以方便模板调取.
                     codeName: codeName,
-                    name: moduleSettings.site[codeName].name,
-                    fullName: moduleSettings.site[codeName].fullName,
-                    icon: moduleSettings.site[codeName].icon,
-                    disabled: moduleSettings.site[codeName].disabled
+                    name: appConfig.site[codeName].name,
+                    fullName: appConfig.site[codeName].fullName,
+                    icon: appConfig.site[codeName].icon,
+                    disabled: appConfig.site[codeName].disabled
                 };
 
                 // Definition: Result Information Object.
-                $scope.result = $scope.searchResult;
+                scope.result = $scope.searchResult;
 
-            },
-            link: function (scope, element, attrs) {
-                attrs.codename ? void(0) : throwError('Attribute "codename" must be defined.');
             }
         }
-    });
+    }]);
 
     // Definition: Text Panel Directive. | 文字面板指令.
     ngAppDirectives.directive("textPanel", ["$compile", "$timeout", "$window", "$toast", "$clearMDToast", function ($compile, $timeout, $window, $toast, $clearMDToast) {
@@ -168,7 +165,7 @@
                 scope.closePanel = null;  // Close Panel Function.
                 scope.panelStatus = "out";  // Panel Status.
 
-                // Broadcast Listener.
+                // Broadcast Listener: Panel Creating. | 面板创建广播监听.
                 scope.$on("textPanelCreated", function (event, object) {
                     createPanel(object);
                 });

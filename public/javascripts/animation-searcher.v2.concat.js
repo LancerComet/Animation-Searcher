@@ -62,7 +62,7 @@
         },
 
         settings: {
-            xhrTimeout: 1000 * 30  // Timeout for 30s.
+            xhrTimeout: 1000 * 30  // Timeout: 30s.
         }
 
     });
@@ -85,6 +85,11 @@
  *
  *  Log:
  *  ---
+ *  V0.1.7 - 0:01, 2015.10.20.
+ *   + 完善前端搜索逻辑.
+ *   + Splash 页面增加模糊切换开关.
+ *   + 后端搜索模块逻辑.
+ *
  *  v0.1.6 - 22:33, 2015.10.18
  *   + 修复菜单按钮在火狐下不变换的问题. (火狐不识别 background-position 的分离属性)
  *
@@ -132,6 +137,7 @@
     ]);
 
     ngApp.run(["$timeout", "$splashScreen", "$colorChange", "$colorThief", function ($timeout, $splashScreen, $colorChange, $colorThief) {
+
         angular.element(window).on("load", function () {
 
             var darkestColor = $colorThief.getDarkestColor(document.querySelector("#greeting-background"));
@@ -143,6 +149,7 @@
                 $colorChange.change(darkestColor)
             }, 1000)
         });
+
     }]);
 
 
@@ -822,6 +829,8 @@
         // Set "Https", "Ftp", "Mailto", "File", "Magnet" as trusted string. | 将 "Https", "Ftp", "Mailto", "File", "Magnet" 设置为编译服务的可信字符串.
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|magnet):/);
     }]).controller("mainController", ["$scope", "$rootScope", "$location", "$timeout", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, $timeout, appConfig, $splashLayout) {
+        // Definition: Basic Variables. | 基本变量定义.
+        $scope.blurButton = "hide";
 
         // Definition: Layout Controller. | 页面布局控制器.
         // ---------------------------------------------
@@ -831,13 +840,21 @@
             $scope.layout = newVal.layout.status;
         }, true);  // 启动深度监视.
 
+
+
         // SplashScreen Listener. | 启动画面广播监听.
+        // ---------------------------------------------
         $scope.$on("splashScreen", function (event, value) {
             $timeout(function () {
                 $scope.backgroundBlur = "blur";
-            }, 1000);
+                $timeout(function () { $scope.blurButton = "show"; }, 5000);  // Show Blur Toggle Button after blur finished.
+            }, 4000);
         });
 
+        // Blur Toggle. | 模糊切换方法.
+        $scope.toggleBlur = function () {
+            $scope.backgroundBlur === "blur" ? $scope.backgroundBlur = "" :  $scope.backgroundBlur = "blur";
+        };
 
         // Definition: Status of Progressbar (on the left). | 左侧切换列表的搜索条状态.
         // ---------------------------------------------
@@ -1029,7 +1046,7 @@
             },
             link: function (scope, element, attrs) {
 
-                // Definition: Data of switcher list. | 搜索结果切换列表列表项数据.
+                // Definition: Data for switcher list. | 搜索结果切换列表列表项数据.
                 scope.switcherList = appConfig.site;
 
                 // Attach "Title" property to $scope.searchableSite | 给 $scope.searchableSite 增加 title 属性.
@@ -1044,37 +1061,34 @@
 
 
     // Definition: Result Panel Directive. | 结果面板指令.
-    ngAppDirectives.directive("resultPanel", function () {
+    ngAppDirectives.directive("resultPanel", ["$compile", "$sce", "appConfig", function ($compile, $sce, appConfig) {
         return {
             restrict: "E",
             scope: true,
             templateUrl: "/templates/ng-result-panel.html",
-            controller: function ($scope, $element, $attrs, $http, $sce, $compile) {
-
+            controller: function ($scope, $element, $attrs) {},
+            link: function (scope, element, attrs) {
                 // Error Handle: Attribute "codename" must be defined.
                 // 错误处理: 必须定义 "codename" 属性.
-                $attrs.codename ? void(0) : throwError('Attribute "codename" must be defined.');
+                attrs.codename ? void(0) : throwError('Attribute "codename" must be defined.');
 
                 // Definition: Dom Information Object.
-                var codeName = $attrs.codename;
-                $scope.domInfo = {  // Attach domInfo to $scope in order to import it in template.
+                var codeName = attrs.codename;
+                scope.domInfo = {  // Attach domInfo to $scope in order to import it in template.
                     // 将 domInfo 定义在 $scope 下以方便模板调取.
                     codeName: codeName,
-                    name: moduleSettings.site[codeName].name,
-                    fullName: moduleSettings.site[codeName].fullName,
-                    icon: moduleSettings.site[codeName].icon,
-                    disabled: moduleSettings.site[codeName].disabled
+                    name: appConfig.site[codeName].name,
+                    fullName: appConfig.site[codeName].fullName,
+                    icon: appConfig.site[codeName].icon,
+                    disabled: appConfig.site[codeName].disabled
                 };
 
                 // Definition: Result Information Object.
-                $scope.result = $scope.searchResult;
+                scope.result = $scope.searchResult;
 
-            },
-            link: function (scope, element, attrs) {
-                attrs.codename ? void(0) : throwError('Attribute "codename" must be defined.');
             }
         }
-    });
+    }]);
 
     // Definition: Text Panel Directive. | 文字面板指令.
     ngAppDirectives.directive("textPanel", ["$compile", "$timeout", "$window", "$toast", "$clearMDToast", function ($compile, $timeout, $window, $toast, $clearMDToast) {
@@ -1085,7 +1099,7 @@
                 scope.closePanel = null;  // Close Panel Function.
                 scope.panelStatus = "out";  // Panel Status.
 
-                // Broadcast Listener.
+                // Broadcast Listener: Panel Creating. | 面板创建广播监听.
                 scope.$on("textPanelCreated", function (event, object) {
                     createPanel(object);
                 });

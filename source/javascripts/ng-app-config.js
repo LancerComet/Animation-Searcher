@@ -33,7 +33,7 @@
         },
 
         settings: {
-            xhrTimeout: 1000 * 30  // Timeout for 30s.
+            xhrTimeout: 1000 * 30  // Timeout: 30s.
         }
 
     });

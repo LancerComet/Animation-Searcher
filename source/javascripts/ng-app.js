@@ -14,6 +14,11 @@
  *
  *  Log:
  *  ---
+ *  V0.1.7 - 0:01, 2015.10.20.
+ *   + 完善前端搜索逻辑.
+ *   + Splash 页面增加模糊切换开关.
+ *   + 后端搜索模块逻辑.
+ *
  *  v0.1.6 - 22:33, 2015.10.18
  *   + 修复菜单按钮在火狐下不变换的问题. (火狐不识别 background-position 的分离属性)
  *
@@ -61,6 +66,7 @@
     ]);
 
     ngApp.run(["$timeout", "$splashScreen", "$colorChange", "$colorThief", function ($timeout, $splashScreen, $colorChange, $colorThief) {
+
         angular.element(window).on("load", function () {
 
             var darkestColor = $colorThief.getDarkestColor(document.querySelector("#greeting-background"));
@@ -72,6 +78,7 @@
                 $colorChange.change(darkestColor)
             }, 1000)
         });
+
     }]);
 
 

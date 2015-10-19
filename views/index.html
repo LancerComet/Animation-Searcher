@@ -68,6 +68,9 @@
                                   <i class="icon-search"></i>
                                   <md-tooltip>Rock n' Roll !</md-tooltip>
                               </md-button>
+
+                              <md-button class="md-button search-button" style="color: rgba(255, 255, 255, .5);" ng-click="toggleBlur()" ng-class="{'show': 'scale-in-ease', 'hide': 'dp-none'}[blurButton]"><md-tooltip>背景太模糊?</md-tooltip><i class="icon-palette"></i></md-button>
+
                           </form>
                       </search-bar>
                   </div>
@@ -82,7 +85,7 @@
                       Hello, I'm <%=appConfig.appInfo.appName%><br>
                       <small>Just have a try. <i class="icon-emo-happy"></i></small>
                   </h1>
-                  <p class="text-center">
+                  <p class="text-center no-margin">
                       <md-button class="md-button" href="/powered-by" style="color: rgba(255, 255, 255, .5)" aria-label="Powered By."><md-tooltip>惊人的艺术.</md-tooltip><i class="icon-emo-devil"></i> Powered By ...</md-button>
                   </p>
               </div>

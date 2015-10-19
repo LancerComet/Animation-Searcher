@@ -17,6 +17,11 @@ var customPart = require("./ctrl-search-custom");
 
 function searchService (req, res, next) {
 
+	// Definition: Requiring Search Module.
+	var moduleName = req.url.substr(8, req.url.length);
+	customPart[moduleName](req, res, next);  // Execute Funciton in Search Module.
+
+
 }
 
 module.exports = searchService;

@@ -25,6 +25,8 @@
         // Set "Https", "Ftp", "Mailto", "File", "Magnet" as trusted string. | 将 "Https", "Ftp", "Mailto", "File", "Magnet" 设置为编译服务的可信字符串.
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|magnet):/);
     }]).controller("mainController", ["$scope", "$rootScope", "$location", "$timeout", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, $timeout, appConfig, $splashLayout) {
+        // Definition: Basic Variables. | 基本变量定义.
+        $scope.blurButton = "hide";
 
         // Definition: Layout Controller. | 页面布局控制器.
         // ---------------------------------------------
@@ -34,13 +36,21 @@
             $scope.layout = newVal.layout.status;
         }, true);  // 启动深度监视.
 
+
+
         // SplashScreen Listener. | 启动画面广播监听.
+        // ---------------------------------------------
         $scope.$on("splashScreen", function (event, value) {
             $timeout(function () {
                 $scope.backgroundBlur = "blur";
-            }, 1000);
+                $timeout(function () { $scope.blurButton = "show"; }, 5000);  // Show Blur Toggle Button after blur finished.
+            }, 4000);
         });
 
+        // Blur Toggle. | 模糊切换方法.
+        $scope.toggleBlur = function () {
+            $scope.backgroundBlur === "blur" ? $scope.backgroundBlur = "" :  $scope.backgroundBlur = "blur";
+        };
 
         // Definition: Status of Progressbar (on the left). | 左侧切换列表的搜索条状态.
         // ---------------------------------------------
