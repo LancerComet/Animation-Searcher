@@ -1403,39 +1403,39 @@
     ngApp.config(["$routeProvider", function ($routeProvider) {
             $routeProvider.when("/change-log", {
                 template: "",
-                controller: function ($changeLog) {
+                controller: ["$changeLog", function ($changeLog) {
                     $changeLog.show();
-                }
+                }]
             }).when("/welcome", {
                     template: "",
-                    controller: function ($splashLayout) {
+                    controller: ["$splashLayout", function ($splashLayout) {
                         $splashLayout.toInitLayout();
-                    }
+                    }]
                 }
             ).when("/stand-by", {
                     template: "",
-                    controller: function ($splashLayout) {
+                    controller: ["$splashLayout", function ($splashLayout) {
                         $splashLayout.toStandByLayout();
-                    }
+                    }]
                 }
             ).when("/side-nav-open", {
                     template: "",
-                    controller: function ($leftNav, $splashLayout) {
+                    controller: ["$leftNav", "$splashLayout", function ($leftNav, $splashLayout) {
                         $leftNav.open();
                         $splashLayout.toStandByLayout();
-                    }
+                    }]
                 }
             ).when("/powered-by", {
                     template: "",
-                    controller: function ($charMsg) {
+                    controller: ["$charMsg", function ($charMsg) {
                         $charMsg.show("Powered By ...", "This site is powered by Angular.JS, Node.JS, Nginx @ Aliyun.");
-                    }
+                    }]
                 }
             ).when("/", {
                     template: "",
-                    controller: function ($leftNav, $changeLog) {
+                    controller: ["$leftNav", function ($leftNav) {
                         $leftNav.close();
-                    }
+                    }]
                 }
             ).otherwise({
                     redirectTo: "/"
