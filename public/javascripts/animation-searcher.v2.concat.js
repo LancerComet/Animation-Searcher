@@ -263,7 +263,7 @@
 
             var finalColor = [];
             // If dominant color is too bright, adjust the birghtness to 0.75.
-            if (hsvResult[2] > 0.75 && hsvResult[2] < 0.85) {
+            if (hsvResult[2] > 0.75 && hsvResult[2] <= 0.85) {
                 hsvResult[2] = 0.75;
                 hsvResult[1] += 0.15;
                 console.log("Animation Searcher Info: The dominant color is too bright, and it has been adjusted.");
