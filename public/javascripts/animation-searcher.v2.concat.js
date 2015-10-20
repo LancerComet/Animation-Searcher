@@ -903,9 +903,9 @@
     var ngAppCtrls = angular.module("ngAppCtrls", []);
     ngAppCtrls
         .config(["$compileProvider", function ($compileProvider) {
-        // Set "Https", "Ftp", "Mailto", "File", "Magnet" as trusted string. | 将 "Https", "Ftp", "Mailto", "File", "Magnet" 设置为编译服务的可信字符串.
-        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|magnet):/);
-    }])
+            // Set "Https", "Ftp", "Mailto", "File", "Magnet" as trusted string. | 将 "Https", "Ftp", "Mailto", "File", "Magnet" 设置为编译服务的可信字符串.
+            $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|magnet):/);
+        }])
         .controller("mainController", ["$scope", "$rootScope", "$location", "$timeout", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, $timeout, appConfig, $splashLayout) {
         // Definition: Basic Variables. | 基本变量定义.
         $scope.blurButton = "hide";
@@ -1613,7 +1613,7 @@
 
     // Definition: LocalStorage Control Module. | LocalStorage 控制模块.
     var localStorage = angular.module("localStorage", []);
-    localStorage.factory("$localStorage", function ($toast, $internalFunc, appConfig) {
+    localStorage.factory("$localStorage", ["$toast" ,"$internalFunc", "appConfig", function ($toast, $internalFunc, appConfig) {
 
         return {
             setItem: setItem,
@@ -1657,12 +1657,12 @@
             console.log(appConfig.text.prefix + "Info:\nAll items in Local Storage has been removed at " + new Date(Date.now()) + ".")
         }
 
-    });
+    }]);
 
 
     // Definition: Left Side Navigator Bar, from Material-Angular. | Material-Angular 左侧导航模块.
     var leftNav = angular.module("leftNav", []);
-    leftNav.factory("$leftNav", function ($mdSidenav, $timeout, $location, $internalFunc) {
+    leftNav.factory("$leftNav", ["$timeout", "$mdSidenav", "$location", "$internalFunc", function ($timeout, $mdSidenav, $location, $internalFunc) {
 
         // Definition: $window Object.
         var $window = angular.element(global);
@@ -1802,7 +1802,7 @@
             close: closeBar
         }
 
-    });
+    }]);
 
 
     // Definition: Color Change Service Module. | 颜色变换服务模块.
