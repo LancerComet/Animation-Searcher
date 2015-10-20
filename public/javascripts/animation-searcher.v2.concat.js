@@ -261,15 +261,38 @@
             };
             var hsvResult = rgbToHsv(rgbResult.r, rgbResult.g, rgbResult.b);  // [h, s, v]
 
+            var finalColor = [];
             // If dominant color is too bright, adjust the birghtness to 0.75.
-            if (hsvResult[2] > 0.75) {
+            if (hsvResult[2] > 0.75 && hsvResult[2] < 0.85) {
                 hsvResult[2] = 0.75;
                 hsvResult[1] += 0.15;
                 console.log("Animation Searcher Info: The dominant color is too bright, and it has been adjusted.");
+                finalColor = hsvToRgb(hsvResult[0], hsvResult[1], hsvResult[2]);  // [r, g, b]
+            } else if (hsvResult[2] > 0.85) {
+                // Return the darkest color when is toooooooo bright.
+                finalColor = ColorThief.prototype.getDarkestColor(sourceImage, quality);
+                console.log("Animation Searcher Info: The dominant color is too bright, so the darkest color has been set.");
+            } else {
+                finalColor = hsvToRgb(hsvResult[0], hsvResult[1], hsvResult[2]);  // [r, g, b]
             }
 
-            var finallyColor = hsvToRgb(hsvResult[0], hsvResult[1], hsvResult[2]);  // [r, g, b]
-            return "rgb(" + finallyColor[0] + ", " + finallyColor[1] + ", " + finallyColor[2] + ")";  // This is dominant color or adjusted color.
+            return "rgb(" + finalColor[0] + ", " + finalColor[1] + ", " + finalColor[2] + ")";  // This is dominant color or adjusted color.
+        };
+
+        // Darkest Color Function By LancerComet at 1:36, 2015.10.18.
+        ColorThief.prototype.getDarkestColor = function (sourceImage, quality) {
+            var palette = this.getPalette(sourceImage, 5, quality);
+            var colorSum = 255 * 3;
+            var darkestColor = null;
+            Object.keys(palette).filter(function (eachColor) {
+                var sum = palette[eachColor][0] + palette[eachColor][1] + palette[eachColor][2];
+                if (sum < colorSum) {
+                    colorSum = sum;
+                    //darkestColor = "rgb(" + palette[eachColor][0] + ", " + palette[eachColor][1] + ", " + palette[eachColor][2] + ")";
+                    darkestColor = [palette[eachColor][0], palette[eachColor][1], palette[eachColor][2]];
+                }
+            });
+            return darkestColor;
         };
 
 
