@@ -21,21 +21,23 @@
 
     // Definition: Controllers Module & Configuration. | 总控制器模块定义.
     var ngAppCtrls = angular.module("ngAppCtrls", []);
-    ngAppCtrls.config(["$compileProvider", function ($compileProvider) {
+    ngAppCtrls
+        .config(["$compileProvider", function ($compileProvider) {
         // Set "Https", "Ftp", "Mailto", "File", "Magnet" as trusted string. | 将 "Https", "Ftp", "Mailto", "File", "Magnet" 设置为编译服务的可信字符串.
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|magnet):/);
-    }]).controller("mainController", ["$scope", "$rootScope", "$location", "$timeout", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, $timeout, appConfig, $splashLayout) {
+    }])
+        .controller("mainController", ["$scope", "$rootScope", "$location", "$timeout", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, $timeout, appConfig, $splashLayout) {
         // Definition: Basic Variables. | 基本变量定义.
         $scope.blurButton = "hide";
+        $scope.historyPanel = false;
 
-        // Definition: Layout Controller. | 页面布局控制器.
+            // Definition: Layout Controller. | 页面布局控制器.
         // ---------------------------------------------
         $scope.splashLayout = $splashLayout;  // $splashLayout service reference for $watch service. | 单独引用服务出来进行深度监视.
         $scope.layout = $splashLayout.layout.status;  // Set default value. | 设置默认值.
         $scope.$watch("splashLayout", function (newVal, oldVal) {
             $scope.layout = newVal.layout.status;
         }, true);  // 启动深度监视.
-
 
 
         // SplashScreen Listener. | 启动画面广播监听.
@@ -47,10 +49,20 @@
             }, 4000);
         });
 
+
         // Blur Toggle. | 模糊切换方法.
+        // ---------------------------------------------
         $scope.toggleBlur = function () {
             $scope.backgroundBlur === "blur" ? $scope.backgroundBlur = "" :  $scope.backgroundBlur = "blur";
         };
+
+
+        // History Panel Listener. | 历史记录面板监听事件.
+        // ---------------------------------------------
+        $scope.$on("historyPanel", function (event, value) {
+            value === "show" ? $scope.historyPanel = true : $scope.historyPanel = false;
+        });
+
 
         // Definition: Status of Progressbar (on the left). | 左侧切换列表的搜索条状态.
         // ---------------------------------------------
@@ -81,24 +93,24 @@
 
 
     // Definition: Search Part Controller. | 搜索节点控制器.
-    ngAppCtrls.controller("searchController", ["$scope", function ($scope) {
+    ngAppCtrls.controller("searchController", ["$scope", "$historyPanel", function ($scope, $historyPanel) {
 
         $scope.searchBarFocus = searchBarFocus;
         $scope.searchBarBlur = searchBarBlur;
-        $scope.searchBarKeyDown = searchBarKeyDown;
+        $scope.searchBarKeyup = searchBarKeyup;
 
         /* Definition go below. | 下方为定义部分. */
 
         function searchBarFocus () {
-
+            $historyPanel.show();
         }
 
         function searchBarBlur () {
-
+            $historyPanel.hide();
         }
 
-        function searchBarKeyDown () {
-
+        function searchBarKeyup ($event) {
+            console.log($event);
         }
 
     }]);
@@ -122,8 +134,14 @@
         $scope.$on("splashScreen", function (event, value) {
             $scope.status = value;
         });
-    }])
+    }]);
 
+
+    // Definition: Service Modules Controller. | 服务模块节点控制器.
+    ngAppCtrls.controller("serviceModules", ["$scope", function ($scope) {
+
+
+    }]);
 
 
 })();

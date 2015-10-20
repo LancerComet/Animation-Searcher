@@ -164,6 +164,13 @@
     var localStorage = angular.module("localStorage", []);
     localStorage.factory("$localStorage", function ($toast, $internalFunc, appConfig) {
 
+        return {
+            setItem: setItem,
+            getItem: getItem,
+            removeItem: removeItem,
+            empty: empty
+        };
+
         function setItem (key, value) {
             // Error Handler.
             if (!key || !value) {
@@ -197,13 +204,6 @@
             });
             $toast.showSimpleToast("搜索历史已成功清空!  (●'◡'●)ﾉ♥");
             console.log(appConfig.text.prefix + "Info:\nAll items in Local Storage has been removed at " + new Date(Date.now()) + ".")
-        }
-
-        return {
-            setItem: setItem,
-            getItem: getItem,
-            removeItem: removeItem,
-            empty: empty
         }
 
     });
@@ -490,5 +490,18 @@
             $rootScope.$broadcast("splashScreen", arguments[0]);
         }
     }]);
+
+    // Definition: History Panel Broadcaster. | 历史记录面板广播器.
+    var historyPanel = angular.module("historyPanel", []);
+    historyPanel.factory("$historyPanel", ["$rootScope", function ($rootScope) {
+        return {
+            show: exec.bind(0, "show"),
+            hide: exec.bind(0, "hide")
+        };
+
+        function exec () {
+            $rootScope.$broadcast("historyPanel", arguments[0]);
+        }
+    }])
 
 })(window);

@@ -15,7 +15,7 @@
 
 var appConfig = require("../config/app-config");
 var randomTitle = require("../libs/random-title");
-
+var randomBackgroundImage = require("../libs/random-background-image");
 
 // Definition: Main Service Function.
 function indexService (req, res, next) {
@@ -23,6 +23,7 @@ function indexService (req, res, next) {
 	// Definition: Rendering Variables. | 渲染用变量定义.
 	var renderVar = {
 		appConfig: appConfig,
+		backgroundImage: randomBackgroundImage(),
 		title: appConfig.appInfo.appName + " | " + randomTitle(),
 		randomTitle: randomTitle()
 	};

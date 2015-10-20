@@ -14,6 +14,10 @@
  *
  *  Log:
  *  ---
+ *  V0.1.8 - 22:25, 2015.10.20.
+ *   + 历史记录面板.
+ *   + 随机生成背景图片.
+ *
  *  V0.1.7 - 0:01, 2015.10.20.
  *   + 完善前端搜索逻辑.
  *   + Splash 页面增加模糊切换开关.
@@ -62,20 +66,21 @@
         "internalFunc",  // Internal Functions Add-on Module. | 内部方法模块.
         "ngAppCtrls", "ngAppDirectives",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
         "colorThief",  // colorThief Original By Lokesh Dhakar.
-        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
+        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast", "historyPanel"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
     ]);
 
     ngApp.run(["$timeout", "$splashScreen", "$colorChange", "$colorThief", function ($timeout, $splashScreen, $colorChange, $colorThief) {
 
         angular.element(window).on("load", function () {
 
-            var darkestColor = $colorThief.getDarkestColor(document.querySelector("#greeting-background"));
+            var image = document.querySelector("#greeting-background");
+            var themeColor = $colorThief.getThemeColor(image);
 
             $timeout(function () {
                 $splashScreen.hide();
             }, 3000);
             $timeout(function () {
-                $colorChange.change(darkestColor)
+                $colorChange.change(themeColor);
             }, 1000)
         });
 

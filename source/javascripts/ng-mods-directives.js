@@ -204,4 +204,16 @@
         }
     }])
 
+    // Definition: History Panel. | 历史记录面板.
+    ngAppDirectives.directive("history", ["$localStorage", function ($localStorage) {
+        return {
+            restrict: "E",
+            scope: true,
+            controller: function ($scope, $element, $attrs) {},
+            link: function (scope, element, attrs) {
+
+            }
+        }
+    }]);
+
 })();

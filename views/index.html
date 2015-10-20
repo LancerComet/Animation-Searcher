@@ -41,8 +41,8 @@
           <header class="header p-relative pd-common md-whiteframe-z1 color-theme bk-color transition-dot-6" layout="column" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
 
               <%# Greeting images. | 欢迎背景图片. %>
-              <div class="greeting-background w-100 h-100 p-absolute p-zero {{backgroundBlur}}" style="background-image: url('/images/picked-up-background/02.jpg');" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
-                  <img id="greeting-background" src="/images/picked-up-background/02.jpg" class="dp-none"/>
+              <div class="greeting-background w-100 h-100 p-absolute p-zero {{backgroundBlur}}" style="background-image: url('<%= backgroundImage %>');" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
+                  <img id="greeting-background" src="<%= backgroundImage %>" class="dp-none"/>
               </div>
               <div class="greeting-color-merge w-100 h-100 p-absolute p-zero color-theme bk-color" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]"></div>
 
@@ -61,7 +61,7 @@
                           <form name="search-form" layout="row" ng-submit="searchExec($event)">
                               <md-input-container class="search-input-container" flex>
                                   <label class="search-bar-color"><%=randomTitle%></label>
-                                  <input class="search-bar-color" ng-model="keywords" aria-label="请在此处输入关键字" aria-labelledby="Insert keywords here." name="keywords" type="text">
+                                  <input class="search-bar-color" ng-model="keywords" aria-label="请在此处输入关键字" aria-labelledby="Insert keywords here." name="keywords" type="text" ng-focus="searchBarFocus()" ng-blur="searchBarBlur()" ng-keyup="searchBarKeyup($event)">
                               </md-input-container>
 
                               <md-button class="md-button p-relative search-bar-color search-button" aria-label="点击搜索" aria-labelledby="Click it to search." type="submit">
@@ -69,7 +69,7 @@
                                   <md-tooltip>Rock n' Roll !</md-tooltip>
                               </md-button>
 
-                              <md-button class="md-button search-button" style="color: rgba(255, 255, 255, .5);" ng-click="toggleBlur()" ng-class="{'show': 'scale-in-ease', 'hide': 'dp-none'}[blurButton]"><md-tooltip>背景太模糊?</md-tooltip><i class="icon-palette"></i></md-button>
+                              <md-button class="md-button search-button" style="color: rgba(255, 255, 255, .5);" ng-click="toggleBlur()" ng-class="{'show': 'scale-in-ease', 'hide': 'dp-none'}[blurButton]" type="button"><md-tooltip>背景太模糊?</md-tooltip><i class="icon-palette"></i></md-button>
 
                           </form>
                       </search-bar>
@@ -78,6 +78,19 @@
                   <div flex class="action-bar-right-flex transition-dot-8" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]"></div>
 
               </action-bar>
+
+              <%# History Panel. | 历史记录面板. %>
+              <history class="history-panel-search-bar p-relative" ng-if="historyPanel" layout="row">
+                  <div flex></div>
+                  <ul flex>
+                      <li class="history-item">aa</li>
+                      <li class="history-item">bb</li>
+                      <li class="history-item">cc</li>
+                      <li class="history-item">dd</li>
+                      <li class="history-item">ee</li>
+                  </ul>
+                  <div flex></div>
+              </history>
 
               <%# Greeting Area. | 欢迎内容节点. %>
               <div class="greeting-area p-relative" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
@@ -107,7 +120,7 @@
       <%# Material Service Modules Nodes. | Angular-Material 服务组件节点. %>
       <%# 节点定义在 Body Container 之外以减少干扰. %>
 
-      <div class="service-modules">
+      <div class="service-modules" ng-controller="serviceModules">
 
           <%# LeftSide Navigator. | 左侧导航抽屉. %>
           <div class="left-side-nav-ctrl">

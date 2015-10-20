@@ -86,22 +86,28 @@
          * */
         ColorThief.prototype.getColor = function (sourceImage, quality) {
             var palette = this.getPalette(sourceImage, 5, quality);
-            return "rgb(" + palette[0][0] + ", " + palette[0][1] + ", " + palette[0][2] + ")";  // This is dominantColor.
+            return "rgb(" + palette[0][0] + ", " + palette[0][1] + ", " + palette[0][2] + ")";  // This is dominant color or adjusted color.
         };
 
-        // Darkest Color Function By LancerComet at 1:36, 2015.10.18.
-        ColorThief.prototype.getDarkestColor = function (sourceImage, quality) {
+        // Get Theme Color Function By LancerComet at 0:06, 2015.10.21.
+        ColorThief.prototype.getThemeColor = function (sourceImage, quality) {
             var palette = this.getPalette(sourceImage, 5, quality);
-            var colorSum = 255 * 3;
-            var darkestColor = null;
-            Object.keys(palette).filter(function (eachColor) {
-                var sum = palette[eachColor][0] + palette[eachColor][1] + palette[eachColor][2];
-                if (sum < colorSum) {
-                    colorSum = sum;
-                    darkestColor = "rgb(" + palette[eachColor][0] + ", " + palette[eachColor][1] + ", " + palette[eachColor][2] + ")";
-                }
-            });
-            return darkestColor;
+            var rgbResult = {
+                r: palette[0][0],
+                g: palette[0][1],
+                b: palette[0][2]
+            };
+            var hsvResult = rgbToHsv(rgbResult.r, rgbResult.g, rgbResult.b);  // [h, s, v]
+
+            // If dominant color is too bright, adjust the birghtness to 0.75.
+            if (hsvResult[2] > 0.75) {
+                hsvResult[2] = 0.75;
+                hsvResult[1] += 0.15;
+                console.log("Animation Searcher Info: The dominant color is too bright, and it has been adjusted.");
+            }
+
+            var finallyColor = hsvToRgb(hsvResult[0], hsvResult[1], hsvResult[2]);  // [r, g, b]
+            return "rgb(" + finallyColor[0] + ", " + finallyColor[1] + ", " + finallyColor[2] + ")";  // This is dominant color or adjusted color.
         };
 
 
@@ -639,8 +645,50 @@
         return new ColorThief;
     });
 
+    // Definition: RGB to HSV. | RGB 转化为 HSV 函数.
+    function rgbToHsv (r, g, b) {
+        if (arguments.length === 1) {
+            g = r.g, b = r.b, r = r.r;
+        }
+        var max = Math.max(r, g, b), min = Math.min(r, g, b),
+            d = max - min,
+            h,
+            s = (max === 0 ? 0 : d / max),
+            v = max / 255;
 
+        switch (max) {
+            case min: h = 0; break;
+            case r: h = (g - b) + d * (g < b ? 6: 0); h /= 6 * d; break;
+            case g: h = (b - r) + d * 2; h /= 6 * d; break;
+            case b: h = (r - g) + d * 4; h /= 6 * d; break;
+        }
 
+        return [h, s, v];
+    }
 
+    function hsvToRgb (h, s, v) {
+        var r, g, b, i, f, p, q, t;
+        if (arguments.length === 1) {
+            s = h.s, v = h.v, h = h.h;
+        }
+        i = Math.floor(h * 6);
+        f = h * 6 - i;
+        p = v * (1 - s);
+        q = v * (1 - f * s);
+        t = v * (1 - (1 - f) * s);
+        switch (i % 6) {
+            case 0: r = v, g = t, b = p; break;
+            case 1: r = q, g = v, b = p; break;
+            case 2: r = p, g = v, b = t; break;
+            case 3: r = p, g = q, b = v; break;
+            case 4: r = t, g = p, b = v; break;
+            case 5: r = v, g = p, b = q; break;
+        }
+        return [
+            Math.round(r * 255),
+            Math.round(g * 255),
+            Math.round(b * 255)
+        ];
+    }
 
 })();

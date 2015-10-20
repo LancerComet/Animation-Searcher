@@ -85,6 +85,10 @@
  *
  *  Log:
  *  ---
+ *  V0.1.8 - 22:25, 2015.10.20.
+ *   + 历史记录面板.
+ *   + 随机生成背景图片.
+ *
  *  V0.1.7 - 0:01, 2015.10.20.
  *   + 完善前端搜索逻辑.
  *   + Splash 页面增加模糊切换开关.
@@ -133,20 +137,21 @@
         "internalFunc",  // Internal Functions Add-on Module. | 内部方法模块.
         "ngAppCtrls", "ngAppDirectives",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
         "colorThief",  // colorThief Original By Lokesh Dhakar.
-        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
+        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast", "historyPanel"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
     ]);
 
     ngApp.run(["$timeout", "$splashScreen", "$colorChange", "$colorThief", function ($timeout, $splashScreen, $colorChange, $colorThief) {
 
         angular.element(window).on("load", function () {
 
-            var darkestColor = $colorThief.getDarkestColor(document.querySelector("#greeting-background"));
+            var image = document.querySelector("#greeting-background");
+            var themeColor = $colorThief.getThemeColor(image);
 
             $timeout(function () {
                 $splashScreen.hide();
             }, 3000);
             $timeout(function () {
-                $colorChange.change(darkestColor)
+                $colorChange.change(themeColor);
             }, 1000)
         });
 
@@ -243,22 +248,28 @@
          * */
         ColorThief.prototype.getColor = function (sourceImage, quality) {
             var palette = this.getPalette(sourceImage, 5, quality);
-            return "rgb(" + palette[0][0] + ", " + palette[0][1] + ", " + palette[0][2] + ")";  // This is dominantColor.
+            return "rgb(" + palette[0][0] + ", " + palette[0][1] + ", " + palette[0][2] + ")";  // This is dominant color or adjusted color.
         };
 
-        // Darkest Color Function By LancerComet at 1:36, 2015.10.18.
-        ColorThief.prototype.getDarkestColor = function (sourceImage, quality) {
+        // Get Theme Color Function By LancerComet at 0:06, 2015.10.21.
+        ColorThief.prototype.getThemeColor = function (sourceImage, quality) {
             var palette = this.getPalette(sourceImage, 5, quality);
-            var colorSum = 255 * 3;
-            var darkestColor = null;
-            Object.keys(palette).filter(function (eachColor) {
-                var sum = palette[eachColor][0] + palette[eachColor][1] + palette[eachColor][2];
-                if (sum < colorSum) {
-                    colorSum = sum;
-                    darkestColor = "rgb(" + palette[eachColor][0] + ", " + palette[eachColor][1] + ", " + palette[eachColor][2] + ")";
-                }
-            });
-            return darkestColor;
+            var rgbResult = {
+                r: palette[0][0],
+                g: palette[0][1],
+                b: palette[0][2]
+            };
+            var hsvResult = rgbToHsv(rgbResult.r, rgbResult.g, rgbResult.b);  // [h, s, v]
+
+            // If dominant color is too bright, adjust the birghtness to 0.75.
+            if (hsvResult[2] > 0.75) {
+                hsvResult[2] = 0.75;
+                hsvResult[1] += 0.15;
+                console.log("Animation Searcher Info: The dominant color is too bright, and it has been adjusted.");
+            }
+
+            var finallyColor = hsvToRgb(hsvResult[0], hsvResult[1], hsvResult[2]);  // [r, g, b]
+            return "rgb(" + finallyColor[0] + ", " + finallyColor[1] + ", " + finallyColor[2] + ")";  // This is dominant color or adjusted color.
         };
 
 
@@ -796,9 +807,51 @@
         return new ColorThief;
     });
 
+    // Definition: RGB to HSV. | RGB 转化为 HSV 函数.
+    function rgbToHsv (r, g, b) {
+        if (arguments.length === 1) {
+            g = r.g, b = r.b, r = r.r;
+        }
+        var max = Math.max(r, g, b), min = Math.min(r, g, b),
+            d = max - min,
+            h,
+            s = (max === 0 ? 0 : d / max),
+            v = max / 255;
 
+        switch (max) {
+            case min: h = 0; break;
+            case r: h = (g - b) + d * (g < b ? 6: 0); h /= 6 * d; break;
+            case g: h = (b - r) + d * 2; h /= 6 * d; break;
+            case b: h = (r - g) + d * 4; h /= 6 * d; break;
+        }
 
+        return [h, s, v];
+    }
 
+    function hsvToRgb (h, s, v) {
+        var r, g, b, i, f, p, q, t;
+        if (arguments.length === 1) {
+            s = h.s, v = h.v, h = h.h;
+        }
+        i = Math.floor(h * 6);
+        f = h * 6 - i;
+        p = v * (1 - s);
+        q = v * (1 - f * s);
+        t = v * (1 - (1 - f) * s);
+        switch (i % 6) {
+            case 0: r = v, g = t, b = p; break;
+            case 1: r = q, g = v, b = p; break;
+            case 2: r = p, g = v, b = t; break;
+            case 3: r = p, g = q, b = v; break;
+            case 4: r = t, g = p, b = v; break;
+            case 5: r = v, g = p, b = q; break;
+        }
+        return [
+            Math.round(r * 255),
+            Math.round(g * 255),
+            Math.round(b * 255)
+        ];
+    }
 
 })();
 
@@ -825,21 +878,23 @@
 
     // Definition: Controllers Module & Configuration. | 总控制器模块定义.
     var ngAppCtrls = angular.module("ngAppCtrls", []);
-    ngAppCtrls.config(["$compileProvider", function ($compileProvider) {
+    ngAppCtrls
+        .config(["$compileProvider", function ($compileProvider) {
         // Set "Https", "Ftp", "Mailto", "File", "Magnet" as trusted string. | 将 "Https", "Ftp", "Mailto", "File", "Magnet" 设置为编译服务的可信字符串.
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|magnet):/);
-    }]).controller("mainController", ["$scope", "$rootScope", "$location", "$timeout", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, $timeout, appConfig, $splashLayout) {
+    }])
+        .controller("mainController", ["$scope", "$rootScope", "$location", "$timeout", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, $timeout, appConfig, $splashLayout) {
         // Definition: Basic Variables. | 基本变量定义.
         $scope.blurButton = "hide";
+        $scope.historyPanel = false;
 
-        // Definition: Layout Controller. | 页面布局控制器.
+            // Definition: Layout Controller. | 页面布局控制器.
         // ---------------------------------------------
         $scope.splashLayout = $splashLayout;  // $splashLayout service reference for $watch service. | 单独引用服务出来进行深度监视.
         $scope.layout = $splashLayout.layout.status;  // Set default value. | 设置默认值.
         $scope.$watch("splashLayout", function (newVal, oldVal) {
             $scope.layout = newVal.layout.status;
         }, true);  // 启动深度监视.
-
 
 
         // SplashScreen Listener. | 启动画面广播监听.
@@ -851,10 +906,20 @@
             }, 4000);
         });
 
+
         // Blur Toggle. | 模糊切换方法.
+        // ---------------------------------------------
         $scope.toggleBlur = function () {
             $scope.backgroundBlur === "blur" ? $scope.backgroundBlur = "" :  $scope.backgroundBlur = "blur";
         };
+
+
+        // History Panel Listener. | 历史记录面板监听事件.
+        // ---------------------------------------------
+        $scope.$on("historyPanel", function (event, value) {
+            value === "show" ? $scope.historyPanel = true : $scope.historyPanel = false;
+        });
+
 
         // Definition: Status of Progressbar (on the left). | 左侧切换列表的搜索条状态.
         // ---------------------------------------------
@@ -885,24 +950,24 @@
 
 
     // Definition: Search Part Controller. | 搜索节点控制器.
-    ngAppCtrls.controller("searchController", ["$scope", function ($scope) {
+    ngAppCtrls.controller("searchController", ["$scope", "$historyPanel", function ($scope, $historyPanel) {
 
         $scope.searchBarFocus = searchBarFocus;
         $scope.searchBarBlur = searchBarBlur;
-        $scope.searchBarKeyDown = searchBarKeyDown;
+        $scope.searchBarKeyup = searchBarKeyup;
 
         /* Definition go below. | 下方为定义部分. */
 
         function searchBarFocus () {
-
+            $historyPanel.show();
         }
 
         function searchBarBlur () {
-
+            $historyPanel.hide();
         }
 
-        function searchBarKeyDown () {
-
+        function searchBarKeyup ($event) {
+            console.log($event);
         }
 
     }]);
@@ -926,8 +991,14 @@
         $scope.$on("splashScreen", function (event, value) {
             $scope.status = value;
         });
-    }])
+    }]);
 
+
+    // Definition: Service Modules Controller. | 服务模块节点控制器.
+    ngAppCtrls.controller("serviceModules", ["$scope", function ($scope) {
+
+
+    }]);
 
 
 })();
@@ -1137,6 +1208,18 @@
             }
         }
     }])
+
+    // Definition: History Panel. | 历史记录面板.
+    ngAppDirectives.directive("history", ["$localStorage", function ($localStorage) {
+        return {
+            restrict: "E",
+            scope: true,
+            controller: function ($scope, $element, $attrs) {},
+            link: function (scope, element, attrs) {
+
+            }
+        }
+    }]);
 
 })();
 /*
@@ -1509,6 +1592,13 @@
     var localStorage = angular.module("localStorage", []);
     localStorage.factory("$localStorage", function ($toast, $internalFunc, appConfig) {
 
+        return {
+            setItem: setItem,
+            getItem: getItem,
+            removeItem: removeItem,
+            empty: empty
+        };
+
         function setItem (key, value) {
             // Error Handler.
             if (!key || !value) {
@@ -1542,13 +1632,6 @@
             });
             $toast.showSimpleToast("搜索历史已成功清空!  (●'◡'●)ﾉ♥");
             console.log(appConfig.text.prefix + "Info:\nAll items in Local Storage has been removed at " + new Date(Date.now()) + ".")
-        }
-
-        return {
-            setItem: setItem,
-            getItem: getItem,
-            removeItem: removeItem,
-            empty: empty
         }
 
     });
@@ -1835,6 +1918,19 @@
             $rootScope.$broadcast("splashScreen", arguments[0]);
         }
     }]);
+
+    // Definition: History Panel Broadcaster. | 历史记录面板广播器.
+    var historyPanel = angular.module("historyPanel", []);
+    historyPanel.factory("$historyPanel", ["$rootScope", function ($rootScope) {
+        return {
+            show: exec.bind(0, "show"),
+            hide: exec.bind(0, "hide")
+        };
+
+        function exec () {
+            $rootScope.$broadcast("historyPanel", arguments[0]);
+        }
+    }])
 
 })(window);
 /*
