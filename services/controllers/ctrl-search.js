@@ -10,16 +10,16 @@
 	 - 新版的初版.
 */ 
 
-var superAgent = require("superagent");
 var cheerio = require("cheerio");
 
-var customPart = require("./ctrl-search-custom"); 
+var appConfig = require("../config/app-config");
+var searchModule = require("./search-modules/ctrl-requirement");
 
 function searchService (req, res, next) {
 
 	// Definition: Requiring Search Module.
 	var moduleName = req.url.substr(8, req.url.length);
-	customPart[moduleName](req, res, next);  // Execute Funciton in Search Module.
+	searchModule[moduleName] ? searchModule[moduleName](req, res, next) : console.log(appConfig.consoleText.caution + 'Do not support lookling up "' + moduleName + '". No such module exists.');  // Execute Function in Search Module. (If exists.)
 
 
 }
