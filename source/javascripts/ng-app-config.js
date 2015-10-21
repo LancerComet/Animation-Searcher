@@ -20,6 +20,7 @@
 
         // Searchable Site Definition. This object would be imported in many places.
         // 可搜索的站点定义. 数据将在多处地方使用.
+        // 在 Node 的 app-config.js 中同样存在一份配置供后端使用.
         site: {
             caso: { name: "华盟", codeName: "caso", fullName: "China Animation Subtitle Organization",  url: "https://camoe.org", icon: "http://tp4.sinaimg.cn/1843885343/180/1290319229/0", disabled: false },
             ktxp: { name: "极影", codeName: "ktxp", fullName: "Katong XP",  url: "http://bt.ktxp.org", icon: "http://tp4.sinaimg.cn/3808818207/180/5680524263/0", disabled: false },
