@@ -104,12 +104,23 @@
 
 
     // Definition: Result Panel Directive. | 结果面板指令.
-    ngAppDirectives.directive("resultPanel", ["$compile", "$sce", "appConfig", function ($compile, $sce, appConfig) {
+    ngAppDirectives.directive("resultPanel", ["$compile", "$sce", "$search", "appConfig", function ($compile, $sce, $search, appConfig) {
         return {
             restrict: "E",
             scope: true,
             templateUrl: "/templates/ng-result-panel.html",
-            controller: function ($scope, $element, $attrs) {},
+            controller: function ($scope, $element, $attrs) {
+
+                // Definition: Page switching requesting function. | 换页切换请求方法.
+                // 此方法传入 $event & targetSite 作为参数.
+                $scope.switchPage = function ($event, targetSite) {
+                    $search.changePage(targetSite, $event.target.attributes["data-request-link"].value);
+                };
+
+
+                // Definition: Result Item Checkbox checking function. | 
+
+            },
             link: function (scope, element, attrs) {
                 // Error Handle: Attribute "codename" must be defined.
                 // 错误处理: 必须定义 "codename" 属性.
@@ -126,17 +137,17 @@
                     disabled: appConfig.site[codeName].disabled
                 };
 
+
                 // Definition: 搜索结果广播监听事件.
                 scope.$on("searchResult", function (event, value) {
                     if (!value[codeName]) return false;
                     scope.results = value[codeName];
+                    var $pagination = angular.element(document.querySelector(".result-pagination-" + codeName));
+                    $pagination.html(value[codeName].pageLink);
+                    $compile($pagination)(scope);
                 });
 
-                // Definition: Page switching requesting function. | 换页切换请求方法.
-                // 此方法传入 codename 作为参数.
-                scope.switchPage = function (targetSite) {
 
-                }
             }
         }
     }]);

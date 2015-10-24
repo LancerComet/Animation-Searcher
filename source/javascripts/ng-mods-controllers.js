@@ -104,7 +104,7 @@
         }
 
         function searchBarKeyup ($event) {
-            console.log($event);
+
         }
 
     }]);

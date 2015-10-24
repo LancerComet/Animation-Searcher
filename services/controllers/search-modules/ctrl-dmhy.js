@@ -137,7 +137,7 @@ function dmhyModule (req, res, next) {
             // 如果存在翻页按钮数据, 进行正则替换.
             if (dmhyResultObject.pageLink) {
                 var regExp = /href="/g;
-                var replacedPageLink = dmhyResultObject.pageLink.replace(regExp, 'href="javascript:void(0)" ng-click="switchPage("dmhy")" data-request-link="' + appConfig.site.dmhy.url);
+                var replacedPageLink = dmhyResultObject.pageLink.replace(regExp, 'href="javascript:void(0)" ng-click="switchPage($event, \'dmhy\')" data-request-link="' + appConfig.site.dmhy.url);
                 dmhyResultObject.pageLink = replacedPageLink.substring(replacedPageLink.indexOf("<a href="), replacedPageLink.length);
             }
 

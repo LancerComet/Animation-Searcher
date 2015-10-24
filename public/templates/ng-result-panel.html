@@ -11,7 +11,7 @@
 </md-toolbar>
 
 <!-- MD Content Node, all result nodes go here. -->
-<md-content>
+<md-content style="height: 600px">
     <div class="result-list transition-dot-2" ng-repeat="result in results.result">
         <md-checkbox aria-label="{{domInfo.name}}搜索结果勾选" ng-click="resultCheckbox.Fn($event)" data-magnet="{{result.magnet}}">
             <md-tooltip>勾选结果</md-tooltip>
@@ -25,5 +25,4 @@
 
 <!-- Pagination Container Node. -->
 <!-- Just a container, content may be different. -->
-<div id="pagination_popgo" class="text-center pagination">
-</div>
+<div class="text-center result-pagination-{{domInfo.codeName}}"></div>
