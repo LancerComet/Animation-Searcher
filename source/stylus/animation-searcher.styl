@@ -18,8 +18,9 @@
 // Top Header Area. | 顶部 Header 区域.
 // ==============================================================
 $headerMinHeight = 6em
+$headerHeight = 10em
 .header
-    height: 10em
+    height: $headerHeight
     padding-top: $headerMinHeight
     z-index: 100
 
@@ -95,11 +96,11 @@ $headerMinHeight = 6em
 .search-input-container
     padding: 0
 
- .search-input-container.md-input-focused .search-bar-color
+.search-input-container.md-input-focused .search-bar-color
      color: #fff !important
      border-color: #fff !important
 
- .search-button
+.search-button
      top: 1em
      width: 3em
 
@@ -109,6 +110,7 @@ $headerMinHeight = 6em
 .history-panel-search-bar .history-item
     display: inline-block
     list-style: none
+
 
 // Left Side Navigator. | 左侧导航.
 // ==============================================================
@@ -145,6 +147,7 @@ $headerMinHeight = 6em
        padding-top: $headerMinHeight + 4em
    }
 }
+
 
 // Character Message Module. | 左侧导航.
 // ==============================================================
@@ -238,6 +241,12 @@ $charMsgBK = #539cff
     &:active
         transition: none !important
         transform: scale(.8)
+
+
+// Main Part. | 主体节点.
+// ==============================================================
+.main
+    height: calc(100% - 10em)  // $headerHeight
 
 
 

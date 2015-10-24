@@ -106,15 +106,17 @@
           </header>
 
           <%# Main Part. | 主体部分. %>
-          <main class="main">
+          <main class="main" layout="row">
 
-              <aside class="aside left-controller-bar"></aside>
+              <aside class="aside left-controller-bar" flex="20" layout="column">
 
-              <div class="main-content">
+              </aside>
+
+              <div class="main-content" flex="80" layout="column">
                   <!--<result-panel class="result-panel" data-codename="caso"></result-panel>-->
                   <!--<result-panel class="result-panel" data-codename="ktxp"></result-panel>-->
                   <!--<result-panel class="result-panel" data-codename="popgo"></result-panel>-->
-                  <result-panel class="result-panel" data-codename="dmhy"></result-panel>
+                  <result-panel class="result-panel" data-codename="dmhy" layout="column"></result-panel>
               </div>
 
           </main>

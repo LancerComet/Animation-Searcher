@@ -1143,7 +1143,7 @@
                 };
 
 
-                // Definition: Result Item Checkbox checking function. | 
+                // Definition: Result Item Checkbox checking function. |
 
             },
             link: function (scope, element, attrs) {
