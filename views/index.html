@@ -32,7 +32,7 @@
 
   </head>
   
-  <body class="w-100 h-100 over-hidden">
+  <body class="w-100 h-100 over-hidden ng-cloak">
 
       <%# Body Container. | 总容器节点. %>
       <div class="body-container w-100 h-100" ng-controller="mainController">
@@ -80,17 +80,17 @@
               </action-bar>
 
               <%# History Panel. | 历史记录面板. %>
-              <history class="history-panel-search-bar p-relative" ng-if="historyPanel" layout="row">
-                  <div flex></div>
-                  <ul flex>
-                      <li class="history-item">aa</li>
-                      <li class="history-item">bb</li>
-                      <li class="history-item">cc</li>
-                      <li class="history-item">dd</li>
-                      <li class="history-item">ee</li>
-                  </ul>
-                  <div flex></div>
-              </history>
+              <!--<history class="history-panel-search-bar p-relative" ng-if="historyPanel" layout="row">-->
+                  <!--<div flex></div>-->
+                  <!--<ul flex>-->
+                      <!--<li class="history-item">aa</li>-->
+                      <!--<li class="history-item">bb</li>-->
+                      <!--<li class="history-item">cc</li>-->
+                      <!--<li class="history-item">dd</li>-->
+                      <!--<li class="history-item">ee</li>-->
+                  <!--</ul>-->
+                  <!--<div flex></div>-->
+              <!--</history>-->
 
               <%# Greeting Area. | 欢迎内容节点. %>
               <div class="greeting-area p-relative" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
@@ -109,6 +109,13 @@
           <main class="main">
 
               <aside class="aside left-controller-bar"></aside>
+
+              <div class="main-content">
+                  <result-panel class="result-panel" data-codename="caso"></result-panel>
+                  <result-panel class="result-panel" data-codename="ktxp"></result-panel>
+                  <result-panel class="result-panel" data-codename="popgo"></result-panel>
+                  <result-panel class="result-panel" data-codename="dmhy"></result-panel>
+              </div>
 
           </main>
 

@@ -14,6 +14,12 @@
 (function (global, undefined) {
     "use strict";
 
+    // Definition: Service modules requirement module. | 服务模块引用模块.(真特么绕嘴)
+    angular.module("ngAppService", [
+        // Animation Searcher Custom Service Modules. | 自定义服务模块.
+        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast", "historyPanel", "searchService"
+    ]);
+
     // Definition: Toast Module, from Material-Angular. | Material-Angular Toast 模块定义.
     var appToast = angular.module("appToast", []);
     appToast.factory("$toast", ["$mdToast", "appConfig", function ($mdToast, appConfig) {
@@ -379,36 +385,26 @@
 
     // Definition: Splash Layout Service Module. | 启动布局服务模块.
     var splashLayout = angular.module("splashLayout", []);
-    splashLayout.factory("$splashLayout", function () {
-
-        var className = {
-            initLayout: "init-layout",  // "True" stands by "init-layout".
-            standBy: "stand-by-layout"  // "False" stands by "stand-by-layout".
-        };
-
-        var layout = {
-            status: className.initLayout  // 设置为属性以便在控制器中深度监听.
-        };
+    splashLayout.factory("$splashLayout", ["$rootScope", function ($rootScope) {
 
         return {
             toInitLayout: toInitLayout,
-            toStandByLayout: toStandByLayout,
-            layout: layout
+            toStandByLayout: toStandByLayout
         };
 
         /* Services go below. */
 
         // Switch to initial layout. | 变换为初始布局.
         function toInitLayout () {
-            layout.status = className.initLayout;
+            $rootScope.$broadcast("splashLayout", "init-layout");
         }
 
         // Switch to stand-by layout. | 变换为正常布局.
         function toStandByLayout () {
-            layout.status = className.standBy;
+            $rootScope.$broadcast("splashLayout", "stand-by-layout");
         }
 
-    });
+    }]);
 
 
     // Definition: Change Log Service. | 更新日志服务模块.
@@ -437,6 +433,7 @@
 
     }]);
 
+
     // Definition: Text Panel Service. | 文字面板服务模块.
     var textPanel = angular.module("textPanel", []);
     textPanel.factory("$textPanel", ["$rootScope", function ($rootScope) {
@@ -450,7 +447,7 @@
         // 老了，撸不动了.
         function showHelp () {
             console.log("$textPanel Service: \n--- This is a invincible divider. ---");
-            console.log(' - $textPanel.show(config): Create a text panel and fill it with "content".');
+            console.log(' - $textPanel.show(config): Create a text panel and fill it with "config.content".');
             console.log(' - $textPanel.help(): Here comes the help you loser! \n');
         }
 
@@ -470,6 +467,7 @@
 
     }]);
 
+
     // Definition: Clear Material Toast. | 清除可能残余的 Material Toast.
     var clearMdToast = angular.module("clearMdToast", []);
     clearMdToast.factory("$clearMDToast", function () {
@@ -477,6 +475,7 @@
             angular.element(document.querySelector(".md-content")).remove();
         }
     });
+
 
     // Definition: Splash Screen Service. | 载入界面服务.
     var splashScreen = angular.module("splashScreen", []);
@@ -491,6 +490,7 @@
         }
     }]);
 
+
     // Definition: History Panel Broadcaster. | 历史记录面板广播器.
     var historyPanel = angular.module("historyPanel", []);
     historyPanel.factory("$historyPanel", ["$rootScope", function ($rootScope) {
@@ -502,6 +502,71 @@
         function exec () {
             $rootScope.$broadcast("historyPanel", arguments[0]);
         }
-    }])
+    }]);
+
+
+    // Definition: Search Service. | 搜索功能服务.
+    var searchService = angular.module("searchService", []);
+    searchService.factory("$search", ["$rootScope", "$http", "$toast", "appConfig", function ($rootScope, $http, $toast, appConfig) {
+        return {
+            search: search,
+            changePage: changePage
+        };
+
+        // Definition: Search-requesting Function. | 搜索请求发起函数.
+        function search (keywords) {
+
+            // Fire Async Requesting. | 循环发起搜索请求.
+            Object.keys(appConfig.site).filter(function (prop) {
+                $http.post("/search/" + appConfig.site[prop].codeName, {
+                    keywords: keywords
+                }, {
+                    timeout: appConfig.settings.xhrTimeout  // Timeout for 30s.
+                }).success(function (data, status, headers, config, statusText) {
+                    $rootScope.$broadcast("searchResult", data);  // Broadcast result.
+                    $toast.showSimpleToast(data.info);  // Show simple toast after finished succesfully.
+                }).error(function (data, status, headers, config, statusText) {
+                    if (status === -1) {
+                        // Timeout Handler.
+                        $toast.showActionToast("您的搜索请求超时，不兹道四哪里粗了问题 ... ＞︿＜", "我知道了~");
+                    } else {
+                        // Throw a ActionToast when error was caught. | 出错时进行提示.
+                        $toast.showActionToast(data.info, data.action);
+                    }
+
+                });
+            });
+
+        }
+
+        // Definition: 换页请求搜索.
+        function changePage (codename, link) {
+
+            /*
+             *  @ codename: 目标站点.
+             *  @ link: 搜索目标链接.
+             */
+
+            $http.post("/search/" + codename, {
+                mode: "switchPage",
+                link: link
+            }, {
+                timeout: appConfig.settings.xhrTimeout  // Timeout for 30s.
+            }).success(function (data, status, headers, config, statusText) {
+                $rootScope.$broadcast("searchResult", data);  // Broadcast result.
+                $toast.showSimpleToast(data.info);  // Show simple toast after finished succesfully.
+            }).error(function (data, status, headers, config, statusText) {
+                if (status === -1) {
+                    // Timeout Handler.
+                    $toast.showActionToast("您的搜索请求超时，不兹道四哪里粗了问题 ... ＞︿＜", "我知道了~");
+                } else {
+                    // Throw a ActionToast when error was caught. | 出错时进行提示.
+                    $toast.showActionToast(data.info, data.action);
+                }
+
+            });
+        }
+
+    }]);
 
 })(window);

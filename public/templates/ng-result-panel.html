@@ -6,15 +6,20 @@
  -->
 
 <!-- MD Toolbar Node. -->
-<md-toolbar class="md-toolbar-tools"><h4>{{domInfo.name}} <small>{{domInfo.fullName}}</small></h4></md-toolbar>
+<md-toolbar class="md-toolbar-tools">
+    <h4>{{domInfo.name}} <small>{{domInfo.fullName}}</small></h4>
+</md-toolbar>
 
 <!-- MD Content Node, all result nodes go here. -->
 <md-content>
-    <div class="result-list transition-dot-2" ng-repeat="popgoResult in popgoResults.Result.popgoResult.collection">
-        <md-checkbox aria-label="漫游搜索结果勾选" ng-click="resultCheckbox.Fn($event)" data-magnet="{{popgoResult.magnet}}"><md-tooltip>勾选结果</md-tooltip></md-checkbox>
-        <p class="resultList_Number" ng-bind="$index + 1"></p>
-        <a class="resultList_Title transition-dot-4" title="{{popgoResult.title}}" href="{{popgoResult.link}}" target="_blank">{{popgoResult.title}}</a>
-        <a class="resultList_Magnet" href="{{popgoResult.magnet}}"><i class="icon-magnet"></i>磁力链</a>
+    <div class="result-list transition-dot-2" ng-repeat="result in results.result">
+        <md-checkbox aria-label="{{domInfo.name}}搜索结果勾选" ng-click="resultCheckbox.Fn($event)" data-magnet="{{result.magnet}}">
+            <md-tooltip>勾选结果</md-tooltip>
+        </md-checkbox>
+        <p class="result-list-index" ng-bind="$index + 1"></p>
+        <a class="result-list-title transition-dot-4" title="{{result.title}}" href="{{result.link}}" target="_blank">{{result.title}}</a>
+        <a class="result-list-magnet" href="{{result.magnet}}"><i class="icon-magnet"></i>磁力链</a>
+        <p class="result-list-date">{{result.date}}</p>
     </div>
 </md-content>
 

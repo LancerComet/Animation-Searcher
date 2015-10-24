@@ -6,14 +6,14 @@
  *
  *  Descrption:
  *  ---
- *  ¶¯Âş»¨Ô°µÄ±ê×¼ËÑË÷£º
- *  http://share.dmhy.org/topics/list/page/Ò³Âë?keyword=¹Ø¼ü×Ö
- *  ×¢Òâ£¡¶¯Âş»¨Ô°²»¿ÉÒÔÔÚ¶ÌÊ±¼äÄÚ·¢³ö´óÁ¿ÇëÇó£¡·ñÔò»áÒªÇóÌîĞ´ÑéÖ¤Âë.
+ *  åŠ¨æ¼«èŠ±å›­çš„æ ‡å‡†æœç´¢ï¼š
+ *  http://share.dmhy.org/topics/list/page/é¡µç ?keyword=å…³é”®å­—
+ *  æ³¨æ„ï¼åŠ¨æ¼«èŠ±å›­ä¸å¯ä»¥åœ¨çŸ­æ—¶é—´å†…å‘å‡ºå¤§é‡è¯·æ±‚ï¼å¦åˆ™ä¼šè¦æ±‚å¡«å†™éªŒè¯ç .
  *
  *  ChangeLog:
  *  ---
  *  V0.1.9 - 23:19, 2015.10.21.
- *   + ³õ°æ.
+ *   + åˆç‰ˆ.
  */
 
 var superAgent = require("superagent");
@@ -21,8 +21,8 @@ var cheerio = require("cheerio");
 
 var appConfig = require("../../config/app-config");
 
-// Definition: Cookie Information from DMHY. | ¶¯Âş»¨Ô°µÄ Cookie ĞÅÏ¢.
-// Ã¿´Î·ÃÎÊµÄÊ±ºòĞ¯´ø·ÃÎÊ.
+// Definition: Cookie Information from DMHY. | åŠ¨æ¼«èŠ±å›­çš„ Cookie ä¿¡æ¯.
+// æ¯æ¬¡è®¿é—®çš„æ—¶å€™æºå¸¦è®¿é—®.
 // DMHY will check client's cookie in order to confirm you are not the robot.
 // We'll visit DMHY every 3 minutes and renew the latest cookie in order to avoid robot-detection.
 var dmhyCookie = {
@@ -31,10 +31,10 @@ var dmhyCookie = {
     visitInterval: 3  // Visit Interval: 3 minutes.
 };
 
-// Definition: DMHY Cookie Refresher. | ¶¯Âş»¨Ô° Cookie Ë¢ĞÂº¯Êı.
+// Definition: DMHY Cookie Refresher. | åŠ¨æ¼«èŠ±å›­ Cookie åˆ·æ–°å‡½æ•°.
 (function dmhyCookieFunction () {
 
-    // Action: Set Interval to renew cookie from DMHY. | ÉèÖÃ¶¯Âş»¨Ô° Cookie ¸üĞÂ¼ÆÊ±Æ÷.
+    // Action: Set Interval to renew cookie from DMHY. | è®¾ç½®åŠ¨æ¼«èŠ±å›­ Cookie æ›´æ–°è®¡æ—¶å™¨.
     setInterval( function () {
         dmhyCookieRenew();
     }, 1000 * 60 * dmhyCookie.visitInterval);
@@ -43,13 +43,13 @@ var dmhyCookie = {
     function dmhyCookieRenew () {
         if (!dmhyCookie.visitStatus) {
             setTimeout(function () {
-                console.log("Search Module DMHY: ¼´½«ÔÚ30ÃëºóÖØĞÂ³¢ÊÔ·ÃÎÊ¶¯Âş»¨Ô°....");
+                console.log("Search Module DMHY: å³å°†åœ¨30ç§’åé‡æ–°å°è¯•è®¿é—®åŠ¨æ¼«èŠ±å›­....");
                 dmhyCookieRenew();
             }, 30000);
         } else {
-            console.log("Search Module DMHY: ¼´½«¿ªÊ¼Ô¤ÏÈ·ÃÎÊ¶¯Âş»¨Ô°È¡µÃ Cookie...");
+            console.log("Search Module DMHY: å³å°†å¼€å§‹é¢„å…ˆè®¿é—®åŠ¨æ¼«èŠ±å›­å–å¾— Cookie...");
             superAgent
-                .get("https://share.dmhy.org")
+                .get(appConfig.site.dmhy.url)
                 .set('Accept', 'text/html, application/xhtml+xml, */*')
                 .set('Accept-Encoding', 'gzip, deflate')
                 .set('Accept-Language', 'zh-CN')
@@ -59,24 +59,31 @@ var dmhyCookie = {
                 .set('Host', 'share.dmhy.org')
                 .end(function (err, res) {
                     if (err) {
-                        console.log("Search Module DMHY: ¶¯Âş»¨Ô° Cookie ¸üĞÂÊ§°Ü:");
+                        console.log("Search Module DMHY: åŠ¨æ¼«èŠ±å›­ Cookie æ›´æ–°å¤±è´¥:");
                         console.log(err);
                         return false;
                     }
                     dmhyCookie.cookie = res.header["set-cookie"];
-                    console.log("Search Module DMHY: ¶¯Âş»¨Ô°·ÃÎÊÍê±Ï²¢¸üĞÂ Cookie.");
+                    console.log("Search Module DMHY: åŠ¨æ¼«èŠ±å›­è®¿é—®å®Œæ¯•å¹¶æ›´æ–° Cookie.");
                 });
         }
     }
 })();
 
-// Definition: Dongman Huayuan Searching Module Main Logic. | ¶¯Âş»¨Ô°ËÑË÷Ä£¿éÖ÷Âß¼­.
+// Definition: Dongman Huayuan Searching Module Main Logic. | åŠ¨æ¼«èŠ±å›­æœç´¢æ¨¡å—ä¸»é€»è¾‘.
 function dmhyModule (req, res, next) {
-    dmhyCookie.visitStatus = false;  // Block interval to renew cookie while searching process is on. | ÔÚ·ÃÎÊÆÚ¼ä×èÖ¹¼ÆÊ±Æ÷Ë¢ĞÂ Cookie.
-    var keywords = req.body.keywords;  // Keywords for look-up. | ²éÑ¯¹Ø¼ü×Ö.
+    dmhyCookie.visitStatus = false;  // Block interval to renew cookie while searching process is on. | åœ¨è®¿é—®æœŸé—´é˜»æ­¢è®¡æ—¶å™¨åˆ·æ–° Cookie.
+
+    var requestingLink = null;  // Requesting Link for superAgent.
+    if (req.body.mode === "switchPage") {
+        requestingLink = req.body.link;
+    } else {
+        var keywords = req.body.keywords;  // Keywords for look-up. | æŸ¥è¯¢å…³é”®å­—.
+        requestingLink = appConfig.site.dmhy.url + "/topics/list?keyword=" + encodeURIComponent(keywords);
+    }
 
     superAgent
-        .get(appConfig.site.dmhy + "/topics/list?keyword=" + encodeURIComponent(keywords))
+        .get(requestingLink)
         .set('Accept-Encoding', 'gzip, deflate')
         .set('Accept-Language', 'zh-CN')
         .set("Connection", "Keep-Alive")
@@ -91,8 +98,8 @@ function dmhyModule (req, res, next) {
                 res.status(500).json({
                     status: 500,
                     type: "error",
-                    info: "¶¯Âş»¨Ô°ËÑË÷´Ö´í£¬ÓÖÕ¨ÁË°É~ (¨s¨p¨‰Ãó¨‰)¨s¦à©ß©¥©ß",
-                    action: "µÈµÈÔÙÀ´°É~",
+                    info: "åŠ¨æ¼«èŠ±å›­æœç´¢ç²—é”™ï¼Œåˆç‚¸äº†å§~ (â•¯â•¬â–”çš¿â–”)â•¯ï¸µâ”»â”â”»",
+                    action: "ç­‰ç­‰å†æ¥å§~",
                     detail: superAgentError
                 });
                 console.log(appConfig.consoleText.error + "SuperAgent for " + appConfig.site.dmhy.codeName + " failed:");
@@ -102,32 +109,64 @@ function dmhyModule (req, res, next) {
             }
 
             // Initialize Cheerio and refer to "$" just like jQuery.
-            // ³õÊ¼»¯ Cheerio.
+            // åˆå§‹åŒ– Cheerio.
             var $ = cheerio.load(superAgentResponse.text);
 
-            // No Result. | ÎŞËÑË÷½á¹û.
+            // No Result Handler. | æ— æœç´¢ç»“æœ.
             var $topicList = $("#topic_list");
             if ($topicList.length === 0) {
-                console.log(appConfig.consoleText.info + "¶¯Âş»¨Ô°: Î´ËÑË÷µ½ÄÚÈİ.");
+                console.log(appConfig.consoleText.info + "åŠ¨æ¼«èŠ±å›­: æœªæœç´¢åˆ°å†…å®¹.");
                 res.status(404).json({
                     status: 404,
                     type: "info",
-                    info: "¶¯Âş»¨Ô°£ºÃ»ÓĞÕÒµ½ÄÚÈİ~ £¾¦ä£¼",
-                    action:"ÄãÒÑ¾­¾¡Á¦ÁË£¡"
+                    info: "åŠ¨æ¼«èŠ±å›­ï¼šæ²¡æœ‰æ‰¾åˆ°å†…å®¹~ ï¼ï¸¿ï¼œ",
+                    action:"ä½ å·²ç»å°½åŠ›äº†ï¼"
                 });
                 dmhyCookie.visitStatus = true;
                 return true;
             }
 
-            // We have got result ! | ÓĞËÑË÷½á¹û.
-            // Definition: DMHY Result Data Object. | ¶¯Âş»¨Ô°ËÑË÷½á¹ûÊı¾İ¶ÔÏó.
+            // We have got result ! | æœ‰æœç´¢ç»“æœ.
+            // Definition: DMHY Result Data Object. | åŠ¨æ¼«èŠ±å›­æœç´¢ç»“æœæ•°æ®å¯¹è±¡.
             var dmhyResultObject = Object.create(null);  // Empty object for clean data restoring.
-            dmhyResultObject.result = [];  // Restore result data. | ´æ·ÅËÑË÷½á¹û.
+            dmhyResultObject.result = [];  // Restore result data. | å­˜æ”¾æœç´¢ç»“æœ.
                                            // @ Item in "dmhyResultObject.result" : { title: String, link: String, magnet: String, Date: String }
-            dmhyResultObject.pageLink = $topicList.siblings(".nav_title").html();  // Page Switcher HTML Fragment. | ·­Ò³°´Å¥ HTML.
+            dmhyResultObject.pageLink = $topicList.siblings(".nav_title").html();  // Page Switcher HTML Fragment. | ç¿»é¡µæŒ‰é’® HTML.
 
-            // TODO: ´¦ÀíËÑË÷½á¹ûÄÚÈİ²¢·µ»ØÇ°Ì¨.
-        })
+            // If there comes pageLink, take replacing action with regexp.
+            // å¦‚æœå­˜åœ¨ç¿»é¡µæŒ‰é’®æ•°æ®, è¿›è¡Œæ­£åˆ™æ›¿æ¢.
+            if (dmhyResultObject.pageLink) {
+                var regExp = /href="/g;
+                var replacedPageLink = dmhyResultObject.pageLink.replace(regExp, 'href="javascript:void(0)" ng-click="switchPage("dmhy")" data-request-link="' + appConfig.site.dmhy.url);
+                dmhyResultObject.pageLink = replacedPageLink.substring(replacedPageLink.indexOf("<a href="), replacedPageLink.length);
+            }
+
+            // Push results to "dmhyResultObject.result". | æ¨é€æœç´¢ç»“æœåˆ°ç»“æœå¯¹è±¡.
+            var $resultTr = $topicList.find("tr");
+            var resultLength = $resultTr.length;
+            $resultTr.each(function () {
+                var resultKey = {
+                    title: $(this).find("td.title a").text(),
+                    link: appConfig.site.dmhy.url + $(this).find("td.title a").attr("href"),
+                    magnet: $(this).children("td").eq(3).children("a").attr("href"),
+                    date: $(this).children("td").eq(0).children("span").text()
+                };
+                dmhyResultObject.result.push(resultKey);
+                dmhyResultObject.result.length === resultLength ? returnResult() : void(0);
+            });
+
+            // Definition: Result-returning function. | ç»“æœè¿”å›å‡½æ•°.
+            function returnResult () {
+                res.status(200).json({
+                    status: 200,
+                    info: "åŠ¨æ¼«èŠ±å›­æœç´¢å®Œæ¯•~~(â—'â—¡'â—)ï¾‰â™¥",
+                    action: "OKï¼",
+                    dmhy: dmhyResultObject  // { result: [], pageLink: "" }
+                });
+            }
+
+
+        });
 
 
 

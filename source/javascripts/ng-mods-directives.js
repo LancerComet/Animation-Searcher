@@ -46,19 +46,17 @@
 
 
     // Definition: Search Directive. | 搜索模块指令定义.
-    ngAppDirectives.directive("searchBar", ["$http", "$toast", "appConfig", function ($http, $toast, appConfig) {
+    ngAppDirectives.directive("searchBar", ["$http", "$toast", "$search", function ($http, $toast, $search) {
         return {
             restrict: "E",
             scope: true,
-            controller: function ($scope, $element, $attrs, $http) {
-            },
+            controller: function ($scope, $element, $attrs) {},
             link: function (scope, element, attrs) {
 
                 // Definition: Search Keyword. | 搜索关键字变量定义.
                 scope.keywords = null;
 
                 // Definition: Searching function. | 搜索功能定义.
-                // Search and assignment. | 搜索、赋值逻辑主体.
                 scope.searchExec = function ($event) {
 
                     // 非回车事件滚粗.
@@ -67,29 +65,8 @@
                         return false;
                     }
 
-                    // Fire Async Requesting. | 发起搜索请求.
-                    Object.keys(appConfig.site).filter(function (prop) {
-                        $http.post("/search/" + appConfig.site[prop].codeName, {
-                            keywords: scope.keywords
-                        }, {
-                            timeout: appConfig.settings.xhrTimeout  // Timeout for 30s.
-                        }).success(function (data, status, headers, config, statusText) {
-                            $scope.searchResult[prop] = data.result;  // Attach result data to $scope.searchResult.
-                            $toast.showSimpleToast(data.info);  // Show simple toast after finished succesfully.
-                        }).error(function (data, status, headers, config, statusText) {
-                            if (status === -1) {
-                                // Timeout Handler.
-                                $toast.showActionToast("您的搜索请求超时，不兹道四哪里粗了问题 ... ＞︿＜", "我知道了~");
-                            } else {
-                                // Throw a ActionToast when error was caught. | 出错时进行提示.
-                                $toast.showActionToast(data.info, data.action);
-                            }
-
-                        });
-                    });
-
+                    $search.search(scope.keywords);  // Execute searching function. | 执行搜索方法.
                 };
-
             }
         }
     }]);
@@ -138,10 +115,10 @@
                 // 错误处理: 必须定义 "codename" 属性.
                 attrs.codename ? void(0) : throwError('Attribute "codename" must be defined.');
 
-                // Definition: Dom Information Object.
+                // Definition: Dom Information Object. | 节点属性对象.
+                // Attach domInfo to $scope in order to import it in template. | 将 domInfo 定义在 $scope 下以方便模板调取.
                 var codeName = attrs.codename;
-                scope.domInfo = {  // Attach domInfo to $scope in order to import it in template.
-                    // 将 domInfo 定义在 $scope 下以方便模板调取.
+                scope.domInfo = {
                     codeName: codeName,
                     name: appConfig.site[codeName].name,
                     fullName: appConfig.site[codeName].fullName,
@@ -149,9 +126,17 @@
                     disabled: appConfig.site[codeName].disabled
                 };
 
-                // Definition: Result Information Object.
-                scope.result = $scope.searchResult;
+                // Definition: 搜索结果广播监听事件.
+                scope.$on("searchResult", function (event, value) {
+                    if (!value[codeName]) return false;
+                    scope.results = value[codeName];
+                });
 
+                // Definition: Page switching requesting function. | 换页切换请求方法.
+                // 此方法传入 codename 作为参数.
+                scope.switchPage = function (targetSite) {
+
+                }
             }
         }
     }]);
@@ -202,7 +187,7 @@
                 }
             }
         }
-    }])
+    }]);
 
     // Definition: History Panel. | 历史记录面板.
     ngAppDirectives.directive("history", ["$localStorage", function ($localStorage) {

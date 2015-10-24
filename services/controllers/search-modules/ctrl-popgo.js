@@ -7,7 +7,7 @@
  *  ChangeLog:
  *  ---
  *  V0.1.9 - 23:20, 2015.10.21.
- *   + ³õ°æ.
+ *   + åˆç‰ˆ.
  */
 
 var superAgent = require("superagent");

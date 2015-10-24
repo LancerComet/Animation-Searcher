@@ -18,6 +18,7 @@
  *   + 历史记录面板.
  *   + 随机生成背景图片.
  *   + 后端搜索模块逻辑.
+ *   + 布局服务从深度监听修改为广播机制.
  *
  *  V0.1.7 - 0:01, 2015.10.20.
  *   + 完善前端搜索功能逻辑.
@@ -65,24 +66,24 @@
         "ngAnimate", "ngMaterial", "ngSanitize", "ngRoute",  // Angular Official Modules. | Angular.JS 官方模块.
         "appConfig",  // Angular Application Configuration. | Angular 实例模块设置.
         "internalFunc",  // Internal Functions Add-on Module. | 内部方法模块.
-        "ngAppCtrls", "ngAppDirectives",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
-        "colorThief",  // colorThief Original By Lokesh Dhakar.
-        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast", "historyPanel"  // Animation Searcher Custom Service Modules. | 自定义服务模块.
+        "ngAppCtrls", "ngAppDirectives", "ngAppService",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
+        "colorThief"  // colorThief Original By Lokesh Dhakar.
     ]);
 
+    // Action: ngApp configuration.
+    ngApp.config(["$compileProvider", function ($compileProvider) {
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|magnet):/);  // Set "Https", "Ftp", "Mailto", "File", "Magnet" as trusted string. | 将 "Https", "Ftp", "Mailto", "File", "Magnet" 设置为编译服务的可信字符串.
+    }]);
+
+    // Action: ngApp Initialization-run.
     ngApp.run(["$timeout", "$splashScreen", "$colorChange", "$colorThief", function ($timeout, $splashScreen, $colorChange, $colorThief) {
 
+        // "window.onload" event.
         angular.element(window).on("load", function () {
-
             var image = document.querySelector("#greeting-background");
             var themeColor = $colorThief.getThemeColor(image);
-
-            $timeout(function () {
-                $splashScreen.hide();
-            }, 3000);
-            $timeout(function () {
-                $colorChange.change(themeColor);
-            }, 1000)
+            $timeout(function () { $splashScreen.hide(); }, 3000);
+            $timeout(function () { $colorChange.change(themeColor); }, 1000)
         });
 
     }]);
