@@ -18,7 +18,7 @@
 // Top Header Area. | 顶部 Header 区域.
 // ==============================================================
 $headerMinHeight = 6em
-$headerHeight = 25em
+$headerHeight = 20em
 .header
     width: 100%
     height: $headerHeight
@@ -63,13 +63,24 @@ $headerHeight = 25em
     padding: 0 3%
 
 .action-bar-left-flex.stand-by-layout
-    flex: 1
+    //flex: 1
 
 .action-bar-center-flex.stand-by-layout
-    flex: 10
+    //flex: 10
+
+.action-bar-right-flex
+    opacity: 0
+    text-align: right
+
+@media (max-width: 959px) and (min-width: 0px) {
+    .action-bar-right-flex {
+        opacity: 0 !important
+    }
+}
 
 .action-bar-right-flex.stand-by-layout
-    flex: 20
+    //flex: 20
+    opacity: 1
 
 .action-bar.init-layout
     //width: 26.5em
@@ -119,15 +130,15 @@ $headerHeight = 25em
 
 // Left Side Navigator. | 左侧导航.
 // ==============================================================
-.left-side-nav-ctrl .md-sidenav-left
-    padding-top: $headerMinHeight + 2.5em
+//.left-side-nav-ctrl .md-sidenav-left
+//    padding-top: $headerMinHeight + 2.5em
 
 .left-side-nav-ctrl .author-cover
     min-height: 14em
     background-image: url("/images/left-leftnav-author.jpg")
 
 .left-side-nav-ctrl .content
-    max-height: calc(100% - 8.5em - 14em - 3em + 5em) // I don't why I msut plus 5em here.
+    max-height: calc(100% - 14em - 2em - 3.5em)  // I don't why I msut -3.5em here.
 
 .left-side-nav-ctrl .left-nav-button
     width: 100%
@@ -135,22 +146,19 @@ $headerHeight = 25em
     padding: .8em
 
 .footer
-    height: 1em
-    line-height: 1em
+    height: 2em
+    line-height: 2em
     font-size: .8em
 
-@media screen and (max-height: 640px) {
+@media screen and (max-height: 500px) {
     .left-side-nav-ctrl .content {
-        max-height: calc(100% - 8.5em  + 5em) // I don't why I msut plus 5em here.
+        max-height: calc(100% - 2em)
     }
 
    .author-cover {
        display: none !important
    }
 
-   .left-side-nav-ctrl .md-sidenav-left {
-       padding-top: $headerMinHeight + 4em
-   }
 }
 
 
@@ -159,6 +167,16 @@ $headerHeight = 25em
 // ==============================================================
 .aside
     overflow: auto
+
+@media (min-width: 0px) and (max-width: 1000px)  {
+    .aside {
+        width: 10em
+    }
+
+    .site-switcher-list {
+        width: calc(100% - 1.1em)
+    }
+}
 
 .site-switcher
     border-radius: .5em
@@ -289,6 +307,7 @@ $headerHeight = 25em
 
 .result-list .result-item-date
     margin: .35em 0
+    color: #9ab4ec
 
 .result-pagination
     padding: 1em
@@ -487,7 +506,7 @@ $charMsgBK = #539cff
     z-index: 0
     background-color: #7ba7eb
     animation: move-infinite ease 160s infinite
-    transform: translate(0, -800px)
+    transform: translate(0, -880px)
 
 
 @keyframes move-infinite {
@@ -495,10 +514,10 @@ $charMsgBK = #539cff
         transform: translate(0, 0)
     }
     40% {
-        transform: translate(0, -800px)
+        transform: translate(0, -880px)
     }
     60% {
-        transform: translate(0, -800px)
+        transform: translate(0, -880px)
     }
     100% {
         transform: translate(0, 0)

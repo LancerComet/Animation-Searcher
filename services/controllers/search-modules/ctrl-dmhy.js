@@ -162,6 +162,7 @@ function dmhyModule (req, res, next) {
                     status: 200,
                     info: "动漫花园搜索完毕~~(●'◡'●)ﾉ♥",
                     action: "OK！",
+                    codeName: "dmhy",
                     dmhy: dmhyResultObject  // { result: [], pageLink: "" }
                 });
             }

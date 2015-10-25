@@ -16,10 +16,10 @@
     </div>
 
 
-    <section flex="90" layout="column">
+    <section flex="90" layout="column" class="site-switcher-body">
         <!--<md-subheader class="md-primary color-theme text-color" style="margin: 0;" flex="10">切换站点</md-subheader>-->
         <!--<div flex="10">切换站点</div>-->
-        <md-list class="site-switcher-list">
+        <md-list class="site-switcher-list over-auto">
             <md-list-item ng-repeat="site in siteList">
                 <md-button class="site-switcher-item" aria-label="切换到{{site.name}}的搜索结果.">
                     <div class="site-switcher-item-icon">
@@ -33,6 +33,6 @@
                     <md-tooltip>{{site.title}}</md-tooltip>
                 </md-button>
             </md-list-item>
-        </md-list flex>
+        </md-list>
     </section>
 </md-content>

@@ -101,7 +101,7 @@ function searchModule (req, res, next) {
                 var $seedName = $(this).children(".inde_tab_seedname");
                 var resultKey = {
                     title: $seedName.children("a").attr("title"),
-                    link: appConfig.site[codeName].url + $seedName.children("a").attr("title"),
+                    link: appConfig.site[codeName].url + $seedName.children("a").attr("href"),
                     date: $(this).children("td").eq(1).text(),
                     magnet: $(this).children("td").last().children("a").attr("href")
                 };
@@ -116,7 +116,8 @@ function searchModule (req, res, next) {
                 var returnObj = {
                     status: 200,
                     info: "漫游搜索完毕~~｡◕‿◕｡",
-                    action: "哦液~"
+                    action: "哦液~",
+                    codeName: codeName
                 };
                 returnObj[codeName] = resultObject;  // { result: [], pageLink: "" }
                 res.status(200).json(returnObj);

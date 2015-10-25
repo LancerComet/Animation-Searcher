@@ -26,6 +26,7 @@
         // Definition: Basic Variables. | 基本变量定义.
         $scope.blurButton = "hide";
         $scope.historyPanel = false;
+        $scope.resultPanelIf = {};
 
         // Definition: Layout Controller. | 页面布局控制器.
         // ---------------------------------------------
@@ -76,12 +77,6 @@
         //   caso: false, ktxp: false, ...
         // }
 
-        // Definition: Result Data. | 搜索结果数据定义.
-        // ---------------------------------------------
-        // Value will change after search requesting is finished successfully.
-        // 数据将在搜索完毕之后更变.
-        // Auto two-way data bind. | 自动双向数据绑定,
-        $scope.searchResult = {};
 
     }]);
 

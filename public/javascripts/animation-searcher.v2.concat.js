@@ -909,6 +909,7 @@
         // Definition: Basic Variables. | 基本变量定义.
         $scope.blurButton = "hide";
         $scope.historyPanel = false;
+        $scope.resultPanelIf = {};
 
         // Definition: Layout Controller. | 页面布局控制器.
         // ---------------------------------------------
@@ -959,12 +960,6 @@
         //   caso: false, ktxp: false, ...
         // }
 
-        // Definition: Result Data. | 搜索结果数据定义.
-        // ---------------------------------------------
-        // Value will change after search requesting is finished successfully.
-        // 数据将在搜索完毕之后更变.
-        // Auto two-way data bind. | 自动双向数据绑定,
-        $scope.searchResult = {};
 
     }]);
 
@@ -1149,6 +1144,7 @@
                 // Error Handle: Attribute "codename" must be defined.
                 // 错误处理: 必须定义 "codename" 属性.
                 attrs.codename ? void(0) : throwError('Attribute "codename" must be defined.');
+                scope.panelShow = false;
 
                 // Definition: Dom Information Object. | 节点属性对象.
                 // Attach domInfo to $scope in order to import it in template. | 将 domInfo 定义在 $scope 下以方便模板调取.
@@ -1169,6 +1165,7 @@
                     var $pagination = angular.element(document.querySelector(".result-pagination-" + codeName));
                     $pagination.html(value[codeName].pageLink);
                     $compile($pagination)(scope);
+                    scope.panelShow = true;
                 });
 
 

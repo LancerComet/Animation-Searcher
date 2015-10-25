@@ -124,7 +124,8 @@ function searchModule (req, res, next) {
                 var returnObj = {
                     status: 200,
                     info: "华萌姐搜索完毕~~(●'◡'●)ﾉ♥",
-                    action: "华萌姐辛苦了！"
+                    action: "华萌姐辛苦了！",
+                    codeName: codeName
                 };
                 returnObj[codeName] = resultObject;  // { result: [], pageLink: "" }
                 res.status(200).json(returnObj);
