@@ -18,15 +18,18 @@
 // Top Header Area. | 顶部 Header 区域.
 // ==============================================================
 $headerMinHeight = 6em
-$headerHeight = 10em
+$headerHeight = 25em
 .header
+    width: 100%
     height: $headerHeight
     padding-top: $headerMinHeight
-    z-index: 100
+    position: absolute
+    z-index: 0
 
 .header.init-layout
     height: 100%
     padding: 0
+    z-index: 100
 
 .greeting-background
     background-size: cover
@@ -157,6 +160,10 @@ $headerHeight = 10em
 .aside
     overflow: auto
 
+.site-switcher
+    border-radius: .5em
+    overflow: hidden
+
 .site-switcher-item
     width: 100%
     padding: 1em .5em
@@ -189,7 +196,9 @@ $headerHeight = 10em
 // Main Part. | 主体节点.
 // ==============================================================
 .main
-    height: calc(100% - 10em)  // $headerHeight
+    //height: calc(100% - 10em)  // $headerHeight
+    height: 100%
+    padding-top: 10em
 
 .main-content
     position: relative
@@ -201,7 +210,28 @@ $headerHeight = 10em
 // ==============================================================
 .result-panel
     padding: 0 1em
+    background-color: #fff
+    border-radius: .5em
     overflow: auto
+
+.result-header
+    padding: 0 .5em .5em .5em
+    margin: 0 1em
+    background-color: #698dda
+    color: #fff
+    border-radius: 0 0 1.5em 1.5em
+
+.result-header-title
+    height: 3.5em
+    margin: 0
+    border: .15em dashed rgba(255, 255, 255, .6)
+    border-top: 0
+    border-radius: 0 0 1em 1em
+    font-size: 1.2em
+    font-weight: 100
+    line-height: 3.5em
+    text-align: center
+
 
 .result-list .result-item
     position: relative
@@ -457,7 +487,7 @@ $charMsgBK = #539cff
     z-index: 0
     background-color: #7ba7eb
     animation: move-infinite ease 160s infinite
-    transform: translate(0, -1040px)
+    transform: translate(0, -800px)
 
 
 @keyframes move-infinite {
@@ -465,10 +495,10 @@ $charMsgBK = #539cff
         transform: translate(0, 0)
     }
     40% {
-        transform: translate(0, -1040px)
+        transform: translate(0, -800px)
     }
     60% {
-        transform: translate(0, -1040px)
+        transform: translate(0, -800px)
     }
     100% {
         transform: translate(0, 0)
