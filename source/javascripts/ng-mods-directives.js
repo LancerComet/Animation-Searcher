@@ -77,7 +77,7 @@
         return {
             restrict: "E",
             scope: true,
-            replace: true,
+            replace: false,
             templateUrl: "/templates/ng-site-switcher.html",
             controller: function ($scope, $element, $attrs) {
 
@@ -88,14 +88,13 @@
 
             },
             link: function (scope, element, attrs) {
-
                 // Definition: Data for switcher list. | 搜索结果切换列表列表项数据.
-                scope.switcherList = appConfig.site;
+                scope.siteList = appConfig.site;
 
                 // Attach "Title" property to $scope.searchableSite | 给 $scope.searchableSite 增加 title 属性.
                 // This property is prepared For "md-tooltip". | 此属性将用在 "md-tooltip" 指令中.
-                Object.keys(scope.switcherList).filter(function (prop) {
-                    scope.switcherList[prop].title = "切换至" + scope.switcherList[prop].name + "的搜索结果";
+                Object.keys(scope.siteList).filter(function (prop) {
+                    scope.siteList[prop].title = "切换至" + scope.siteList[prop].name + "的搜索结果";
                 });
 
             }
@@ -211,5 +210,14 @@
             }
         }
     }]);
+
+    ngAppDirectives.directive("dynamicBackground", function () {
+       return {
+           restrict: "E",
+           templateUrl: "/templates/ng-dynamic-bk.html",
+           controller: function ($scope, $element, $attrs) {},
+           link: function (scope, element, attrs) {}
+       }
+    });
 
 })();

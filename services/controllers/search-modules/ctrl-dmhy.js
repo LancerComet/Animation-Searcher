@@ -157,6 +157,7 @@ function dmhyModule (req, res, next) {
 
             // Definition: Result-returning function. | 结果返回函数.
             function returnResult () {
+                dmhyResultObject.result.splice(0, 1);  // Remove First Empty Result.
                 res.status(200).json({
                     status: 200,
                     info: "动漫花园搜索完毕~~(●'◡'●)ﾉ♥",

@@ -23,9 +23,14 @@
           .color-theme.bk-color {
               /*background-color: #3bb2ca;*/
               background-color: rgb(63, 68, 118);
+              color: #fff !important;
           }
 
           .color-theme.text-color {
+              color: rgb(63, 68, 118); !important;
+          }
+
+          .color-theme.text-hover:hover {
               color: rgb(63, 68, 118); !important;
           }
       </style>
@@ -38,13 +43,15 @@
       <div class="body-container w-100 h-100" ng-controller="mainController">
 
           <%# Header. | 头部区域. %>
-          <header class="header p-relative pd-common md-whiteframe-z1 color-theme bk-color transition-dot-6" layout="column" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
+          <header class="header p-relative pd-common md-whiteframe-2dp color-theme bk-color transition-dot-6" layout="column" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
 
               <%# Greeting images. | 欢迎背景图片. %>
               <div class="greeting-background w-100 h-100 p-absolute p-zero {{backgroundBlur}}" style="background-image: url('<%= backgroundImage %>');" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
                   <img id="greeting-background" src="<%= backgroundImage %>" class="dp-none"/>
               </div>
               <div class="greeting-color-merge w-100 h-100 p-absolute p-zero color-theme bk-color" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]"></div>
+
+              <!--<p><%= appConfig.appInfo.appName %></p>-->
 
               <%# Action bar in Header. | 顶部 Action bar. %>
               <action-bar class="action-bar p-relative transition-dot-6" layout="row" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]" ng-cloak>
@@ -108,15 +115,21 @@
           <%# Main Part. | 主体部分. %>
           <main class="main" layout="row">
 
-              <aside class="aside left-controller-bar" flex="20" layout="column">
+              <!-- Dynamic Background -->
+              <dynamic-background></dynamic-background>
 
+              <!-- Site Switching Aside. -->
+              <aside class="aside left-controller-bar" flex="20" layout="column">
+                  <site-switcher class="md-whiteframe-2dp" layout="column">
+
+                  </site-switcher>
               </aside>
 
-              <div class="main-content" flex="80" layout="column">
+              <div class="main-content" flex="auto" layout="column">
                   <!--<result-panel class="result-panel" data-codename="caso"></result-panel>-->
                   <!--<result-panel class="result-panel" data-codename="ktxp"></result-panel>-->
                   <!--<result-panel class="result-panel" data-codename="popgo"></result-panel>-->
-                  <result-panel class="result-panel" data-codename="dmhy" layout="column"></result-panel>
+                  <result-panel class="result-panel md-whiteframe-2dp" data-codename="dmhy" layout="column"></result-panel>
               </div>
 
           </main>
@@ -133,7 +146,7 @@
 
           <%# LeftSide Navigator. | 左侧导航抽屉. %>
           <div class="left-side-nav-ctrl">
-              <md-sidenav ng-cloak class="md-sidenav-left md-whiteframe-z2" md-component-id="leftside" ng-click="onChange()">
+              <md-sidenav ng-cloak class="md-sidenav-left md-whiteframe-2dp" md-component-id="leftside" ng-click="onChange()">
                   <md-toolbar class="md-toolbar-tools author-cover bk-cover"></md-toolbar>
                   <md-content class="content w-100 text-center over-hidden-x over-auto-y">
 

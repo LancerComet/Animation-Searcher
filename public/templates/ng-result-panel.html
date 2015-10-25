@@ -11,18 +11,24 @@
 </md-toolbar>
 
 <!-- MD Content Node, all result nodes go here. -->
-<md-content flex="90">
-    <div class="result-list transition-dot-2" ng-repeat="result in results.result">
-        <md-checkbox aria-label="{{domInfo.name}}搜索结果勾选" ng-click="resultCheckbox.Fn($event)" data-magnet="{{result.magnet}}">
-            <md-tooltip>勾选结果</md-tooltip>
-        </md-checkbox>
-        <p class="result-list-index" ng-bind="$index + 1"></p>
-        <a class="result-list-title transition-dot-4" title="{{result.title}}" href="{{result.link}}" target="_blank">{{result.title}}</a>
-        <a class="result-list-magnet" href="{{result.magnet}}"><i class="icon-magnet"></i>磁力链</a>
-        <p class="result-list-date">{{result.date}}</p>
+<md-content flex class="result-list">
+    <div class="result-item transition-dot-2" ng-repeat="result in results.result">
+        <div class="result-item-checkbox-container dp-inline-block">
+            <p class="result-item-index color-theme text-color" ng-bind="$index + 1"></p>
+            <md-checkbox class="result-item-checkbox transition-dot-2" aria-label="{{domInfo.name}}搜索结果勾选" ng-click="resultCheckbox.Fn($event)" data-magnet="{{result.magnet}}">
+                <md-tooltip>勾选结果</md-tooltip>
+            </md-checkbox>
+        </div>
+        <div class="result-item-text-container dp-inline-block">
+            <a class="result-item-title text-no-decoration transition-dot-2" title="{{result.title}}" href="{{result.link}}" target="_blank">{{result.title}}</a>
+            <div class="result-item-link-container">
+                <a class="result-item-link result-item-magnet text-no-decoration" href="{{result.magnet}}"><i class="icon-magnet"></i>磁力链</a>
+            </div>
+            <p class="result-item-date text-no-decoration">{{result.date}}</p>
+        </div>
     </div>
 </md-content>
 
 <!-- Pagination Container Node. -->
 <!-- Just a container, content may be different. -->
-<div class="text-center result-pagination-{{domInfo.codeName}}"></div>
+<div class="text-center result-pagination result-pagination-{{domInfo.codeName}}"></div>

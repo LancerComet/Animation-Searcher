@@ -369,9 +369,13 @@
 
         function colorChange (color) {
             var sheetString = ".color-theme.bk-color {" +
-                "background-color:" + color +
+                "background-color:" + color + ";" +
+                "color: #fff !important;" +
                 "}" +
                 ".color-theme.text-color {" +
+                "color:" + color + " !important" +
+                "}" +
+                ".color-theme.text-hover:hover {" +
                 "color:" + color + " !important" +
                 "}";
             $colorThemeSheet.html(sheetString);

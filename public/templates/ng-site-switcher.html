@@ -2,12 +2,31 @@
     Site Switcher Template By LancerComet at 15:35, 2015.09.30.
     # Carry Your World #
 -->
-<md-list-item ng-repeat="site in switcherList">
-    <md-tooltip>{{site.title}}</md-tooltip>
-    <md-button ng-disabled="{{site.disable}}" aria-label="{{site.title}}" ng-click="panelSwtich({{site.codeName}})">
-        <div class="siteIcon" style="background-image: url({{site.icon}})"></div>
-        <p ng-bind="site.name"></p>
-        <span ng-bind="site.url"></span>
-        <md-progress-linear md-mode="indeterminate" codename="{{site.codeName}}"></md-progress-linear>
-    </md-button>
-</md-list-item>
+
+<!--<md-toolbar flex="5">-->
+    <!--<div class="md-toolbar-tools" style="font-size: .85em;">站点切换</div>-->
+<!--</md-toolbar>-->
+
+<md-content flex="auto" layout="row">
+    <div flex="10" class="color-theme bk-color text-center" style="min-width: 2em;">
+        <p><i class="icon-th-list"></i></p>
+    </div>
+    <section flex="auto">
+        <md-subheader class="md-primary color-theme text-color" style="margin: 0">切换站点</md-subheader>
+        <md-list class="site-switcher-list">
+            <md-list-item ng-repeat="site in siteList">
+                <md-button class="site-switcher-item" aria-label="切换到{{site.name}}的搜索结果.">
+                    <div class="site-switcher-item-icon">
+                        <img ng-src="{{site.icon}}" class="site-switcher-item-icon-img" alt="Site Logo.">
+                    </div>
+                    <div class="md-list-item-text site-switcher-item-content">
+                        <h3 ng-bind="site.name" class="site-switcher-item-name"></h3>
+                        <h4 ng-bind="site.fullName" class="site-switcher-item-fullname"></h4>
+                        <p ng-bind="site.url" class="site-switcher-item-url"></p>
+                    </div>
+                    <md-tooltip>{{site.title}}</md-tooltip>
+                </md-button>
+            </md-list-item>
+        </md-list>
+    </section>
+</md-content>

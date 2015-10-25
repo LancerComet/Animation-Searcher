@@ -44,7 +44,7 @@ $headerHeight = 10em
 
 .greeting-color-merge
     background-color: #000
-    opacity: .5
+    opacity: .35
 
 .greeting-color-merge.stand-by-layout
     opacity: 0
@@ -112,6 +112,7 @@ $headerHeight = 10em
     list-style: none
 
 
+
 // Left Side Navigator. | 左侧导航.
 // ==============================================================
 .left-side-nav-ctrl .md-sidenav-left
@@ -149,98 +150,39 @@ $headerHeight = 10em
 }
 
 
-// Character Message Module. | 左侧导航.
+
+// Site Switcher. | 站点切换节点.
 // ==============================================================
-$charMsgBK = #539cff
-.char-msg
-    /* Position. */
-    position: fixed
-    bottom: 6em
-    z-index: 10000
+.aside
+    padding: 1em
 
-    /* Box-sizing. */
-    max-width: 30em
-    margin: 1em
-    padding: .5em
+.site-switcher-item
+    width: 100%
+    padding: 1em .5em
+    margin: 0
+    text-align: left
+    text-transform: none
 
-    /* Visual. */
-    background-color: $charMsgBK
-    border-radius: 2em
+.site-switcher-item-icon
+    margin: 0 1em 0 .5em
+    float: left
 
-    /* Texting. */
-    color: #fff
-
-    /* Animation. */
-    animation: move-in-bottom $cubicEase .4s
-
-    /* Others. */
-    &:before
-        content: ""
-        display: block
-        width: 200px
-        height: 200px
-        position: absolute
-        left: -12em
-        bottom: -7em
-        background-position: center center
-        backgrond-repeat: no-repeat
-        background-image: url("/images/char-msg-22.png")
-        animation: move-in-bottom $cubicEase .4s
-
-    &:after
-         content: ""
-         display: block
-         position: absolute
-         bottom: -1em
-         left: 2em
-         background-color: $charMsgBK
-         border-left: 1em solid $charMsgBK
-         border-bottom: 1em solid
-
-.char-msg.left
-    left: 15em
-
-.char-msg.right
-    right: 10em
-
-.char-msg.out-animation
-    animation: move-out-bottom $cubicEase .4s forwards
-
-.char-msg-container
-    padding: .5em 2em;
-    border: .2em dotted #fff;
-    border-radius: 2em;
-    white-space: pre-line;
-    word-break: break-word;
-    word-wrap: break-word;
-
-.char-msg-title
-    font-size: 1.2em
-    font-weight: 400
-
-.char-msg-content
-    margin: 1em 0
-    font-size: .9em
-    
-.char-msg-close-btn
-    background: rgb(255, 116, 0);
-    position: absolute
-    right: -.6em
-    top: -.7em
-    width: 2em
-    height: 2em
-    padding: 0
-    border: none
-    text-align: center
+.site-switcher-item-icon-img
+    width: 5em
+    height: 5em
     border-radius: 50%
-    outline: none
-    transition: all $cubicEase .3s
-    transform-origin: 50% 50%
-    &:hover
-        transform: rotate(90deg)
-    &:active
-        transition: none !important
-        transform: scale(.8)
+
+.site-switcher-item-name, .site-switcher-item-fullname, .site-switcher-item-url
+    max-width: 17em;
+    margin: 0
+    font-weight: 400
+    line-height: 1.7em
+    overflow: hidden
+    text-overflow: ellipsis;
+
+.site-switcher-item-url
+    color: cornflowerblue
+
 
 
 // Main Part. | 主体节点.
@@ -248,6 +190,75 @@ $charMsgBK = #539cff
 .main
     height: calc(100% - 10em)  // $headerHeight
 
+.main-content
+    position: relative
+    padding: 1em
+
+
+
+// Result Panel. | 结果面板.
+// ==============================================================
+.result-list
+    padding: 0 1em
+
+.result-list .result-item
+    position: relative
+    padding: 0 0 .35em 0
+    border-bottom: .1em solid #D3DCE7
+
+.result-list .result-item-checkbox-container
+    width: 3em
+    margin-right: .5em
+    float: left
+
+.result-list .result-item-checkbox
+    position: absolute
+    left: .5em
+    top: 1.2em
+    background-color: #fff
+    opacity: 0
+    &:before
+        content: ""
+        display: block
+        width: 2em
+        height: 2em
+        position: absolute
+        left: -.45em
+        top: -.1em
+        background-color: #fff
+    &:hover
+        opacity: 1
+
+.result-list .result-item-checkbox.md-checked
+    opacity: 1
+
+.result-list .result-item-index
+    font-size: 1.5em
+    text-align: center
+
+.result-list .result-item-text-container
+    max-width: calc(100% - 3.5em - 2em)  // .result-item-checkbox-container 的宽度 + margin-right 和 .result-list 的 padding
+    margin-top: 1em
+    font-size: .85em
+    font-weight: 400
+
+.result-list .result-item-title
+    display: block
+    color: #555
+    &:hover
+        color: #337ab7
+
+.result-list .result-item-link-container
+    margin: .35em 0
+
+.result-list .result-item-link
+    color: #337ab7
+
+.result-list .result-item-date
+    margin: .35em 0
+
+.result-pagination
+    padding: 1em
 
 
 // Popup Article Panel Module. | 弹出文章面板模块.
@@ -334,3 +345,248 @@ $charMsgBK = #539cff
     transform: scale(0)
     animation: scale-in $cubicEase 1.5s forwards
     animation-delay: 1.2s
+
+
+
+// Character Message Module. | 角色信息提示模块.
+// ==============================================================
+$charMsgBK = #539cff
+.char-msg
+    /* Position. */
+    position: fixed
+    bottom: 6em
+    z-index: 10000
+
+    /* Box-sizing. */
+    max-width: 30em
+    margin: 1em
+    padding: .5em
+
+    /* Visual. */
+    background-color: $charMsgBK
+    border-radius: 2em
+
+    /* Texting. */
+    color: #fff
+
+    /* Animation. */
+    animation: move-in-bottom $cubicEase .4s
+
+    /* Others. */
+    &:before
+        content: ""
+        display: block
+        width: 200px
+        height: 200px
+        position: absolute
+        left: -12em
+        bottom: -7em
+        background-position: center center
+        backgrond-repeat: no-repeat
+        background-image: url("/images/char-msg-22.png")
+        animation: move-in-bottom $cubicEase .4s
+
+    &:after
+        content: ""
+        display: block
+        position: absolute
+        bottom: -1em
+        left: 2em
+        background-color: $charMsgBK
+        border-left: 1em solid $charMsgBK
+        border-bottom: 1em solid
+
+.char-msg.left
+    left: 15em
+
+.char-msg.right
+    right: 10em
+
+.char-msg.out-animation
+    animation: move-out-bottom $cubicEase .4s forwards
+
+.char-msg-container
+    padding: .5em 2em;
+    border: .2em dotted #fff;
+    border-radius: 2em;
+    white-space: pre-line;
+    word-break: break-word;
+    word-wrap: break-word;
+
+.char-msg-title
+    font-size: 1.2em
+    font-weight: 400
+
+.char-msg-content
+    margin: 1em 0
+    font-size: .9em
+
+.char-msg-close-btn
+    background: rgb(255, 116, 0);
+    position: absolute
+    right: -.6em
+    top: -.7em
+    width: 2em
+    height: 2em
+    padding: 0
+    border: none
+    text-align: center
+    border-radius: 50%
+    outline: none
+    transition: all $cubicEase .3s
+    transform-origin: 50% 50%
+    &:hover
+        transform: rotate(90deg)
+    &:active
+        transition: none !important
+        transform: scale(.8)
+
+
+// Dynamic Background Part. | 动态背景样式.
+// ==============================================================
+.dynamic-background
+    background-color: #7ba7eb
+    width: 100%
+    height: 100%
+    position: absolute
+    top: 0
+    left: 0
+    overflow: hidden
+
+
+.dynamic-background .cloud, .dynamic-background .sun-moon, .dynamic-background .mountain, .dynamic-background .tree-container
+    position: absolute
+
+
+.dynamic-background .svgImg
+    width: 100%
+    height: 100%
+
+
+@keyframes cloud-small {
+    from {
+        transform:translate(-1610%, 0)
+    }
+    to {
+        transform:translate(170%, 0)
+    }
+}
+
+
+@keyframes cloud-normal {
+    from {
+        transform:translate(-220%, 0)
+    }
+    to {
+        transform:translate(660%, 0)
+    }
+}
+
+
+@keyframes cloud-large {
+    from {
+        transform:translate(-215%, 0)
+    }
+    to {
+        transform:translate(315%, 0)
+    }
+}
+
+.dynamic-background .cloud
+    -webkit-transition: all ease .6s
+    -moz-transition: all ease .6s
+    -ms-transition: all ease .6s
+    -o-transition: all ease .6s
+    transition: all ease .6s
+
+
+.dynamic-background .cloud.small
+    width: 6%
+    top: 22%
+    left: 90%
+    -webkit-animation: cloud-small 180s ease infinite
+    -o-animation: cloud-small 180s ease infinite
+    animation: cloud-small 180s ease infinite
+
+
+.dynamic-background .cloud.normal
+    width: 13%
+    top: 5%
+    left: 15%
+    -webkit-animation: cloud-normal 240s ease infinite
+    -o-animation: cloud-normal 240s ease infinite
+    animation: cloud-normal 240s ease infinite
+
+
+.dynamic-background .cloud.large
+    width: 24%
+    top: 2%
+    left: 25%
+    -webkit-animation: cloud-large 360s ease infinite
+    -o-animation: cloud-large 360s ease infinite
+    animation: cloud-large 360s ease infinite
+
+
+.dynamic-background .cloud.huge
+    width: 170%
+    height: 170%
+    top: -25%
+    left: -15%
+
+
+.dynamic-background .mountain.left
+    width: 30%
+    bottom: -20%
+
+
+.dynamic-background .mountain.center
+    width:58%
+    bottom:-27%
+    left: calc(50% - 30%)
+
+
+.dynamic-background .mountain.right
+    width: 35%
+    bottom: -20%
+    left: calc(50% + 20%)
+
+
+.dynamic-background .tree-container
+    width:10em
+    height:15em
+    position: absolute
+    bottom:0
+
+
+.dynamic-background .tree-container .tree-leaf
+    background-color:#638764
+    width: 100%
+    height:65%
+    position: absolute
+    top: 0
+    left: 0
+    -webkit-border-radius: 100%
+    -moz-border-radius: 100%
+    border-radius: 100%
+
+
+.dynamic-background .tree-container .tree-leaf:after
+    content: ''
+    width: 68%
+    height: 68%
+    position: absolute
+    top: 16%
+    left: 16%
+    background: #70a753
+    border-radius: 100%
+    z-index: 1
+
+
+.dynamic-background .tree-container .tree-body
+    background-color: #876959
+    width: 15%
+    height: 50%
+    position: absolute
+    bottom: 0
+    left: 43.5%
+
