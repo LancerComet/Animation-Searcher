@@ -112,6 +112,7 @@ function searchModule (req, res, next) {
             // Definition: Result-returning function. | 结果返回函数.
             function returnResult () {
                 resultObject.result.splice(0, 1);  // Remove First Empty Result.
+                resultObject.result.splice(resultObject.result.length - 1, 1);  // Remove Last Empty Result.
                 var returnObj = {
                     status: 200,
                     info: "漫游搜索完毕~~｡◕‿◕｡",

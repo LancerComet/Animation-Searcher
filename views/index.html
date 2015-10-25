@@ -120,17 +120,15 @@
           <main class="main" layout="row">
 
               <!-- Site Switching Aside. -->
-              <aside class="aside left-controller-bar" flex="20" layout="column">
-                  <site-switcher class="md-whiteframe-2dp" layout="column">
-
-                  </site-switcher>
+              <aside class="aside left-controller-bar" flex="20" layout="row">
+                  <site-switcher class="md-whiteframe-2dp" layout="row" flex="100"></site-switcher>
               </aside>
 
-              <div class="main-content" flex="auto" layout="column">
-                  <result-panel class="result-panel md-whiteframe-2dp" data-codename="caso" layout="column"></result-panel>
-                  <result-panel class="result-panel md-whiteframe-2dp" data-codename="ktxp" layout="column"></result-panel>
-                  <result-panel class="result-panel md-whiteframe-2dp" data-codename="popgo" layout="column"></result-panel>
-                  <result-panel class="result-panel md-whiteframe-2dp" data-codename="dmhy" layout="column"></result-panel>
+              <div class="main-content pd-common" flex="auto" layout="row">
+                  <!--<result-panel class="result-panel md-whiteframe-2dp" data-codename="caso" layout="column"></result-panel>-->
+                  <!--<result-panel class="result-panel md-whiteframe-2dp" data-codename="ktxp" layout="column"></result-panel>-->
+                  <result-panel flex="100" class="result-panel md-whiteframe-2dp" data-codename="popgo"></result-panel>
+                  <!--<result-panel flex="100" class="result-panel md-whiteframe-2dp" data-codename="dmhy" layout="column"></result-panel>-->
               </div>
 
           </main>
