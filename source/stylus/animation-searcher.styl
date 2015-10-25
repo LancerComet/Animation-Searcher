@@ -168,14 +168,11 @@ $headerHeight = 20em
 .aside
     overflow: auto
 
-@media (min-width: 0px) and (max-width: 1000px)  {
-    .aside {
-        width: 10em
-    }
-
-    .site-switcher-list {
-        width: calc(100% - 1.1em)
-    }
+@media (min-width: 0px) and (max-width: 960px)  {
+  .aside {
+      min-height: 8.5em
+      height: 8.5em
+  }
 }
 
 .site-switcher
@@ -203,8 +200,13 @@ $headerHeight = 20em
     margin: 0
     font-weight: 400
     line-height: 1.7em
+    color: #555
     overflow: hidden
     text-overflow: ellipsis;
+
+.site-switcher-item-fullname
+    font-weight: 100
+    color: #aaa
 
 .site-switcher-item-url
     color: cornflowerblue
@@ -216,7 +218,7 @@ $headerHeight = 20em
 .main
     //height: calc(100% - 10em)  // $headerHeight
     height: 100%
-    padding-top: 10em
+    padding: 10em 5em 0 5em
 
 .main-content
     position: relative
