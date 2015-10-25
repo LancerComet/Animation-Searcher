@@ -8,11 +8,11 @@
 <!--</md-toolbar>-->
 
 <md-content flex="auto" layout="row">
-    <div flex="10" class="color-theme bk-color text-center" style="min-width: 2em;">
-        <p><i class="icon-th-list"></i></p>
-    </div>
-    <section flex="auto">
-        <md-subheader class="md-primary color-theme text-color" style="margin: 0">切换站点</md-subheader>
+    <!--<div flex="10" class="color-theme bk-color text-center" style="min-width: 2em;">-->
+        <!--<p><i class="icon-th-list"></i></p>-->
+    <!--</div>-->
+    <section flex="auto" layout="column">
+        <md-subheader class="md-primary color-theme text-color" style="margin: 0" flex>切换站点</md-subheader>
         <md-list class="site-switcher-list">
             <md-list-item ng-repeat="site in siteList">
                 <md-button class="site-switcher-item" aria-label="切换到{{site.name}}的搜索结果.">
@@ -27,6 +27,6 @@
                     <md-tooltip>{{site.title}}</md-tooltip>
                 </md-button>
             </md-list-item>
-        </md-list>
+        </md-list flex>
     </section>
 </md-content>

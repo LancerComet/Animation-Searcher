@@ -36,7 +36,8 @@ $headerHeight = 10em
 
 .greeting-background.blur
     filter: blur(10px)
-    transition: all 5s
+    transition: all ease 5s
+    transform: scale(1.1)
 
 .greeting-background.stand-by-layout
     opacity: 0
@@ -155,6 +156,7 @@ $headerHeight = 10em
 // ==============================================================
 .aside
     padding: 1em
+    overflow: auto
 
 .site-switcher-item
     width: 100%
@@ -193,6 +195,7 @@ $headerHeight = 10em
 .main-content
     position: relative
     padding: 1em
+    overflow: auto
 
 
 
@@ -235,6 +238,7 @@ $headerHeight = 10em
 .result-list .result-item-index
     font-size: 1.5em
     text-align: center
+    color: rgb(106, 165, 239)
 
 .result-list .result-item-text-container
     max-width: calc(100% - 3.5em - 2em)  // .result-item-checkbox-container 的宽度 + margin-right 和 .result-list 的 padding
@@ -445,13 +449,32 @@ $charMsgBK = #539cff
 // Dynamic Background Part. | 动态背景样式.
 // ==============================================================
 .dynamic-background
-    background-color: #7ba7eb
     width: 100%
-    height: 100%
+    height: 1200px
     position: absolute
     top: 0
     left: 0
     overflow: hidden
+    z-index: 0
+    background-color: #7ba7eb
+    animation: move-infinite ease 160s infinite
+    transform: translate(0, -1040px)
+
+
+@keyframes move-infinite {
+    0% {
+        transform: translate(0, 0)
+    }
+    40% {
+        transform: translate(0, -1040px)
+    }
+    60% {
+        transform: translate(0, -1040px)
+    }
+    100% {
+        transform: translate(0, 0)
+    }
+}
 
 
 .dynamic-background .cloud, .dynamic-background .sun-moon, .dynamic-background .mountain, .dynamic-background .tree-container
@@ -493,10 +516,6 @@ $charMsgBK = #539cff
 }
 
 .dynamic-background .cloud
-    -webkit-transition: all ease .6s
-    -moz-transition: all ease .6s
-    -ms-transition: all ease .6s
-    -o-transition: all ease .6s
     transition: all ease .6s
 
 
@@ -504,8 +523,6 @@ $charMsgBK = #539cff
     width: 6%
     top: 22%
     left: 90%
-    -webkit-animation: cloud-small 180s ease infinite
-    -o-animation: cloud-small 180s ease infinite
     animation: cloud-small 180s ease infinite
 
 
@@ -513,8 +530,6 @@ $charMsgBK = #539cff
     width: 13%
     top: 5%
     left: 15%
-    -webkit-animation: cloud-normal 240s ease infinite
-    -o-animation: cloud-normal 240s ease infinite
     animation: cloud-normal 240s ease infinite
 
 
@@ -522,8 +537,6 @@ $charMsgBK = #539cff
     width: 24%
     top: 2%
     left: 25%
-    -webkit-animation: cloud-large 360s ease infinite
-    -o-animation: cloud-large 360s ease infinite
     animation: cloud-large 360s ease infinite
 
 
@@ -557,6 +570,36 @@ $charMsgBK = #539cff
     position: absolute
     bottom:0
 
+.dynamic-background .tree-container.tree-1
+    animation: move-up-down ease 3s infinite
+
+.dynamic-background .tree-container.tree-2
+    animation: move-up-down-2 ease 3s infinite
+
+@keyframes move-up-down {
+    0% {
+        transform: translate(0, 0)
+    }
+    50% {
+        transform: translate(0, 3em)
+    }
+    100% {
+        transform: translate(0, 0)
+    }
+}
+
+@keyframes move-up-down-2 {
+    0% {
+        transform: translate(0, 3em)
+    }
+    50% {
+        transform: translate(0, 0)
+    }
+    100% {
+        transform: translate(0, 3em)
+    }
+}
+
 
 .dynamic-background .tree-container .tree-leaf
     background-color:#638764
@@ -565,8 +608,6 @@ $charMsgBK = #539cff
     position: absolute
     top: 0
     left: 0
-    -webkit-border-radius: 100%
-    -moz-border-radius: 100%
     border-radius: 100%
 
 

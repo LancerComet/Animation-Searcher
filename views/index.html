@@ -43,10 +43,14 @@
       <div class="body-container w-100 h-100" ng-controller="mainController">
 
           <%# Header. | 头部区域. %>
-          <header class="header p-relative pd-common md-whiteframe-2dp color-theme bk-color transition-dot-6" layout="column" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
+          <header class="header p-relative over-hidden pd-common md-whiteframe-2dp color-theme bk-color transition-dot-6" layout="column" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
+
+
+              <!-- Dynamic Background -->
+              <dynamic-background></dynamic-background>
 
               <%# Greeting images. | 欢迎背景图片. %>
-              <div class="greeting-background w-100 h-100 p-absolute p-zero {{backgroundBlur}}" style="background-image: url('<%= backgroundImage %>');" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
+              <div class="greeting-background w-100 h-100 p-absolute p-zero {{backgroundBlur}} color-theme bk-color" style="background-image: url('<%= backgroundImage %>');" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
                   <img id="greeting-background" src="<%= backgroundImage %>" class="dp-none"/>
               </div>
               <div class="greeting-color-merge w-100 h-100 p-absolute p-zero color-theme bk-color" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]"></div>
@@ -115,9 +119,6 @@
           <%# Main Part. | 主体部分. %>
           <main class="main" layout="row">
 
-              <!-- Dynamic Background -->
-              <dynamic-background></dynamic-background>
-
               <!-- Site Switching Aside. -->
               <aside class="aside left-controller-bar" flex="20" layout="column">
                   <site-switcher class="md-whiteframe-2dp" layout="column">
@@ -126,9 +127,9 @@
               </aside>
 
               <div class="main-content" flex="auto" layout="column">
-                  <!--<result-panel class="result-panel" data-codename="caso"></result-panel>-->
-                  <!--<result-panel class="result-panel" data-codename="ktxp"></result-panel>-->
-                  <!--<result-panel class="result-panel" data-codename="popgo"></result-panel>-->
+                  <result-panel class="result-panel md-whiteframe-2dp" data-codename="caso" layout="column"></result-panel>
+                  <result-panel class="result-panel md-whiteframe-2dp" data-codename="ktxp" layout="column"></result-panel>
+                  <result-panel class="result-panel md-whiteframe-2dp" data-codename="popgo" layout="column"></result-panel>
                   <result-panel class="result-panel md-whiteframe-2dp" data-codename="dmhy" layout="column"></result-panel>
               </div>
 
