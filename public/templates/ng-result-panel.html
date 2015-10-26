@@ -31,6 +31,7 @@
                 <a class="result-item-title text-no-decoration transition-dot-2" title="{{result.title}}" href="{{result.link}}" target="_blank">{{result.title}}</a>
                 <div class="result-item-link-container">
                     <a class="result-item-link result-item-magnet text-no-decoration" href="{{result.magnet}}"><i class="icon-magnet"></i>磁力链</a>
+                    <a class="result-item-link result-item-torrent text-no-decoration" href="{{result.torrent}}" ng-if="result.torrent"><i class="icon-download-alt"></i>Torrent</a>
                 </div>
                 <p class="result-item-date text-no-decoration">{{result.date}}</p>
             </div>
