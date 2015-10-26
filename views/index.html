@@ -68,7 +68,7 @@
                       <leftnav-menu id="left-nav-menu" class="left-nav-menu bk-cover no-outline" ng-click="toggle()" data-status="menu"></leftnav-menu>
 
                       <%# Search Bar Container. | 搜索条节点. %>
-                      <search-bar class="search-bar" flex ng-controller="searchController">
+                      <search-bar class="search-bar" flex>
                           <form name="search-form" layout="row" ng-submit="searchExec($event)">
                               <md-input-container class="search-input-container" flex>
                                   <label class="search-bar-color"><%=randomTitle%></label>
@@ -120,15 +120,15 @@
           <main class="main" layout-sm="column" layout-md="column" layout="row">
 
               <!-- Site Switching Aside. -->
-              <aside class="aside left-controller-bar pd-common" flex-sm="20" flex-md="20" flex="none" layout="row">
-                  <site-switcher class="site-switcher md-whiteframe-6dp" layout="row" flex="100"></site-switcher>
+              <aside class="aside left-controller-bar pd-common p-relative" flex-sm="20" flex-md="20" flex="none" layout="row">
+                  <site-switcher class="site-switcher md-whiteframe-6dp" layout="row" flex="100" ng-show="siteSwitcherShow"></site-switcher>
               </aside>
 
-              <div class="main-content pd-common" flex="auto" layout="row">
-                  <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="caso" ng-show="panelShow"></result-panel>
-                  <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="ktxp" ng-show="panelShow"></result-panel>
-                  <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="popgo" ng-show="panelShow"></result-panel>
-                  <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="dmhy" ng-show="panelShow"></result-panel>
+              <div class="main-content pd-common" flex="auto" layout="row" ng-controller="resultPanelController">
+                  <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="caso" ng-show="panelShow.caso"></result-panel>
+                  <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="ktxp" ng-show="panelShow.ktxp"></result-panel>
+                  <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="popgo" ng-show="panelShow.popgo"></result-panel>
+                  <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="dmhy" ng-show="panelShow.dmhy"></result-panel>
               </div>
 
           </main>

@@ -21,7 +21,8 @@ $headerMinHeight = 6em
 $headerHeight = 20em
 .header
     width: 100%
-    height: $headerHeight
+    //height: $headerHeight
+    height: 100%
     padding-top: $headerMinHeight
     position: absolute
     z-index: 0
@@ -29,7 +30,7 @@ $headerHeight = 20em
 .header.init-layout
     height: 100%
     padding: 0
-    z-index: 100
+    z-index: 1
 
 .greeting-background
     background-size: cover
@@ -40,7 +41,7 @@ $headerHeight = 20em
 .greeting-background.blur
     filter: blur(10px)
     transition: all ease 5s
-    transform: scale(1.1)
+    //transform: scale(1.1)
 
 .greeting-background.stand-by-layout
     opacity: 0
@@ -179,6 +180,35 @@ $headerHeight = 20em
     border-radius: .5em
     overflow: hidden
 
+.site-switcher.ng-hide-remove
+    animation: move-in-left $cubicEase .4s
+
+.site-switcher-header
+    min-width: 2em
+    padding: .5em .5em .5em 0
+    margin: 1em 0
+    border-radius: 0 .5em .5em 0
+    background-color: #698dda
+
+.site-switcher-header-inner
+    border: .15em dashed rgba(255, 255, 255, .7)
+    border-left: 0
+    border-radius: 0 .5em .5em 0
+    background-color: #698dda
+    color: #fff
+
+@media (max-width: 960px) {
+    .site-switcher-header {
+        border-radius: 0 50% 50% 0
+    }
+    .site-switcher-header-inner {
+        border-radius: 0 50% 50% 0
+    }
+    .site-switcher-list {
+        padding: .4em 0 !important
+    }
+}
+
 .site-switcher-item
     width: 100%
     padding: 1em .5em
@@ -218,21 +248,33 @@ $headerHeight = 20em
 .main
     //height: calc(100% - 10em)  // $headerHeight
     height: 100%
-    padding: 10em 2em 0 2em
+    padding: 10em 2em 1em 2em
 
 .main-content
     position: relative
-    overflow: auto
 
 
 
 // Result Panel. | 结果面板.
 // ==============================================================
 .result-panel
+    width: 100%
+    height: 100%
+    position: absolute
+    top: 0
+    left: 0
     padding: 0 1em
     background-color: #fff
     border-radius: .5em
     overflow: auto
+
+.result-panel.ng-hide-add
+    animation: scale-out $cubicEase .6s forwards
+
+.result-panel.ng-hide-remove
+    opacity: 0
+    animation: move-in-from-bottom-card $cubicEase .6s forwards
+    //animation-delay: .5s
 
 .result-header
     padding: 0 .5em .5em .5em
@@ -500,15 +542,17 @@ $charMsgBK = #539cff
 // ==============================================================
 .dynamic-background
     width: 100%
-    height: 1200px
+    //height: 1200px
+    height: 100%
     position: absolute
-    top: 0
+    //top: 0
+    bottom: 0
     left: 0
     overflow: hidden
     z-index: 0
     background-color: #7ba7eb
-    animation: move-infinite ease 160s infinite
-    transform: translate(0, -880px)
+    //animation: move-infinite ease 160s infinite
+    //transform: translate(0, -880px)
 
 
 @keyframes move-infinite {

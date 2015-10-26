@@ -81,26 +81,36 @@
     }]);
 
 
-    // Definition: Search Part Controller. | 搜索节点控制器.
-    ngAppCtrls.controller("searchController", ["$scope", "$historyPanel", function ($scope, $historyPanel) {
+    // Definition: Result Panel Controller. | 结果面板控制器.
+    // 用来控制结果面板的显示与隐藏.
+    ngAppCtrls.controller("resultPanelController", ["$scope", "appConfig", function ($scope, appConfig) {
 
-        $scope.searchBarFocus = searchBarFocus;
-        $scope.searchBarBlur = searchBarBlur;
-        $scope.searchBarKeyup = searchBarKeyup;
+        // Panel Show Object.
+        $scope.panelShow = {};
+        Object.keys(appConfig.site).filter(function (item) {
+            var codeName = appConfig.site[item].codeName;
+            $scope.panelShow[codeName] = false;
+        });
+        // Now it should be { caso: false, ktxp: false, ... }.
 
-        /* Definition go below. | 下方为定义部分. */
+        // Definition: First Search Panel Showing Handler. | 首次搜索结果面板显示控制器.
+        var panelIn = false;
+        $scope.$on("searchResult", function (event, value) {
+            if (panelIn) return;
+            var codeName = value.codeName;
+            $scope.panelShow[codeName] = true;
+            panelIn = true;
+        });
 
-        function searchBarFocus () {
-            $historyPanel.show();
-        }
+        // Definition: Result Panel Switching. | 面板切换广播监听.
+        $scope.$on("resultPanelSwitching", function resultPanelSwitching (event, value) {
+            Object.keys($scope.panelShow).filter(function (item) {
+                $scope.panelShow[item] = false;
+                value === item ? $scope.panelShow[item] = true : void(0);
+            });
+        });
 
-        function searchBarBlur () {
-            $historyPanel.hide();
-        }
 
-        function searchBarKeyup ($event) {
-
-        }
 
     }]);
 

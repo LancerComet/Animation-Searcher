@@ -52,7 +52,7 @@
         // 在 Node 的 app-config.js 中同样存在一份配置供后端使用.
         site: {
             caso: { name: "华盟", codeName: "caso", fullName: "China Animation Subtitle Organization",  url: "https://camoe.org", icon: "http://tp4.sinaimg.cn/1843885343/180/1290319229/0", disabled: false },
-            ktxp: { name: "极影", codeName: "ktxp", fullName: "Katong XP",  url: "http://bt.ktxp.org", icon: "http://tp4.sinaimg.cn/3808818207/180/5680524263/0", disabled: false },
+            ktxp: { name: "极影", codeName: "ktxp", fullName: "Katong XP",  url: "http://bt.ktxp.org", icon: "http://tp4.sinaimg.cn/3808818207/180/5680524263/0", disabled: true },
             popgo: { name: "漫游", codeName: "popgo", fullName: "Popgo",  url: "http://share.popgo.org", icon: "http://tp1.sinaimg.cn/2661910672/180/5727241391/0", disabled: false },
             dmhy: { name: "动漫花园", codeName: "dmhy", fullName: "DongMan HuaYuan",  url: "https://share.dmhy.org", icon: "http://tp2.sinaimg.cn/1926582581/180/22817929400/0", disabled: false }
         },
@@ -964,26 +964,36 @@
     }]);
 
 
-    // Definition: Search Part Controller. | 搜索节点控制器.
-    ngAppCtrls.controller("searchController", ["$scope", "$historyPanel", function ($scope, $historyPanel) {
+    // Definition: Result Panel Controller. | 结果面板控制器.
+    // 用来控制结果面板的显示与隐藏.
+    ngAppCtrls.controller("resultPanelController", ["$scope", "appConfig", function ($scope, appConfig) {
 
-        $scope.searchBarFocus = searchBarFocus;
-        $scope.searchBarBlur = searchBarBlur;
-        $scope.searchBarKeyup = searchBarKeyup;
+        // Panel Show Object.
+        $scope.panelShow = {};
+        Object.keys(appConfig.site).filter(function (item) {
+            var codeName = appConfig.site[item].codeName;
+            $scope.panelShow[codeName] = false;
+        });
+        // Now it should be { caso: false, ktxp: false, ... }.
 
-        /* Definition go below. | 下方为定义部分. */
+        // Definition: First Search Panel Showing Handler. | 首次搜索结果面板显示控制器.
+        var panelIn = false;
+        $scope.$on("searchResult", function (event, value) {
+            if (panelIn) return;
+            var codeName = value.codeName;
+            $scope.panelShow[codeName] = true;
+            panelIn = true;
+        });
 
-        function searchBarFocus () {
-            $historyPanel.show();
-        }
+        // Definition: Result Panel Switching. | 面板切换广播监听.
+        $scope.$on("resultPanelSwitching", function resultPanelSwitching (event, value) {
+            Object.keys($scope.panelShow).filter(function (item) {
+                $scope.panelShow[item] = false;
+                value === item ? $scope.panelShow[item] = true : void(0);
+            });
+        });
 
-        function searchBarBlur () {
-            $historyPanel.hide();
-        }
 
-        function searchBarKeyup ($event) {
-
-        }
 
     }]);
 
@@ -1066,12 +1076,14 @@
 
 
     // Definition: Search Directive. | 搜索模块指令定义.
-    ngAppDirectives.directive("searchBar", ["$http", "$toast", "$search", function ($http, $toast, $search) {
+    ngAppDirectives.directive("searchBar", ["$http", "$toast", "$search" ,"$splashLayout" , function ($http, $toast, $search, $splashLayout) {
         return {
             restrict: "E",
             scope: true,
             controller: function ($scope, $element, $attrs) {},
             link: function (scope, element, attrs) {
+
+                var initStatus = false;
 
                 // Definition: Search Keyword. | 搜索关键字变量定义.
                 scope.keywords = null;
@@ -1087,13 +1099,24 @@
 
                     $search.search(scope.keywords);  // Execute searching function. | 执行搜索方法.
                 };
+
+                scope.searchBarFocus = searchBarFocus;
+
+                /* Definition go below. | 下方为定义部分. */
+
+                function searchBarFocus () {
+                    if (initStatus) return;
+                    $splashLayout.toStandByLayout();
+                    initStatus = true;
+                }
+
             }
         }
     }]);
 
 
     // Definition: Site Switcher Directive. | 搜索结果切换按钮指令.
-    ngAppDirectives.directive("siteSwitcher", ["appConfig", function (appConfig) {
+    ngAppDirectives.directive("siteSwitcher", ["appConfig", "$resultPanelSwitching", function (appConfig, $resultPanelSwitching) {
         return {
             restrict: "E",
             scope: true,
@@ -1116,6 +1139,17 @@
                 Object.keys(scope.siteList).filter(function (prop) {
                     scope.siteList[prop].title = "切换至" + scope.siteList[prop].name + "的搜索结果";
                 });
+
+                // Action: Watching broadcasting to control intro animation of this dom.
+                // Site Switcher 指令进入动画控制广播监听器.
+                scope.$on("searchStart", function (event, value) {
+                    value === true ? scope.siteSwitcherShow = true : void(0);
+                });
+
+                // Definition: Panel Switch emit event. | 面板切换冒泡事件.
+                scope.panelSwitch = function ($event) {
+                    $resultPanelSwitching($event.target.attributes["data-codename"].value);
+                };
 
             }
         }
@@ -1144,7 +1178,6 @@
                 // Error Handle: Attribute "codename" must be defined.
                 // 错误处理: 必须定义 "codename" 属性.
                 attrs.codename ? void(0) : throwError('Attribute "codename" must be defined.');
-                scope.panelShow = false;
 
                 // Definition: Dom Information Object. | 节点属性对象.
                 // Attach domInfo to $scope in order to import it in template. | 将 domInfo 定义在 $scope 下以方便模板调取.
@@ -1165,7 +1198,6 @@
                     var $pagination = angular.element(document.querySelector(".result-pagination-" + codeName));
                     $pagination.html(value[codeName].pageLink);
                     $compile($pagination)(scope);
-                    scope.panelShow = true;
                 });
 
 
@@ -1420,7 +1452,7 @@
                     template: "",
                     controller: ["$leftNav", "$splashLayout", function ($leftNav, $splashLayout) {
                         $leftNav.open();
-                        $splashLayout.toStandByLayout();
+                        //$splashLayout.toStandByLayout();
                     }]
                 }
             ).when("/powered-by", {
@@ -1466,7 +1498,7 @@
     // Definition: Service modules requirement module. | 服务模块引用模块.(真特么绕嘴)
     angular.module("ngAppService", [
         // Animation Searcher Custom Service Modules. | 自定义服务模块.
-        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast", "historyPanel", "searchService"
+        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast", "historyPanel", "searchService", "resultPanelSwitching"
     ]);
 
     // Definition: Toast Module, from Material-Angular. | Material-Angular Toast 模块定义.
@@ -1960,14 +1992,20 @@
 
     // Definition: Search Service. | 搜索功能服务.
     var searchService = angular.module("searchService", []);
-    searchService.factory("$search", ["$rootScope", "$http", "$toast", "appConfig", function ($rootScope, $http, $toast, appConfig) {
+    searchService.factory("$search", ["$rootScope", "$http", "$toast", "$splashLayout", "appConfig", function ($rootScope, $http, $toast, $splashLayout, appConfig) {
+
         return {
             search: search,
             changePage: changePage
         };
 
+        function searchBroadCasting () {
+            $rootScope.$broadcast("searchStart", true);
+        }
+
         // Definition: Search-requesting Function. | 搜索请求发起函数.
         function search (keywords) {
+            searchBroadCasting();
 
             // Fire Async Requesting. | 循环发起搜索请求.
             Object.keys(appConfig.site).filter(function (prop) {
@@ -1986,7 +2024,6 @@
                         // Throw a ActionToast when error was caught. | 出错时进行提示.
                         $toast.showActionToast(data.info, data.action);
                     }
-
                 });
             });
 
@@ -1994,6 +2031,7 @@
 
         // Definition: 换页请求搜索.
         function changePage (codename, link) {
+            searchBroadCasting();
 
             /*
              *  @ codename: 目标站点.
@@ -2020,6 +2058,16 @@
             });
         }
 
+    }]);
+
+    // Definition: Panel Switch Service. | 结果面板切换服务.
+    var resultPanelSwitching = angular.module("resultPanelSwitching", []);
+    resultPanelSwitching.factory("$resultPanelSwitching", ["$rootScope", function ($rootScope) {
+        return resultPanelSwitching;
+
+        function resultPanelSwitching (codeName) {
+            $rootScope.$broadcast("resultPanelSwitching", codeName);
+        }
     }]);
 
 })(window);

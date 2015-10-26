@@ -9,8 +9,8 @@
 
 <md-content flex="100" layout="row" style="border-radius: .5em; overflow: hidden;">
 
-    <div flex="10" layout="row" style="min-width: 2em; padding: .5em .5em .5em 0; margin: 1em 0; border-radius:0 .5em .5em 0; background-color: #698dda">
-        <div flex="100" class="text-center" style="border: .15em dashed rgba(255, 255, 255, .7); border-left: 0; border-radius: 0 .5em .5em 0; background-color: #698dda; color: #fff">
+    <div flex="10" layout="row" class="site-switcher-header transition-dot-4">
+        <div flex="100" class="text-center site-switcher-header-inner transition-dot-4">
             <!--<p><i class="icon-th-list"></i></p> -->
         </div>
     </div>
@@ -19,9 +19,9 @@
     <section flex="90" layout="column" class="site-switcher-body">
         <!--<md-subheader class="md-primary color-theme text-color" style="margin: 0;" flex="10">切换站点</md-subheader>-->
         <!--<div flex="10">切换站点</div>-->
-        <md-list class="site-switcher-list over-auto">
+        <md-list class="site-switcher-list over-auto" style="padding: 1em 0">
             <md-list-item ng-repeat="site in siteList">
-                <md-button class="site-switcher-item" aria-label="切换到{{site.name}}的搜索结果.">
+                <md-button class="site-switcher-item" aria-label="切换到{{site.name}}的搜索结果." ng-disabled="site.disabled">
                     <div class="site-switcher-item-icon">
                         <img ng-src="{{site.icon}}" class="site-switcher-item-icon-img" alt="Site Logo.">
                     </div>
@@ -29,6 +29,7 @@
                         <h3 ng-bind="site.name" class="site-switcher-item-name"></h3>
                         <h4 ng-bind="site.fullName" class="site-switcher-item-fullname"></h4>
                         <p ng-bind="site.url" class="site-switcher-item-url"></p>
+                        <div class="info-stroager w-100 h-100 p-absolute p-zero no-outline" data-codename="{{site.codeName}}" ng-click="panelSwitch($event)"></div>
                     </div>
                     <md-tooltip>{{site.title}}</md-tooltip>
                 </md-button>

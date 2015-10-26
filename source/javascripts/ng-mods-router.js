@@ -34,7 +34,7 @@
                     template: "",
                     controller: ["$leftNav", "$splashLayout", function ($leftNav, $splashLayout) {
                         $leftNav.open();
-                        $splashLayout.toStandByLayout();
+                        //$splashLayout.toStandByLayout();
                     }]
                 }
             ).when("/powered-by", {

@@ -46,12 +46,14 @@
 
 
     // Definition: Search Directive. | 搜索模块指令定义.
-    ngAppDirectives.directive("searchBar", ["$http", "$toast", "$search", function ($http, $toast, $search) {
+    ngAppDirectives.directive("searchBar", ["$http", "$toast", "$search" ,"$splashLayout" , function ($http, $toast, $search, $splashLayout) {
         return {
             restrict: "E",
             scope: true,
             controller: function ($scope, $element, $attrs) {},
             link: function (scope, element, attrs) {
+
+                var initStatus = false;
 
                 // Definition: Search Keyword. | 搜索关键字变量定义.
                 scope.keywords = null;
@@ -67,13 +69,24 @@
 
                     $search.search(scope.keywords);  // Execute searching function. | 执行搜索方法.
                 };
+
+                scope.searchBarFocus = searchBarFocus;
+
+                /* Definition go below. | 下方为定义部分. */
+
+                function searchBarFocus () {
+                    if (initStatus) return;
+                    $splashLayout.toStandByLayout();
+                    initStatus = true;
+                }
+
             }
         }
     }]);
 
 
     // Definition: Site Switcher Directive. | 搜索结果切换按钮指令.
-    ngAppDirectives.directive("siteSwitcher", ["appConfig", function (appConfig) {
+    ngAppDirectives.directive("siteSwitcher", ["appConfig", "$resultPanelSwitching", function (appConfig, $resultPanelSwitching) {
         return {
             restrict: "E",
             scope: true,
@@ -96,6 +109,17 @@
                 Object.keys(scope.siteList).filter(function (prop) {
                     scope.siteList[prop].title = "切换至" + scope.siteList[prop].name + "的搜索结果";
                 });
+
+                // Action: Watching broadcasting to control intro animation of this dom.
+                // Site Switcher 指令进入动画控制广播监听器.
+                scope.$on("searchStart", function (event, value) {
+                    value === true ? scope.siteSwitcherShow = true : void(0);
+                });
+
+                // Definition: Panel Switch emit event. | 面板切换冒泡事件.
+                scope.panelSwitch = function ($event) {
+                    $resultPanelSwitching($event.target.attributes["data-codename"].value);
+                };
 
             }
         }
@@ -124,7 +148,6 @@
                 // Error Handle: Attribute "codename" must be defined.
                 // 错误处理: 必须定义 "codename" 属性.
                 attrs.codename ? void(0) : throwError('Attribute "codename" must be defined.');
-                scope.panelShow = false;
 
                 // Definition: Dom Information Object. | 节点属性对象.
                 // Attach domInfo to $scope in order to import it in template. | 将 domInfo 定义在 $scope 下以方便模板调取.
@@ -145,7 +168,6 @@
                     var $pagination = angular.element(document.querySelector(".result-pagination-" + codeName));
                     $pagination.html(value[codeName].pageLink);
                     $compile($pagination)(scope);
-                    scope.panelShow = true;
                 });
 
 

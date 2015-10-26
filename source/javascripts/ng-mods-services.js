@@ -17,7 +17,7 @@
     // Definition: Service modules requirement module. | 服务模块引用模块.(真特么绕嘴)
     angular.module("ngAppService", [
         // Animation Searcher Custom Service Modules. | 自定义服务模块.
-        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast", "historyPanel", "searchService"
+        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast", "historyPanel", "searchService", "resultPanelSwitching"
     ]);
 
     // Definition: Toast Module, from Material-Angular. | Material-Angular Toast 模块定义.
@@ -511,14 +511,20 @@
 
     // Definition: Search Service. | 搜索功能服务.
     var searchService = angular.module("searchService", []);
-    searchService.factory("$search", ["$rootScope", "$http", "$toast", "appConfig", function ($rootScope, $http, $toast, appConfig) {
+    searchService.factory("$search", ["$rootScope", "$http", "$toast", "$splashLayout", "appConfig", function ($rootScope, $http, $toast, $splashLayout, appConfig) {
+
         return {
             search: search,
             changePage: changePage
         };
 
+        function searchBroadCasting () {
+            $rootScope.$broadcast("searchStart", true);
+        }
+
         // Definition: Search-requesting Function. | 搜索请求发起函数.
         function search (keywords) {
+            searchBroadCasting();
 
             // Fire Async Requesting. | 循环发起搜索请求.
             Object.keys(appConfig.site).filter(function (prop) {
@@ -537,7 +543,6 @@
                         // Throw a ActionToast when error was caught. | 出错时进行提示.
                         $toast.showActionToast(data.info, data.action);
                     }
-
                 });
             });
 
@@ -545,6 +550,7 @@
 
         // Definition: 换页请求搜索.
         function changePage (codename, link) {
+            searchBroadCasting();
 
             /*
              *  @ codename: 目标站点.
@@ -571,6 +577,16 @@
             });
         }
 
+    }]);
+
+    // Definition: Panel Switch Service. | 结果面板切换服务.
+    var resultPanelSwitching = angular.module("resultPanelSwitching", []);
+    resultPanelSwitching.factory("$resultPanelSwitching", ["$rootScope", function ($rootScope) {
+        return resultPanelSwitching;
+
+        function resultPanelSwitching (codeName) {
+            $rootScope.$broadcast("resultPanelSwitching", codeName);
+        }
     }]);
 
 })(window);
