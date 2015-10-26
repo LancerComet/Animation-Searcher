@@ -34,6 +34,8 @@ var dmhyCookie = {
 // Definition: DMHY Cookie Refresher. | 动漫花园 Cookie 刷新函数.
 (function dmhyCookieFunction () {
 
+    dmhyCookieRenew();  // Initialization.
+
     // Action: Set Interval to renew cookie from DMHY. | 设置动漫花园 Cookie 更新计时器.
     setInterval( function () {
         dmhyCookieRenew();
@@ -165,6 +167,7 @@ function dmhyModule (req, res, next) {
                     codeName: "dmhy",
                     dmhy: dmhyResultObject  // { result: [], pageLink: "" }
                 });
+                dmhyCookie.visitStatus = true;
             }
 
 
