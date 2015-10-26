@@ -167,12 +167,14 @@ $headerHeight = 20em
 // Site Switcher. | 站点切换节点.
 // ==============================================================
 .aside
+    padding-left: 0
     overflow: auto
 
 @media (min-width: 0px) and (max-width: 960px)  {
   .aside {
       min-height: 8.5em
       height: 8.5em
+      padding: 1em 2em
   }
 }
 
@@ -194,7 +196,6 @@ $headerHeight = 20em
     border: .15em dashed rgba(255, 255, 255, .7)
     border-left: 0
     border-radius: 0 .5em .5em 0
-    background-color: #698dda
     color: #fff
 
 @media (max-width: 960px) {
@@ -215,6 +216,9 @@ $headerHeight = 20em
     margin: 0
     text-align: left
     text-transform: none
+
+.site-switcher-item[disabled="disabled"]
+    filter: grayscale(1)
 
 .site-switcher-item-icon
     margin: 0 1em 0 .5em
@@ -263,10 +267,9 @@ $headerHeight = 20em
     position: absolute
     top: 0
     left: 0
-    padding: 0 1em
     background-color: #fff
     border-radius: .5em
-    overflow: auto
+    overflow: hidden
 
 .result-panel.ng-hide-add
     animation: scale-out $cubicEase .6s forwards
@@ -278,7 +281,7 @@ $headerHeight = 20em
 
 .result-header
     padding: 0 .5em .5em .5em
-    margin: 0 1em
+    margin: 0 2em
     background-color: #698dda
     color: #fff
     border-radius: 0 0 1.5em 1.5em
@@ -294,6 +297,8 @@ $headerHeight = 20em
     line-height: 3.5em
     text-align: center
 
+.result-list
+    padding: 0 1em
 
 .result-list .result-item
     position: relative

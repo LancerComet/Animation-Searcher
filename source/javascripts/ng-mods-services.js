@@ -528,6 +528,7 @@
 
             // Fire Async Requesting. | 循环发起搜索请求.
             Object.keys(appConfig.site).filter(function (prop) {
+                if (appConfig.site[prop].disabled === true) return;
                 $http.post("/search/" + appConfig.site[prop].codeName, {
                     keywords: keywords
                 }, {

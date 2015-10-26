@@ -29,7 +29,7 @@
                         <h3 ng-bind="site.name" class="site-switcher-item-name"></h3>
                         <h4 ng-bind="site.fullName" class="site-switcher-item-fullname"></h4>
                         <p ng-bind="site.url" class="site-switcher-item-url"></p>
-                        <div class="info-stroager w-100 h-100 p-absolute p-zero no-outline" data-codename="{{site.codeName}}" ng-click="panelSwitch($event)"></div>
+                        <div class="info-stroager w-100 h-100 p-absolute p-zero no-outline" data-codename="{{site.codeName}}" ng-click="panelSwitch($event)" data-disabled="{{site.disabled}}"></div>
                     </div>
                     <md-tooltip>{{site.title}}</md-tooltip>
                 </md-button>

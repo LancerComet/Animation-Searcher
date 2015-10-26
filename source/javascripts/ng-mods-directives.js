@@ -116,9 +116,9 @@
                     value === true ? scope.siteSwitcherShow = true : void(0);
                 });
 
-                // Definition: Panel Switch emit event. | 面板切换冒泡事件.
+                // Definition: Panel Switch event. | 面板切换事件.
                 scope.panelSwitch = function ($event) {
-                    $resultPanelSwitching($event.target.attributes["data-codename"].value);
+                    $event.target.attributes["data-disabled"].value.toString() === "true" ? void(0) : $resultPanelSwitching($event.target.attributes["data-codename"].value);
                 };
 
             }
