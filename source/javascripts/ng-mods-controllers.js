@@ -33,6 +33,10 @@
         $scope.layout = "init-layout";  // Set default value. | 设置默认值.
         $scope.$on("splashLayout", function (event, value) {
             $scope.layout = value;
+            if (value !== "init-layout") {
+                $timeout.cancel($scope.blurButtonTimeout);
+                $scope.blurButton = "hide"
+            }
         });
 
         // SplashScreen Listener. | 启动画面广播监听.
@@ -40,7 +44,7 @@
         $scope.$on("splashScreen", function (event, value) {
             $timeout(function () {
                 $scope.backgroundBlur = "blur";
-                $timeout(function () { $scope.blurButton = "show"; }, 5000);  // Show Blur Toggle Button after blur finished.
+                $scope.blurButtonTimeout = $timeout(function () { $scope.blurButton = "show"; }, 5000);  // Show Blur Toggle Button after blur finished.
             }, 4000);
         });
 

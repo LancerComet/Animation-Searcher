@@ -544,6 +544,10 @@
                         // Throw a ActionToast when error was caught. | 出错时进行提示.
                         $toast.showActionToast(data.info, data.action);
                     }
+                    $rootScope.$broadcast("searchResult", {
+                        codeName: prop,
+                        status: data.status
+                    });  // Broadcast result.
                 });
             });
 

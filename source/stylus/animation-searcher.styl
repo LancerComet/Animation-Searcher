@@ -23,13 +23,10 @@ $headerHeight = 20em
     width: 100%
     //height: $headerHeight
     height: 100%
-    padding-top: $headerMinHeight
     position: absolute
     z-index: 0
 
 .header.init-layout
-    height: 100%
-    padding: 0
     z-index: 1
 
 .greeting-background
@@ -56,18 +53,36 @@ $headerHeight = 20em
 
 .greeting-area
     display: none
+    transform: translate(0, 5em)
 
 .greeting-area.init-layout
     display: block
+    transform: translate(0, 20em)
 
 .action-bar
     padding: 0 3%
+    transform: translate(0, 5em)
 
-.action-bar-left-flex.stand-by-layout
-    //flex: 1
+.action-bar.init-layout
+    transform: translate(0, 20em)
 
-.action-bar-center-flex.stand-by-layout
-    //flex: 10
+@media (min-height: 0) and (max-height: 600px) {
+    .action-bar.init-layout {
+        transform: translate(0, 5em)
+    }
+    .greeting-area.init-layout {
+        transform: translate(0, 5em)
+    }
+}
+
+@media (min-height: 601px) and (max-height: 920px) {
+    .action-bar.init-layout {
+        transform: translate(0, 10em)
+    }
+    .greeting-area.init-layout {
+        transform: translate(0, 10em)
+    }
+}
 
 .action-bar-right-flex
     opacity: 0
@@ -80,12 +95,7 @@ $headerHeight = 20em
 }
 
 .action-bar-right-flex.stand-by-layout
-    //flex: 20
     opacity: 1
-
-.action-bar.init-layout
-    //width: 26.5em
-    padding-top: 15%
 
 .left-nav-menu
     width: 25px
@@ -220,6 +230,9 @@ $headerHeight = 20em
 .site-switcher-item[disabled="disabled"]
     filter: grayscale(1)
 
+.site-switcher-item md-progress-linear .md-container
+    height: 3px
+
 .site-switcher-item-icon
     margin: 0 1em 0 .5em
     float: left
@@ -245,7 +258,44 @@ $headerHeight = 20em
 .site-switcher-item-url
     color: cornflowerblue
 
+.site-switcher-progress.ng-hide-add
+    animation: scale-out-opacity $cubicEase .4s
 
+.site-switcher-progress.ng-hide-remove
+    animation: scale-in $cubicEase .4s
+
+.site-switcher-item .finishing-hinter
+    width: 20em
+    height: 20em
+    position: absolute
+    top: 50%
+    left: 50%
+    margin: -10em -10em
+    opacity: 0
+    border-radius: 50%
+
+.site-switcher-item .finishing-hinter.success
+    background-color: #4fc315
+    animation: splash $cubicEase 1s
+
+.site-switcher-item .finishing-hinter.caution
+    background-color: #ffc920
+    animation: splash $cubicEase 1s
+
+.site-switcher-item .finishing-hinter.failed
+    background-color: red
+    animation: splash $cubicEase 1s
+
+@keyframes splash {
+    from {
+        opacity: 1
+        transform: scale(0)
+    }
+    to {
+        opacity: 0
+        transform: scale(1)
+    }
+}
 
 // Main Part. | 主体节点.
 // ==============================================================
@@ -272,11 +322,10 @@ $headerHeight = 20em
     overflow: hidden
 
 .result-panel.ng-hide-add
-    animation: scale-out $cubicEase .6s forwards
+    animation: scale-out-opacity $cubicEase .6s forwards
 
 .result-panel.ng-hide-remove
-    opacity: 0
-    animation: move-in-from-bottom-card $cubicEase .6s forwards
+    animation: move-in-bottom $cubicEase .6s forwards
     //animation-delay: .5s
 
 .result-header
@@ -379,10 +428,10 @@ $headerHeight = 20em
 }
 
 .text-panel.panel-in .content-container
-    animation: move-in-from-bottom-card $cubicEase .55s
+    animation: move-in-from-bottom-card-opacity $cubicEase .55s
 
 .text-panel.panel-out .content-container
-    animation: scale-out $cubicEase .6s
+    animation: scale-out-opacity $cubicEase .6s
 
 .text-panel .content-container
     width: 50%

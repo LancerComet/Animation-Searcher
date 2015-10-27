@@ -108,6 +108,7 @@
                 // This property is prepared For "md-tooltip". | 此属性将用在 "md-tooltip" 指令中.
                 Object.keys(scope.siteList).filter(function (prop) {
                     scope.siteList[prop].title = "切换至" + scope.siteList[prop].name + "的搜索结果";
+                    scope.siteList[prop].hideProgressbar = false;
                 });
 
                 // Action: Watching broadcasting to control intro animation of this dom.
@@ -120,6 +121,30 @@
                 scope.panelSwitch = function ($event) {
                     $event.target.attributes["data-disabled"].value.toString() === "true" ? void(0) : $resultPanelSwitching($event.target.attributes["data-codename"].value);
                 };
+
+                // Definition: Progress Hiding Listener & Response type hint. | 搜索进度条隐藏监听事件 & 搜索结果类型提示.
+                scope.$on("searchResult", function (event, value) {
+                    // Handle Progressbar Showing / Hiding,
+                    var codeName = value.codeName;
+                    scope.siteList[codeName].hideProgressbar = true;
+
+                    // Handle Response type hint.
+                    if (value.status === 200) {
+                        scope.siteList[codeName].eventType = "success";
+                    } else if (value.status === 404) {
+                        scope.siteList[codeName].eventType = "caution";
+                    } else {
+                        scope.siteList[codeName].eventType = "failed";
+                    }
+                });
+
+                // Definition: Progress Showing Listener. | 搜索进度条显示监听事件.
+                scope.$on("searchStart", function (event, value) {
+                    Object.keys(scope.siteList).filter(function (item) {
+                        scope.siteList[item].hideProgressbar = false;
+                        scope.siteList[item].eventType = "none";  // Reset Response type hint.
+                    });
+                });
 
             }
         }

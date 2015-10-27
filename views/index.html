@@ -45,7 +45,6 @@
           <%# Header. | 头部区域. %>
           <header class="header p-relative over-hidden pd-common md-whiteframe-2dp color-theme bk-color transition-dot-6" layout="column" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
 
-
               <!-- Dynamic Background -->
               <dynamic-background></dynamic-background>
 
@@ -58,7 +57,7 @@
               <!--<p><%= appConfig.appInfo.appName %></p>-->
 
               <%# Action bar in Header. | 顶部 Action bar. %>
-              <action-bar class="action-bar p-relative transition-dot-6" layout="row" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]" ng-cloak>
+              <action-bar class="action-bar p-relative transition-dot-6" layout="row" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
 
                   <div flex flex-sm="10" flex-md="10" flex-lg="25" class="action-bar-left-flex transition-dot-8" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]"></div>
 
@@ -71,7 +70,7 @@
                       <search-bar class="search-bar" flex>
                           <form name="search-form" layout="row" ng-submit="searchExec($event)">
                               <md-input-container class="search-input-container" flex>
-                                  <label class="search-bar-color"><%=randomTitle%></label>
+                                  <label class="search-bar-color"><i class="icon-search"></i>  <%=randomTitle%></label>
                                   <input class="search-bar-color" ng-model="keywords" aria-label="请在此处输入关键字" aria-labelledby="Insert keywords here." name="keywords" type="text" ng-focus="searchBarFocus()" ng-blur="searchBarBlur()" ng-keyup="searchBarKeyup($event)">
                               </md-input-container>
 
@@ -104,7 +103,7 @@
               <!--</history>-->
 
               <%# Greeting Area. | 欢迎内容节点. %>
-              <div class="greeting-area p-relative" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
+              <div class="greeting-area p-relative transition-dot-4" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
                   <h1 style="margin: 0; padding: 3em; color: #fff; font-weight: 100;" class="text-center">
                       Hello, I'm <%=appConfig.appInfo.appName%><br>
                       <small>Just have a try. <i class="icon-emo-happy"></i></small>

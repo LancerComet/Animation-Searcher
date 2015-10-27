@@ -52,7 +52,7 @@
         // 在 Node 的 app-config.js 中同样存在一份配置供后端使用.
         site: {
             caso: { name: "华盟", codeName: "caso", fullName: "China Animation Subtitle Organization",  url: "https://camoe.org", icon: "http://tp4.sinaimg.cn/1843885343/180/1290319229/0", disabled: false },
-            ktxp: { name: "极影", codeName: "ktxp", fullName: "Katong XP",  url: "http://bt.ktxp.org", icon: "http://tp4.sinaimg.cn/3808818207/180/5680524263/0", disabled: true },
+            ktxp: { name: "极影", codeName: "ktxp", fullName: "Katong XP",  url: "http://bt.ktxp.org", icon: "http://tp4.sinaimg.cn/3808818207/180/5680524263/0", disabled: false },
             popgo: { name: "漫游", codeName: "popgo", fullName: "Popgo",  url: "http://share.popgo.org", icon: "http://tp1.sinaimg.cn/2661910672/180/5727241391/0", disabled: false },
             dmhy: { name: "动漫花园", codeName: "dmhy", fullName: "DongMan HuaYuan",  url: "https://share.dmhy.org", icon: "http://tp2.sinaimg.cn/1926582581/180/22817929400/0", disabled: false }
         },
@@ -916,6 +916,10 @@
         $scope.layout = "init-layout";  // Set default value. | 设置默认值.
         $scope.$on("splashLayout", function (event, value) {
             $scope.layout = value;
+            if (value !== "init-layout") {
+                $timeout.cancel($scope.blurButtonTimeout);
+                $scope.blurButton = "hide"
+            }
         });
 
         // SplashScreen Listener. | 启动画面广播监听.
@@ -923,7 +927,7 @@
         $scope.$on("splashScreen", function (event, value) {
             $timeout(function () {
                 $scope.backgroundBlur = "blur";
-                $timeout(function () { $scope.blurButton = "show"; }, 5000);  // Show Blur Toggle Button after blur finished.
+                $scope.blurButtonTimeout = $timeout(function () { $scope.blurButton = "show"; }, 5000);  // Show Blur Toggle Button after blur finished.
             }, 4000);
         });
 
@@ -1138,6 +1142,7 @@
                 // This property is prepared For "md-tooltip". | 此属性将用在 "md-tooltip" 指令中.
                 Object.keys(scope.siteList).filter(function (prop) {
                     scope.siteList[prop].title = "切换至" + scope.siteList[prop].name + "的搜索结果";
+                    scope.siteList[prop].hideProgressbar = false;
                 });
 
                 // Action: Watching broadcasting to control intro animation of this dom.
@@ -1150,6 +1155,30 @@
                 scope.panelSwitch = function ($event) {
                     $event.target.attributes["data-disabled"].value.toString() === "true" ? void(0) : $resultPanelSwitching($event.target.attributes["data-codename"].value);
                 };
+
+                // Definition: Progress Hiding Listener & Response type hint. | 搜索进度条隐藏监听事件 & 搜索结果类型提示.
+                scope.$on("searchResult", function (event, value) {
+                    // Handle Progressbar Showing / Hiding,
+                    var codeName = value.codeName;
+                    scope.siteList[codeName].hideProgressbar = true;
+
+                    // Handle Response type hint.
+                    if (value.status === 200) {
+                        scope.siteList[codeName].eventType = "success";
+                    } else if (value.status === 404) {
+                        scope.siteList[codeName].eventType = "caution";
+                    } else {
+                        scope.siteList[codeName].eventType = "failed";
+                    }
+                });
+
+                // Definition: Progress Showing Listener. | 搜索进度条显示监听事件.
+                scope.$on("searchStart", function (event, value) {
+                    Object.keys(scope.siteList).filter(function (item) {
+                        scope.siteList[item].hideProgressbar = false;
+                        scope.siteList[item].eventType = "none";  // Reset Response type hint.
+                    });
+                });
 
             }
         }
@@ -2025,6 +2054,10 @@
                         // Throw a ActionToast when error was caught. | 出错时进行提示.
                         $toast.showActionToast(data.info, data.action);
                     }
+                    $rootScope.$broadcast("searchResult", {
+                        codeName: prop,
+                        status: data.status
+                    });  // Broadcast result.
                 });
             });
 

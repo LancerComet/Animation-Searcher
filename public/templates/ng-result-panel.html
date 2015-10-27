@@ -18,17 +18,17 @@
     <!-- MD Content Node, all result nodes go here. -->
     <div flex="70" class="result-list" layout="column">
 
-        <div class="result-item transition-dot-2" ng-repeat="result in results.result">
+        <div class="result-item" ng-repeat="result in results.result">
 
             <div class="result-item-checkbox-container dp-inline-block">
                 <p class="result-item-index" ng-bind="$index + 1"></p>
-                <md-checkbox class="result-item-checkbox transition-dot-2" aria-label="{{domInfo.name}}搜索结果勾选" ng-click="resultCheckbox.Fn($event)" data-magnet="{{result.magnet}}">
+                <md-checkbox class="result-item-checkbox" aria-label="{{domInfo.name}}搜索结果勾选" ng-click="resultCheckbox.Fn($event)" data-magnet="{{result.magnet}}">
                     <md-tooltip>勾选结果</md-tooltip>
                 </md-checkbox>
             </div>
 
             <div class="result-item-text-container dp-inline-block">
-                <a class="result-item-title text-no-decoration transition-dot-2" title="{{result.title}}" href="{{result.link}}" target="_blank">{{result.title}}</a>
+                <a class="result-item-title text-no-decoration" title="{{result.title}}" href="{{result.link}}" target="_blank">{{result.title}}</a>
                 <div class="result-item-link-container">
                     <a class="result-item-link result-item-magnet text-no-decoration" href="{{result.magnet}}"><i class="icon-magnet"></i>磁力链</a>
                     <a class="result-item-link result-item-torrent text-no-decoration" href="{{result.torrent}}" ng-if="result.torrent"><i class="icon-download-alt"></i>Torrent</a>
@@ -43,4 +43,5 @@
     <!-- Pagination Container Node. -->
     <!-- Just a container, content may be different. -->
     <div class="text-center result-pagination result-pagination-{{domInfo.codeName}}" flex="10"></div>
+
 </div>

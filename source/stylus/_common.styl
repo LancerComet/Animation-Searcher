@@ -245,6 +245,15 @@ body
 @keyframes scale-out {
   from {
     transform: scale(1)
+  }
+  to {
+    transform: scale(0)
+  }
+}
+
+@keyframes scale-out-opacity {
+  from {
+    transform: scale(1)
     opacity: 1
   }
   to {
@@ -253,16 +262,16 @@ body
   }
 }
 
-@keyframes scale-out-no-opacity {
-  from {
-    transform: scale(1)
+@keyframes move-in-from-bottom-card {
+  0% {
+    transform: translate(0, 100%) scale(1.2)
   }
-  to {
-    transform: scale(0)
+  100% {
+    transform: translate(0, 0) scale(1)
   }
 }
 
-@keyframes move-in-from-bottom-card {
+@keyframes move-in-from-bottom-card-opacity {
   0% {
     opacity: 0
     transform: translate(0, 100%) scale(1.2)
