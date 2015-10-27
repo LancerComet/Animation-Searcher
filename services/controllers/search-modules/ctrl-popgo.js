@@ -91,7 +91,11 @@ function searchModule (req, res, next) {
             // 如果存在翻页按钮数据, 进行正则替换.
             if (resultObject.pageLink) {
                 var regExp = /href="/g;
-                resultObject.pageLink = resultObject.pageLink.replace(regExp, 'href="javascript:void(0)" ng-click="switchPage($event, \'' + codeName + '\')" data-request-link="' + appConfig.site[codeName].url);
+                var regExp1 = /\[/g;
+                var regExp2 = /]/g;
+                resultObject.pageLink = resultObject.pageLink.replace(regExp, 'href="javascript:void(0)" class="pagination-item" ng-click="switchPage($event, \'' + codeName + '\')" data-request-link="' + appConfig.site[codeName].url);
+                resultObject.pageLink = resultObject.pageLink.replace(regExp1, '');
+                resultObject.pageLink = resultObject.pageLink.replace(regExp2, '');
             }
 
             // Push results to "resultObject.result". | 推送搜索结果到结果对象.

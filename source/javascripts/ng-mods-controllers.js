@@ -63,25 +63,6 @@
         });
 
 
-        // Definition: Status of Progressbar (on the left). | 左侧切换列表的搜索条状态.
-        // ---------------------------------------------
-        // @ True: Show this Progress bar.
-        // @ False: Hide this Progress bar.
-        $scope.progressStatus = {};
-
-        // Set $scope.progressStatus's properties refer to "appConfig.site". | 依据 "appConfig.site" 设置 $scope.progressStatus 的属性.
-        // Individual module looks.
-        (function setProgressStatusData () {
-            Object.keys(appConfig.site).filter(function (prop) {
-                $scope.progressStatus[prop] = false;
-            });
-        }());
-        // For now, $scope.progressStatus would be:
-        // $scope.progressStatus = {
-        //   caso: false, ktxp: false, ...
-        // }
-
-
     }]);
 
 

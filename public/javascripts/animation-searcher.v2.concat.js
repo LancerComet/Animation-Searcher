@@ -946,25 +946,6 @@
         });
 
 
-        // Definition: Status of Progressbar (on the left). | 左侧切换列表的搜索条状态.
-        // ---------------------------------------------
-        // @ True: Show this Progress bar.
-        // @ False: Hide this Progress bar.
-        $scope.progressStatus = {};
-
-        // Set $scope.progressStatus's properties refer to "appConfig.site". | 依据 "appConfig.site" 设置 $scope.progressStatus 的属性.
-        // Individual module looks.
-        (function setProgressStatusData () {
-            Object.keys(appConfig.site).filter(function (prop) {
-                $scope.progressStatus[prop] = false;
-            });
-        }());
-        // For now, $scope.progressStatus would be:
-        // $scope.progressStatus = {
-        //   caso: false, ktxp: false, ...
-        // }
-
-
     }]);
 
 
@@ -1142,19 +1123,24 @@
                 // This property is prepared For "md-tooltip". | 此属性将用在 "md-tooltip" 指令中.
                 Object.keys(scope.siteList).filter(function (prop) {
                     scope.siteList[prop].title = "切换至" + scope.siteList[prop].name + "的搜索结果";
-                    scope.siteList[prop].hideProgressbar = false;
+                    scope.siteList[prop].hideProgressbar = true;
                 });
 
                 // Action: Watching broadcasting to control intro animation of this dom.
                 // Site Switcher 指令进入动画控制广播监听器.
                 scope.$on("searchStart", function (event, value) {
-                    value === true ? scope.siteSwitcherShow = true : void(0);
+                    value.showSwitcher === true ? scope.siteSwitcherShow = true : void(0);
                 });
 
                 // Definition: Panel Switch event. | 面板切换事件.
                 scope.panelSwitch = function ($event) {
                     $event.target.attributes["data-disabled"].value.toString() === "true" ? void(0) : $resultPanelSwitching($event.target.attributes["data-codename"].value);
                 };
+
+                // Definition: Progress Showing Listener. | 搜索进度条显示监听事件.
+                scope.$on("searchStart", function (event, value) {
+                    scope.siteList[value.codeName].hideProgressbar = false;
+                });
 
                 // Definition: Progress Hiding Listener & Response type hint. | 搜索进度条隐藏监听事件 & 搜索结果类型提示.
                 scope.$on("searchResult", function (event, value) {
@@ -1172,13 +1158,6 @@
                     }
                 });
 
-                // Definition: Progress Showing Listener. | 搜索进度条显示监听事件.
-                scope.$on("searchStart", function (event, value) {
-                    Object.keys(scope.siteList).filter(function (item) {
-                        scope.siteList[item].hideProgressbar = false;
-                        scope.siteList[item].eventType = "none";  // Reset Response type hint.
-                    });
-                });
 
             }
         }
@@ -2028,18 +2007,21 @@
             changePage: changePage
         };
 
-        function searchBroadCasting () {
-            $rootScope.$broadcast("searchStart", true);
+        function searchBroadCasting (codeName) {
+            $rootScope.$broadcast("searchStart", {
+                codeName: codeName,
+                showSwitcher: true
+            });
         }
 
         // Definition: Search-requesting Function. | 搜索请求发起函数.
         function search (keywords) {
-            searchBroadCasting();
-
             // Fire Async Requesting. | 循环发起搜索请求.
             Object.keys(appConfig.site).filter(function (prop) {
                 if (appConfig.site[prop].disabled === true) return;
-                $http.post("/search/" + appConfig.site[prop].codeName, {
+                var codeName = appConfig.site[prop].codeName;
+                searchBroadCasting(codeName);
+                $http.post("/search/" + codeName, {
                     keywords: keywords
                 }, {
                     timeout: appConfig.settings.xhrTimeout  // Timeout for 30s.
@@ -2065,7 +2047,7 @@
 
         // Definition: 换页请求搜索.
         function changePage (codename, link) {
-            searchBroadCasting();
+            searchBroadCasting(codename);
 
             /*
              *  @ codename: 目标站点.

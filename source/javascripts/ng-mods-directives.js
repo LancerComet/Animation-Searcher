@@ -108,19 +108,24 @@
                 // This property is prepared For "md-tooltip". | 此属性将用在 "md-tooltip" 指令中.
                 Object.keys(scope.siteList).filter(function (prop) {
                     scope.siteList[prop].title = "切换至" + scope.siteList[prop].name + "的搜索结果";
-                    scope.siteList[prop].hideProgressbar = false;
+                    scope.siteList[prop].hideProgressbar = true;
                 });
 
                 // Action: Watching broadcasting to control intro animation of this dom.
                 // Site Switcher 指令进入动画控制广播监听器.
                 scope.$on("searchStart", function (event, value) {
-                    value === true ? scope.siteSwitcherShow = true : void(0);
+                    value.showSwitcher === true ? scope.siteSwitcherShow = true : void(0);
                 });
 
                 // Definition: Panel Switch event. | 面板切换事件.
                 scope.panelSwitch = function ($event) {
                     $event.target.attributes["data-disabled"].value.toString() === "true" ? void(0) : $resultPanelSwitching($event.target.attributes["data-codename"].value);
                 };
+
+                // Definition: Progress Showing Listener. | 搜索进度条显示监听事件.
+                scope.$on("searchStart", function (event, value) {
+                    scope.siteList[value.codeName].hideProgressbar = false;
+                });
 
                 // Definition: Progress Hiding Listener & Response type hint. | 搜索进度条隐藏监听事件 & 搜索结果类型提示.
                 scope.$on("searchResult", function (event, value) {
@@ -138,13 +143,6 @@
                     }
                 });
 
-                // Definition: Progress Showing Listener. | 搜索进度条显示监听事件.
-                scope.$on("searchStart", function (event, value) {
-                    Object.keys(scope.siteList).filter(function (item) {
-                        scope.siteList[item].hideProgressbar = false;
-                        scope.siteList[item].eventType = "none";  // Reset Response type hint.
-                    });
-                });
 
             }
         }
