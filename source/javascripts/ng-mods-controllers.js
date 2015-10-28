@@ -22,7 +22,7 @@
     // Definition: Controllers Module & Configuration. | 总控制器模块定义.
     var ngAppCtrls = angular.module("ngAppCtrls", []);
 
-    ngAppCtrls.controller("mainController", ["$scope", "$rootScope", "$location", "$timeout", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, $timeout, appConfig, $splashLayout) {
+    ngAppCtrls.controller("mainController", ["$scope", "$rootScope", "$location", "$timeout", "$resultCheck", function ($scope, $rootScope, $location, $timeout, $resultCheck) {
         // Definition: Basic Variables. | 基本变量定义.
         $scope.blurButton = "hide";
         $scope.historyPanel = false;
@@ -61,6 +61,37 @@
         $scope.$on("historyPanel", function (event, value) {
             value === "show" ? $scope.historyPanel = true : $scope.historyPanel = false;
         });
+
+
+        // Panel Toolbar Showing / Hiding. | 结果面板工具条显示 / 隐藏控制器.
+        // ---------------------------------------------
+        $scope.resultToolbar = {
+            show: false,
+            open: false,
+            mode: "md-fling",
+            copyLinkButton: false,
+            checkAllResult: checkAllResult,
+            linkCopy: linkCopy
+        };
+
+        $scope.$on("resultToolbar", function (event, value) {
+            $timeout(function () {
+                $scope.resultToolbar.show = value;
+            }, 1000);
+        });
+
+        $scope.$on("showCopyLinkButton", function (event, value) {
+            $scope.resultToolbar.copyLinkButton = value;
+        });
+
+        // Definition: Select-all-magnet-link Function.
+        function checkAllResult () {
+            $resultCheck.checkAll();
+        }
+
+        function linkCopy () {
+            $resultCheck.linkCopy();
+        }
 
 
     }]);
@@ -123,7 +154,6 @@
 
     // Definition: Service Modules Controller. | 服务模块节点控制器.
     ngAppCtrls.controller("serviceModules", ["$scope", function ($scope) {
-
 
     }]);
 

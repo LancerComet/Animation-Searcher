@@ -85,7 +85,9 @@
                       </search-bar>
                   </div>
 
-                  <div flex flex-sm="10" flex-md="10" flex-lg="25" class="action-bar-right-flex transition-dot-8" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]"><%= appConfig.appInfo.appName%> | <%= appConfig.appInfo.codeName %></div>
+                  <div flex flex-sm="10" flex-md="10" flex-lg="25" class="action-bar-right-flex transition-dot-8" ng-class="{'init-layout': 'init-layout', 'stand-by-layout': 'stand-by-layout'}[layout]">
+                      <p><%= appConfig.appInfo.appName%> | <%= appConfig.appInfo.codeName %></p>
+                  </div>
 
               </action-bar>
 
@@ -124,10 +126,36 @@
               </aside>
 
               <div class="main-content pd-common" flex="auto" layout="row" ng-controller="resultPanelController">
-                  <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="caso" ng-show="panelShow.caso"></result-panel>
-                  <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="ktxp" ng-show="panelShow.ktxp"></result-panel>
-                  <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="popgo" ng-show="panelShow.popgo"></result-panel>
-                  <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="dmhy" ng-show="panelShow.dmhy"></result-panel>
+                  <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="caso" ng-show="panelShow.caso" data-show="{{panelShow.caso}}"></result-panel>
+                  <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="ktxp" ng-show="panelShow.ktxp" data-show="{{panelShow.ktxp}}"></result-panel>
+                  <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="popgo" ng-show="panelShow.popgo" data-show="{{panelShow.popgo}}"></result-panel>
+                  <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="dmhy" ng-show="panelShow.dmhy" data-show="{{panelShow.dmhy}}"></result-panel>
+
+                  <%# Result Panel Toolbar. | 结果面板工具条. %>
+                  <div class="result-toolbar no-outline" layout="row" layout-align="center center" ng-show="resultToolbar.show" ng-click="resultToolbar.open = !resultToolbar.open">
+                      <md-fab-speed-dial md-open="resultToolbar.open" md-direction="left" ng-class="resultToolbar.mode">
+                          <md-fab-trigger>
+                              <md-button aria-label="menu" class="md-fab md-warn main-button">
+                                  <i class="icon-menu"></i>
+                              </md-button>
+                          </md-fab-trigger>
+
+                          <md-fab-actions>
+
+                              <md-button aria-label="Copy all results magnet link." class="md-fab md-raised md-mini" ng-click="resultToolbar.checkAllResult($event)">
+                                  <i class="icon-check"></i>
+                                  <md-tooltip>选中所有结果</md-tooltip>
+                              </md-button>
+
+                              <md-button aria-label="Select all results." class="md-fab md-raised md-mini" ng-show="resultToolbar.copyLinkButton" ng-click="resultToolbar.linkCopy()">
+                                  <i class="icon-clipboard"></i>
+                                  <md-tooltip>复制磁力链</md-tooltip>
+                              </md-button>
+
+                          </md-fab-actions>
+
+                      </md-fab-speed-dial>
+                  </div>
               </div>
 
           </main>
@@ -171,9 +199,6 @@
 
           <%# Frontend Router Blank Node. | 前端路由空白节点. %>
           <div class="dp-none" ng-view></div>
-
-          <%# Main Progressbar in body-width. | Body 宽度进度条 %>
-          <!--<md-progress-linear id="body-progress-bar" class="md-warn p-fixed p-bottom" md-mode="query"></md-progress-linear>-->
 
           <%# Splash Screen. | 载入界面. %>
           <div class="splash-screen w-100 h-100 p-absolute p-zero transition-dot-6" layout="column" ng-controller="splashScreenController" ng-class="{'show': 'in', 'hide': 'out'}[status]">

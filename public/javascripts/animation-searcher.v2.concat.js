@@ -905,7 +905,7 @@
     // Definition: Controllers Module & Configuration. | 总控制器模块定义.
     var ngAppCtrls = angular.module("ngAppCtrls", []);
 
-    ngAppCtrls.controller("mainController", ["$scope", "$rootScope", "$location", "$timeout", "appConfig", "$splashLayout", function ($scope, $rootScope, $location, $timeout, appConfig, $splashLayout) {
+    ngAppCtrls.controller("mainController", ["$scope", "$rootScope", "$location", "$timeout", "$resultCheck", function ($scope, $rootScope, $location, $timeout, $resultCheck) {
         // Definition: Basic Variables. | 基本变量定义.
         $scope.blurButton = "hide";
         $scope.historyPanel = false;
@@ -944,6 +944,37 @@
         $scope.$on("historyPanel", function (event, value) {
             value === "show" ? $scope.historyPanel = true : $scope.historyPanel = false;
         });
+
+
+        // Panel Toolbar Showing / Hiding. | 结果面板工具条显示 / 隐藏控制器.
+        // ---------------------------------------------
+        $scope.resultToolbar = {
+            show: false,
+            open: false,
+            mode: "md-fling",
+            copyLinkButton: false,
+            checkAllResult: checkAllResult,
+            linkCopy: linkCopy
+        };
+
+        $scope.$on("resultToolbar", function (event, value) {
+            $timeout(function () {
+                $scope.resultToolbar.show = value;
+            }, 1000);
+        });
+
+        $scope.$on("showCopyLinkButton", function (event, value) {
+            $scope.resultToolbar.copyLinkButton = value;
+        });
+
+        // Definition: Select-all-magnet-link Function.
+        function checkAllResult () {
+            $resultCheck.checkAll();
+        }
+
+        function linkCopy () {
+            $resultCheck.linkCopy();
+        }
 
 
     }]);
@@ -1007,7 +1038,6 @@
     // Definition: Service Modules Controller. | 服务模块节点控制器.
     ngAppCtrls.controller("serviceModules", ["$scope", function ($scope) {
 
-
     }]);
 
 
@@ -1038,10 +1068,8 @@
         return {
             restrict: "E",
             scope: {},
-            controller: function ($scope, $element, $attrs) {
-            },
-            link: function (scope, element, attrs) {
-            }
+            controller: function ($scope, $element, $attrs) {},
+            link: function (scope, element, attrs) {}
         }
     });
 
@@ -1165,7 +1193,7 @@
 
 
     // Definition: Result Panel Directive. | 结果面板指令.
-    ngAppDirectives.directive("resultPanel", ["$compile", "$sce", "$search", "appConfig", function ($compile, $sce, $search, appConfig) {
+    ngAppDirectives.directive("resultPanel", ["$compile", "$sce", "$search", "$resultCheck", "appConfig", function ($compile, $sce, $search, $resultCheck, appConfig) {
         return {
             restrict: "E",
             scope: true,
@@ -1179,7 +1207,10 @@
                 };
 
 
-                // Definition: Result Item Checkbox checking function. |
+                // Definition: Result Checkbox clicking event. | 结果 Checkbox 点击逻辑.
+                $scope.resultCheckbox = function (magnetLink) {
+                    $resultCheck.checkIt(magnetLink);
+                };
 
             },
             link: function (scope, element, attrs) {
@@ -1198,7 +1229,6 @@
                     disabled: appConfig.site[codeName].disabled
                 };
 
-
                 // Definition: 搜索结果广播监听事件.
                 scope.$on("searchResult", function (event, value) {
                     if (!value[codeName]) return false;
@@ -1206,6 +1236,26 @@
                     var $pagination = angular.element(document.querySelector(".result-pagination-" + codeName));
                     $pagination.html(value[codeName].pageLink);
                     $compile($pagination)(scope);
+                });
+
+                // Definition: All result checking broadcast listener. | 结果全选广播监听器.
+                // Foolish Logic.
+                scope.$on("checkAllResult", function (event, value) {
+                    if (attrs.show.toString() === "false") {
+                        return;
+                    }
+                    setTimeout(function () {
+                        var checkBoxs = document.querySelectorAll(".result-panel[data-show=true] md-checkbox");
+                        var selectTimeout = 0;
+                        for (var i = 0, length = checkBoxs.length; i < length; i++) {
+                            (function (j) {
+                                setTimeout(function () {
+                                    checkBoxs[j].click();
+                                }, selectTimeout);
+                                selectTimeout += 20;
+                            })(i);
+                        }
+                    }, 1);
                 });
 
 
@@ -1241,6 +1291,16 @@
                         '<div class="content">' + config.content + '</div>' +
                         '</div>' +
                         '</div>';
+
+                    if (config.resultPanel) {
+                        nodes = '<div class="main-container w-100 h-100 p-absolute p-zero bk-merge md-whiteframe-4dp" style="z-index: 10000">' +
+                            '<div class="content-container p-relative">' +
+                            '<h2 class="title color-theme bk-color">' + config.title + '</h2>' +
+                            '<md-button class="md-icon-button close-btn transition-dot-4" style="margin-top: .5em;" ng-click="closePanel()" aria-label="Close this panel."><md-tooltip>关闭面板</md-tooltip><i class="icon-cancel"></i></md-button>' +
+                            '<textarea class="content" style="width: calc(100% - 4em); resize: none;" onclick="this.focus(); this.select();">' + config.content + '</textarea>' +
+                            '</div>' +
+                            '</div>';
+                    }
 
                     // Append & Set ng-Class.
                     element.append($compile(nodes)(scope));
@@ -1506,7 +1566,7 @@
     // Definition: Service modules requirement module. | 服务模块引用模块.(真特么绕嘴)
     angular.module("ngAppService", [
         // Animation Searcher Custom Service Modules. | 自定义服务模块.
-        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast", "historyPanel", "searchService", "resultPanelSwitching"
+        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast", "historyPanel", "searchService", "resultPanelSwitching", "resultChecking"
     ]);
 
     // Definition: Toast Module, from Material-Angular. | Material-Angular Toast 模块定义.
@@ -2028,6 +2088,7 @@
                 }).success(function (data, status, headers, config, statusText) {
                     $rootScope.$broadcast("searchResult", data);  // Broadcast result.
                     $toast.showSimpleToast(data.info);  // Show simple toast after finished succesfully.
+                    resultToolbarCtrl(true);  // Show Result Toolbar.
                 }).error(function (data, status, headers, config, statusText) {
                     if (status === -1) {
                         // Timeout Handler.
@@ -2074,6 +2135,11 @@
             });
         }
 
+        // Definition: Result Toolbar Controller. | 搜索结果工具条控制器.
+        function resultToolbarCtrl (value) {
+            $rootScope.$broadcast("resultToolbar", value);
+        }
+
     }]);
 
     // Definition: Panel Switch Service. | 结果面板切换服务.
@@ -2085,6 +2151,42 @@
             $rootScope.$broadcast("resultPanelSwitching", codeName);
         }
     }]);
+
+    // Definition: Result Checking Service. | 搜索结果 Checkbox 选中服务.
+    var resultChecking = angular.module("resultChecking", []);
+    resultChecking.factory("$resultCheck", ["$rootScope", "$internalFunc", "$textPanel", function ($rootScope, $internalFunc, $textPanel) {
+        var selectedMagnet = [];
+
+        return {
+            checkIt: checkIt,
+            checkAll: checkAll,
+            linkCopy: linkCopy
+        };
+
+        function checkIt (magnetLink) {
+            !magnetLink ? $internalFunc.throwError("magnetLink must be provided when calling $resultCheck.checkIt().") : void(0);
+            selectedMagnet.indexOf(magnetLink) < 0 ? selectedMagnet.push(magnetLink) : selectedMagnet.splice(selectedMagnet.indexOf(magnetLink), 1);
+            copyLinkButtonCtrl();
+        }
+
+        function checkAll () {
+            $rootScope.$broadcast("checkAllResult");
+        }
+
+        function copyLinkButtonCtrl () {
+            selectedMagnet.length > 0 ? $rootScope.$broadcast("showCopyLinkButton", true) : $rootScope.$broadcast("showCopyLinkButton", false);
+        }
+
+        function linkCopy () {
+            $textPanel.show({
+                title: "复制链接",
+                content: selectedMagnet.join("\n"),
+                resultPanel: true
+            })
+        }
+
+    }]);
+
 
 })(window);
 /*

@@ -17,7 +17,7 @@
     // Definition: Service modules requirement module. | 服务模块引用模块.(真特么绕嘴)
     angular.module("ngAppService", [
         // Animation Searcher Custom Service Modules. | 自定义服务模块.
-        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast", "historyPanel", "searchService", "resultPanelSwitching"
+        "appToast", "charMsg", "leftNav", "colorChange", "localStorage", "splashLayout", "splashScreen", "changeLog", "textPanel", "clearMdToast", "historyPanel", "searchService", "resultPanelSwitching", "resultChecking"
     ]);
 
     // Definition: Toast Module, from Material-Angular. | Material-Angular Toast 模块定义.
@@ -539,6 +539,7 @@
                 }).success(function (data, status, headers, config, statusText) {
                     $rootScope.$broadcast("searchResult", data);  // Broadcast result.
                     $toast.showSimpleToast(data.info);  // Show simple toast after finished succesfully.
+                    resultToolbarCtrl(true);  // Show Result Toolbar.
                 }).error(function (data, status, headers, config, statusText) {
                     if (status === -1) {
                         // Timeout Handler.
@@ -585,6 +586,11 @@
             });
         }
 
+        // Definition: Result Toolbar Controller. | 搜索结果工具条控制器.
+        function resultToolbarCtrl (value) {
+            $rootScope.$broadcast("resultToolbar", value);
+        }
+
     }]);
 
     // Definition: Panel Switch Service. | 结果面板切换服务.
@@ -596,5 +602,41 @@
             $rootScope.$broadcast("resultPanelSwitching", codeName);
         }
     }]);
+
+    // Definition: Result Checking Service. | 搜索结果 Checkbox 选中服务.
+    var resultChecking = angular.module("resultChecking", []);
+    resultChecking.factory("$resultCheck", ["$rootScope", "$internalFunc", "$textPanel", function ($rootScope, $internalFunc, $textPanel) {
+        var selectedMagnet = [];
+
+        return {
+            checkIt: checkIt,
+            checkAll: checkAll,
+            linkCopy: linkCopy
+        };
+
+        function checkIt (magnetLink) {
+            !magnetLink ? $internalFunc.throwError("magnetLink must be provided when calling $resultCheck.checkIt().") : void(0);
+            selectedMagnet.indexOf(magnetLink) < 0 ? selectedMagnet.push(magnetLink) : selectedMagnet.splice(selectedMagnet.indexOf(magnetLink), 1);
+            copyLinkButtonCtrl();
+        }
+
+        function checkAll () {
+            $rootScope.$broadcast("checkAllResult");
+        }
+
+        function copyLinkButtonCtrl () {
+            selectedMagnet.length > 0 ? $rootScope.$broadcast("showCopyLinkButton", true) : $rootScope.$broadcast("showCopyLinkButton", false);
+        }
+
+        function linkCopy () {
+            $textPanel.show({
+                title: "复制链接",
+                content: selectedMagnet.join("\n"),
+                resultPanel: true
+            })
+        }
+
+    }]);
+
 
 })(window);

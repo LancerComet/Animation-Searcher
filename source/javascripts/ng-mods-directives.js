@@ -23,10 +23,8 @@
         return {
             restrict: "E",
             scope: {},
-            controller: function ($scope, $element, $attrs) {
-            },
-            link: function (scope, element, attrs) {
-            }
+            controller: function ($scope, $element, $attrs) {},
+            link: function (scope, element, attrs) {}
         }
     });
 
@@ -150,7 +148,7 @@
 
 
     // Definition: Result Panel Directive. | 结果面板指令.
-    ngAppDirectives.directive("resultPanel", ["$compile", "$sce", "$search", "appConfig", function ($compile, $sce, $search, appConfig) {
+    ngAppDirectives.directive("resultPanel", ["$compile", "$sce", "$search", "$resultCheck", "appConfig", function ($compile, $sce, $search, $resultCheck, appConfig) {
         return {
             restrict: "E",
             scope: true,
@@ -164,7 +162,10 @@
                 };
 
 
-                // Definition: Result Item Checkbox checking function. |
+                // Definition: Result Checkbox clicking event. | 结果 Checkbox 点击逻辑.
+                $scope.resultCheckbox = function (magnetLink) {
+                    $resultCheck.checkIt(magnetLink);
+                };
 
             },
             link: function (scope, element, attrs) {
@@ -183,7 +184,6 @@
                     disabled: appConfig.site[codeName].disabled
                 };
 
-
                 // Definition: 搜索结果广播监听事件.
                 scope.$on("searchResult", function (event, value) {
                     if (!value[codeName]) return false;
@@ -191,6 +191,26 @@
                     var $pagination = angular.element(document.querySelector(".result-pagination-" + codeName));
                     $pagination.html(value[codeName].pageLink);
                     $compile($pagination)(scope);
+                });
+
+                // Definition: All result checking broadcast listener. | 结果全选广播监听器.
+                // Foolish Logic.
+                scope.$on("checkAllResult", function (event, value) {
+                    if (attrs.show.toString() === "false") {
+                        return;
+                    }
+                    setTimeout(function () {
+                        var checkBoxs = document.querySelectorAll(".result-panel[data-show=true] md-checkbox");
+                        var selectTimeout = 0;
+                        for (var i = 0, length = checkBoxs.length; i < length; i++) {
+                            (function (j) {
+                                setTimeout(function () {
+                                    checkBoxs[j].click();
+                                }, selectTimeout);
+                                selectTimeout += 20;
+                            })(i);
+                        }
+                    }, 1);
                 });
 
 
@@ -226,6 +246,16 @@
                         '<div class="content">' + config.content + '</div>' +
                         '</div>' +
                         '</div>';
+
+                    if (config.resultPanel) {
+                        nodes = '<div class="main-container w-100 h-100 p-absolute p-zero bk-merge md-whiteframe-4dp" style="z-index: 10000">' +
+                            '<div class="content-container p-relative">' +
+                            '<h2 class="title color-theme bk-color">' + config.title + '</h2>' +
+                            '<md-button class="md-icon-button close-btn transition-dot-4" style="margin-top: .5em;" ng-click="closePanel()" aria-label="Close this panel."><md-tooltip>关闭面板</md-tooltip><i class="icon-cancel"></i></md-button>' +
+                            '<textarea class="content" style="width: calc(100% - 4em); resize: none;" onclick="this.focus(); this.select();">' + config.content + '</textarea>' +
+                            '</div>' +
+                            '</div>';
+                    }
 
                     // Append & Set ng-Class.
                     element.append($compile(nodes)(scope));
