@@ -336,6 +336,10 @@ $headerHeight = 20em
     animation: move-in-bottom $cubicEase .6s forwards
     //animation-delay: .5s
 
+.result-panel.ng-hide-remove .result-list,
+.result-panel.ng-hide-remove .result-pagination
+    display: none
+
 .result-header
     padding: 0 .5em .5em .5em
     margin: 0 2em
@@ -356,11 +360,13 @@ $headerHeight = 20em
 
 .result-list
     padding: 0 1em
+    animation: move-in-right $cubicEase .4s
 
 .result-list .result-item
     position: relative
     padding: 0 0 .35em 0
     border-bottom: .1em solid #D3DCE7
+    animation: fade-in $cubicEase .4s
 
 .result-list .result-item-checkbox-container
     width: 3em
@@ -418,6 +424,7 @@ $headerHeight = 20em
 
 .result-pagination
     padding: 1em
+    animation: move-in-right $cubicEase .4s
 
 
 // Popup Article Panel Module. | 弹出文章面板模块.

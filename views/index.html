@@ -132,7 +132,7 @@
                   <result-panel flex="100" class="result-panel md-whiteframe-6dp" data-codename="dmhy" ng-show="panelShow.dmhy" data-show="{{panelShow.dmhy}}"></result-panel>
 
                   <%# Result Panel Toolbar. | 结果面板工具条. %>
-                  <div class="result-toolbar no-outline" layout="row" layout-align="center center" ng-show="resultToolbar.show" ng-click="resultToolbar.open = !resultToolbar.open">
+                  <div class="result-toolbar no-outline" layout="row" layout-align="center center" ng-show="resultToolbar.show" ng-click="resultToolbar.forceOpen()">
                       <md-fab-speed-dial md-open="resultToolbar.open" md-direction="left" ng-class="resultToolbar.mode">
                           <md-fab-trigger>
                               <md-button aria-label="menu" class="md-fab md-warn main-button">

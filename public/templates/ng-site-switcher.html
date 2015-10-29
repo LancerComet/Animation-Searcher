@@ -32,8 +32,9 @@
                         <div class="info-stroager finishing-hinter no-outline" data-codename="{{site.codeName}}" ng-click="panelSwitch($event)" data-disabled="{{site.disabled}}" ng-class="{'success': 'success', 'caution': 'caution', 'failed': 'failed', 'none': 'none'}[site.eventType]"></div>
                     </div>
                     <md-progress-linear class="site-switcher-progress transition-dot-4" md-mode="indeterminate" ng-hide="site.hideProgressbar" ng-if="!site.disabled"></md-progress-linear>
-                    <md-tooltip>{{site.title}}</md-tooltip>
+                    <md-tooltip ng-if="!site.disabled">{{site.title}}</md-tooltip>
                 </md-button>
+                <md-tooltip ng-if="site.disabled">永久纪念我们逝去的{{site.name}}.</md-tooltip>
             </md-list-item>
         </md-list>
     </section>

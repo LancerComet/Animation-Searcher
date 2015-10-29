@@ -67,11 +67,14 @@
         // ---------------------------------------------
         $scope.resultToolbar = {
             show: false,
-            open: false,
-            mode: "md-fling",
+            open: true,
+            mode: "md-scale",  // md-fling || md-scale
             copyLinkButton: false,
             checkAllResult: checkAllResult,
-            linkCopy: linkCopy
+            linkCopy: linkCopy,
+            forceOpen: function () {
+                $scope.resultToolbar.open = true;
+            }
         };
 
         $scope.$on("resultToolbar", function (event, value) {
