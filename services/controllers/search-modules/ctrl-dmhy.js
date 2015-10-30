@@ -84,6 +84,8 @@ function dmhyModule (req, res, next) {
         requestingLink = appConfig.site.dmhy.url + "/topics/list?keyword=" + encodeURIComponent(keywords);
     }
 
+    console.log(appConfig.consoleText.info + "动漫花园：即将搜索 " + keywords + " ...");
+
     superAgent
         .get(requestingLink)
         .set('Accept-Encoding', 'gzip, deflate')

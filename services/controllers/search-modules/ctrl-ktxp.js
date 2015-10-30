@@ -29,6 +29,7 @@ function searchModule (req, res, next) {
         requestingLink = appConfig.site[codeName].url + "/search.php?keyword=" + encodeURIComponent(keywords);
     }
 
+    console.log(appConfig.consoleText.info + "极影：即将搜索 " + keywords + " ...");
 
     superAgent
         .get(requestingLink)
