@@ -11,8 +11,8 @@
  */
 ;(function () {
     "use strict";
-    var ngApp = angular.module("ngApp");
-    ngApp.config(["$routeProvider", function ($routeProvider) {
+    var ngFrontendRouter = angular.module("ngFrontendRouter", []);
+    ngFrontendRouter.config(["$routeProvider", function ($routeProvider) {
             $routeProvider.when("/change-log", {
                 template: "",
                 controller: ["$changeLog", function ($changeLog) {

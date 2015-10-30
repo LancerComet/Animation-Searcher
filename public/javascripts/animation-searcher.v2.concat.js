@@ -138,7 +138,7 @@
         "ngAnimate", "ngMaterial", "ngSanitize", "ngRoute",  // Angular Official Modules. | Angular.JS 官方模块.
         "appConfig",  // Angular Application Configuration. | Angular 实例模块设置.
         "internalFunc",  // Internal Functions Add-on Module. | 内部方法模块.
-        "ngAppCtrls", "ngAppDirectives", "ngAppService",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
+        "ngAppCtrls", "ngAppDirectives", "ngAppService", "ngFrontendRouter",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
         "colorThief"  // colorThief Original By Lokesh Dhakar.
     ]);
 
@@ -899,12 +899,11 @@
 (function () {
     "use strict";
 
-    // Definition: Main Controller. | 页面主控制器.
-    // Transferring data between direvtives.
 
     // Definition: Controllers Module & Configuration. | 总控制器模块定义.
     var ngAppCtrls = angular.module("ngAppCtrls", []);
 
+    // Definition: Main Controller. | 页面主控制器.
     ngAppCtrls.controller("mainController", ["$scope", "$rootScope", "$location", "$timeout", "$resultCheck", function ($scope, $rootScope, $location, $timeout, $resultCheck) {
         // Definition: Basic Variables. | 基本变量定义.
         $scope.blurButton = "hide";
@@ -982,7 +981,6 @@
 
     }]);
 
-
     // Definition: Result Panel Controller. | 结果面板控制器.
     // 用来控制结果面板的显示与隐藏.
     ngAppCtrls.controller("resultPanelController", ["$scope", "appConfig", function ($scope, appConfig) {
@@ -1012,14 +1010,10 @@
             });
         });
 
-
-
     }]);
 
-
-
     // Definition: Left Side Navigator Buttons Controller. | 左侧导航按钮控制器.
-    ngAppCtrls.controller("leftNavButtonCtrl", ["$scope", "$http", "$toast", "$leftNav", "$charMsg", "$localStorage", function ($scope, $http, $toast, $leftNav, $charMsg, $localStorage) {
+    ngAppCtrls.controller("leftNavButtonCtrl", ["$scope", "$localStorage", function ($scope, $localStorage) {
 
         // Clear All History Items in Local Storage.
         $scope.clearHistory = function () {
@@ -1028,7 +1022,6 @@
 
     }]);
 
-
     // Definition: Splash Screen Controller. | 载入界面节点控制器.
     ngAppCtrls.controller("splashScreenController", ["$scope", function ($scope) {
         $scope.status = null;  // ngClass adjustment for splash node.
@@ -1036,7 +1029,6 @@
             $scope.status = value;
         });
     }]);
-
 
     // Definition: Service Modules Controller. | 服务模块节点控制器.
     ngAppCtrls.controller("serviceModules", ["$scope", function ($scope) {
@@ -1067,15 +1059,14 @@
     var ngAppDirectives = angular.module("ngAppDirectives", []);
 
     // Definition: ActionBar Directive. | ActionBar 指令.
-    ngAppDirectives.directive("actionBar", function () {
+    ngAppDirectives.directive("actionBar", [function () {
         return {
             restrict: "E",
             scope: {},
             controller: function ($scope, $element, $attrs) {},
             link: function (scope, element, attrs) {}
         }
-    });
-
+    }]);
 
     // Definition: Left Navigator Drawer Button. | 左侧抽屉菜单按钮.
     ngAppDirectives.directive("leftnavMenu", ["$leftNav", function ($leftNav) {
@@ -1089,7 +1080,6 @@
             }
         }
     }]);
-
 
     // Definition: Search Directive. | 搜索模块指令定义.
     ngAppDirectives.directive("searchBar", ["$http", "$toast", "$search" ,"$splashLayout" , function ($http, $toast, $search, $splashLayout) {
@@ -1129,7 +1119,6 @@
             }
         }
     }]);
-
 
     // Definition: Site Switcher Directive. | 搜索结果切换按钮指令.
     ngAppDirectives.directive("siteSwitcher", ["$timeout", "appConfig", "$resultPanelSwitching", function ($timeout, appConfig, $resultPanelSwitching) {
@@ -1197,7 +1186,6 @@
             }
         }
     }]);
-
 
     // Definition: Result Panel Directive. | 结果面板指令.
     ngAppDirectives.directive("resultPanel", ["$compile", "$sce", "$search", "$resultCheck", "appConfig", function ($compile, $sce, $search, $resultCheck, appConfig) {
@@ -1340,14 +1328,15 @@
         }
     }]);
 
-    ngAppDirectives.directive("dynamicBackground", function () {
-       return {
-           restrict: "E",
-           templateUrl: "/templates/ng-dynamic-bk.html",
-           controller: function ($scope, $element, $attrs) {},
-           link: function (scope, element, attrs) {}
-       }
-    });
+    // Definition: Dynamic Background Nodes. | 动态背景指令.
+    ngAppDirectives.directive("dynamicBackground", [function () {
+        return {
+            restrict: "E",
+            templateUrl: "/templates/ng-dynamic-bk.html",
+            controller: function ($scope, $element, $attrs) {},
+            link: function (scope, element, attrs) {}
+        }
+    }]);
 
 })();
 /*
@@ -1504,8 +1493,8 @@
  */
 ;(function () {
     "use strict";
-    var ngApp = angular.module("ngApp");
-    ngApp.config(["$routeProvider", function ($routeProvider) {
+    var ngFrontendRouter = angular.module("ngFrontendRouter", []);
+    ngFrontendRouter.config(["$routeProvider", function ($routeProvider) {
             $routeProvider.when("/change-log", {
                 template: "",
                 controller: ["$changeLog", function ($changeLog) {
@@ -1918,7 +1907,7 @@
 
     // Definition: Color Change Service Module. | 颜色变换服务模块.
     var colorChange = angular.module("colorChange", []);
-    colorChange.factory("$colorChange", function () {
+    colorChange.factory("$colorChange", [function () {
 
         var colorThemeSheet = document.getElementById("color-change");
         var $colorThemeSheet = angular.element(colorThemeSheet);
@@ -1940,7 +1929,7 @@
         return {
             change: colorChange
         }
-    });
+    }]);
 
 
     // Definition: Splash Layout Service Module. | 启动布局服务模块.
@@ -2030,11 +2019,11 @@
 
     // Definition: Clear Material Toast. | 清除可能残余的 Material Toast.
     var clearMdToast = angular.module("clearMdToast", []);
-    clearMdToast.factory("$clearMDToast", function () {
+    clearMdToast.factory("$clearMDToast", [function () {
         return function () {
             angular.element(document.querySelector(".md-content")).remove();
         }
-    });
+    }]);
 
 
     // Definition: Splash Screen Service. | 载入界面服务.
@@ -2152,6 +2141,7 @@
 
     }]);
 
+
     // Definition: Panel Switch Service. | 结果面板切换服务.
     var resultPanelSwitching = angular.module("resultPanelSwitching", []);
     resultPanelSwitching.factory("$resultPanelSwitching", ["$rootScope", function ($rootScope) {
@@ -2161,6 +2151,7 @@
             $rootScope.$broadcast("resultPanelSwitching", codeName);
         }
     }]);
+
 
     // Definition: Result Checking Service. | 搜索结果 Checkbox 选中服务.
     var resultChecking = angular.module("resultChecking", []);

@@ -19,15 +19,14 @@
     var ngAppDirectives = angular.module("ngAppDirectives", []);
 
     // Definition: ActionBar Directive. | ActionBar 指令.
-    ngAppDirectives.directive("actionBar", function () {
+    ngAppDirectives.directive("actionBar", [function () {
         return {
             restrict: "E",
             scope: {},
             controller: function ($scope, $element, $attrs) {},
             link: function (scope, element, attrs) {}
         }
-    });
-
+    }]);
 
     // Definition: Left Navigator Drawer Button. | 左侧抽屉菜单按钮.
     ngAppDirectives.directive("leftnavMenu", ["$leftNav", function ($leftNav) {
@@ -41,7 +40,6 @@
             }
         }
     }]);
-
 
     // Definition: Search Directive. | 搜索模块指令定义.
     ngAppDirectives.directive("searchBar", ["$http", "$toast", "$search" ,"$splashLayout" , function ($http, $toast, $search, $splashLayout) {
@@ -81,7 +79,6 @@
             }
         }
     }]);
-
 
     // Definition: Site Switcher Directive. | 搜索结果切换按钮指令.
     ngAppDirectives.directive("siteSwitcher", ["$timeout", "appConfig", "$resultPanelSwitching", function ($timeout, appConfig, $resultPanelSwitching) {
@@ -149,7 +146,6 @@
             }
         }
     }]);
-
 
     // Definition: Result Panel Directive. | 结果面板指令.
     ngAppDirectives.directive("resultPanel", ["$compile", "$sce", "$search", "$resultCheck", "appConfig", function ($compile, $sce, $search, $resultCheck, appConfig) {
@@ -292,13 +288,14 @@
         }
     }]);
 
-    ngAppDirectives.directive("dynamicBackground", function () {
-       return {
-           restrict: "E",
-           templateUrl: "/templates/ng-dynamic-bk.html",
-           controller: function ($scope, $element, $attrs) {},
-           link: function (scope, element, attrs) {}
-       }
-    });
+    // Definition: Dynamic Background Nodes. | 动态背景指令.
+    ngAppDirectives.directive("dynamicBackground", [function () {
+        return {
+            restrict: "E",
+            templateUrl: "/templates/ng-dynamic-bk.html",
+            controller: function ($scope, $element, $attrs) {},
+            link: function (scope, element, attrs) {}
+        }
+    }]);
 
 })();

@@ -66,7 +66,7 @@
         "ngAnimate", "ngMaterial", "ngSanitize", "ngRoute",  // Angular Official Modules. | Angular.JS 官方模块.
         "appConfig",  // Angular Application Configuration. | Angular 实例模块设置.
         "internalFunc",  // Internal Functions Add-on Module. | 内部方法模块.
-        "ngAppCtrls", "ngAppDirectives", "ngAppService",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
+        "ngAppCtrls", "ngAppDirectives", "ngAppService", "ngFrontendRouter",  // Animation Searcher Main Controller & Directive Modules. | 主控制器与指令模块.
         "colorThief"  // colorThief Original By Lokesh Dhakar.
     ]);
 

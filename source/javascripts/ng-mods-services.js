@@ -362,7 +362,7 @@
 
     // Definition: Color Change Service Module. | 颜色变换服务模块.
     var colorChange = angular.module("colorChange", []);
-    colorChange.factory("$colorChange", function () {
+    colorChange.factory("$colorChange", [function () {
 
         var colorThemeSheet = document.getElementById("color-change");
         var $colorThemeSheet = angular.element(colorThemeSheet);
@@ -384,7 +384,7 @@
         return {
             change: colorChange
         }
-    });
+    }]);
 
 
     // Definition: Splash Layout Service Module. | 启动布局服务模块.
@@ -474,11 +474,11 @@
 
     // Definition: Clear Material Toast. | 清除可能残余的 Material Toast.
     var clearMdToast = angular.module("clearMdToast", []);
-    clearMdToast.factory("$clearMDToast", function () {
+    clearMdToast.factory("$clearMDToast", [function () {
         return function () {
             angular.element(document.querySelector(".md-content")).remove();
         }
-    });
+    }]);
 
 
     // Definition: Splash Screen Service. | 载入界面服务.
@@ -596,6 +596,7 @@
 
     }]);
 
+
     // Definition: Panel Switch Service. | 结果面板切换服务.
     var resultPanelSwitching = angular.module("resultPanelSwitching", []);
     resultPanelSwitching.factory("$resultPanelSwitching", ["$rootScope", function ($rootScope) {
@@ -605,6 +606,7 @@
             $rootScope.$broadcast("resultPanelSwitching", codeName);
         }
     }]);
+
 
     // Definition: Result Checking Service. | 搜索结果 Checkbox 选中服务.
     var resultChecking = angular.module("resultChecking", []);

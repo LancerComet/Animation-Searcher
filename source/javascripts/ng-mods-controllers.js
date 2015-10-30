@@ -16,12 +16,11 @@
 (function () {
     "use strict";
 
-    // Definition: Main Controller. | 页面主控制器.
-    // Transferring data between direvtives.
 
     // Definition: Controllers Module & Configuration. | 总控制器模块定义.
     var ngAppCtrls = angular.module("ngAppCtrls", []);
 
+    // Definition: Main Controller. | 页面主控制器.
     ngAppCtrls.controller("mainController", ["$scope", "$rootScope", "$location", "$timeout", "$resultCheck", function ($scope, $rootScope, $location, $timeout, $resultCheck) {
         // Definition: Basic Variables. | 基本变量定义.
         $scope.blurButton = "hide";
@@ -99,7 +98,6 @@
 
     }]);
 
-
     // Definition: Result Panel Controller. | 结果面板控制器.
     // 用来控制结果面板的显示与隐藏.
     ngAppCtrls.controller("resultPanelController", ["$scope", "appConfig", function ($scope, appConfig) {
@@ -129,14 +127,10 @@
             });
         });
 
-
-
     }]);
 
-
-
     // Definition: Left Side Navigator Buttons Controller. | 左侧导航按钮控制器.
-    ngAppCtrls.controller("leftNavButtonCtrl", ["$scope", "$http", "$toast", "$leftNav", "$charMsg", "$localStorage", function ($scope, $http, $toast, $leftNav, $charMsg, $localStorage) {
+    ngAppCtrls.controller("leftNavButtonCtrl", ["$scope", "$localStorage", function ($scope, $localStorage) {
 
         // Clear All History Items in Local Storage.
         $scope.clearHistory = function () {
@@ -145,7 +139,6 @@
 
     }]);
 
-
     // Definition: Splash Screen Controller. | 载入界面节点控制器.
     ngAppCtrls.controller("splashScreenController", ["$scope", function ($scope) {
         $scope.status = null;  // ngClass adjustment for splash node.
@@ -153,7 +146,6 @@
             $scope.status = value;
         });
     }]);
-
 
     // Definition: Service Modules Controller. | 服务模块节点控制器.
     ngAppCtrls.controller("serviceModules", ["$scope", function ($scope) {
