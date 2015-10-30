@@ -336,9 +336,9 @@ $headerHeight = 20em
     animation: move-in-bottom $cubicEase .6s forwards
     //animation-delay: .5s
 
-.result-panel.ng-hide-remove .result-list,
-.result-panel.ng-hide-remove .result-pagination
-    display: none
+//.result-panel.ng-hide-remove .result-list,
+//.result-panel.ng-hide-remove .result-pagination
+//    display: none
 
 .result-header
     padding: 0 .5em .5em .5em
@@ -369,13 +369,15 @@ $headerHeight = 20em
 
 .result-list .result-item-checkbox-container
     width: 3em
+    height: 1em  // 占位用.
     margin-right: .5em
     float: left
 
 .result-list .result-item-checkbox
-    position: absolute
-    left: .5em
-    top: 1.2em
+    //position: absolute
+    //left: .5em
+    //top: 1.2em
+    margin: -3.2em 1em
     background-color: #fff
     opacity: 0
     &:before

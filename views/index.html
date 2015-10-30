@@ -202,17 +202,17 @@
 
           <%# Splash Screen. | 载入界面. %>
           <div class="splash-screen w-100 h-100 p-absolute p-zero transition-dot-6" layout="column" ng-controller="splashScreenController" ng-class="{'show': 'in', 'hide': 'out'}[status]">
-              <div flex></div>
-              <div flex layout="row">
-                  <div class="flex"></div>
-                  <div class="flex splash-info text-center color-theme text-color ng-cloak">
+              <div flex flex-sm="20"></div>
+              <div flex flex-sm="60" layout="row">
+                  <div flex flex-sm="0"></div>
+                  <div flex flex-sm="100" class="splash-info text-center color-theme text-color ng-cloak">
                       <img src="/images/left-leftnav-author.jpg" alt="Splash Logo." class="author-image">
                       <p class="greeting-text">Carry Your World.</p>
                       <md-progress-linear class="progress" md-mode="query"></md-progress-linear>
                   </div>
-                  <div class="flex"></div>
+                  <div flex flex-sm="0"></div>
               </div>
-              <div flex></div>
+              <div flex flex-sm="20"></div>
           </div>
 
       </div>
