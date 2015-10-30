@@ -84,7 +84,7 @@
 
 
     // Definition: Site Switcher Directive. | 搜索结果切换按钮指令.
-    ngAppDirectives.directive("siteSwitcher", ["appConfig", "$resultPanelSwitching", function (appConfig, $resultPanelSwitching) {
+    ngAppDirectives.directive("siteSwitcher", ["$timeout", "appConfig", "$resultPanelSwitching", function ($timeout, appConfig, $resultPanelSwitching) {
         return {
             restrict: "E",
             scope: true,
@@ -127,11 +127,11 @@
 
                 // Definition: Progress Hiding Listener & Response type hint. | 搜索进度条隐藏监听事件 & 搜索结果类型提示.
                 scope.$on("searchResult", function (event, value) {
-                    // Handle Progressbar Showing / Hiding,
+                    // Handle Progressbar Showing / Hiding. | 进度条隐藏与显示控制.
                     var codeName = value.codeName;
                     scope.siteList[codeName].hideProgressbar = true;
 
-                    // Handle Response type hint.
+                    // Handle Response type hint. | 搜索结果状态 Splashing 指示器.
                     if (value.status === 200) {
                         scope.siteList[codeName].eventType = "success";
                     } else if (value.status === 404) {
@@ -139,6 +139,10 @@
                     } else {
                         scope.siteList[codeName].eventType = "failed";
                     }
+
+                    $timeout(function () {
+                        scope.siteList[codeName].eventType = "none";
+                    }, 500);
                 });
 
 
