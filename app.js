@@ -30,6 +30,14 @@ var appConfig = require("./services/config/app-config");
 
 // Socket.io & Server Setup.
 var port = process.env.PORT || 3000;
+switch (global.devStatus) {
+    case true:
+        port = 3000;
+        break;
+    case false:
+        port = 50001;
+        break;
+}
 app.set("port", port);
 
 var http = require("http").Server(app);

@@ -75,6 +75,7 @@ gulp.task("JS-uglify", function () {
         .pipe(concat("animation-searcher.v2.concat.js"))
         .pipe(gulp.dest(distPath.javascripts))
         .pipe(uglify({
+            mangle: false,
             compress: true
         }))
         .pipe(rename("animation-searcher.v2.min.js"))
