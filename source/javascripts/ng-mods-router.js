@@ -39,8 +39,10 @@
                 }
             ).when("/powered-by", {
                     template: "",
-                    controller: ["$charMsg", function ($charMsg) {
-                        $charMsg.show("Powered By ...", "This site is powered by Angular.JS, Node.JS, Nginx @ Aliyun.");
+                    controller: ["$location", "$toast", function ($location, $toast) {
+                        $toast.showSimpleToast("Powered by Angular.JS, Angular-Material and Node.JS.");
+                        //$charMsg.show("Powered By ...", "This site is powered by Angular.JS, Node.JS, Nginx @ Aliyun.");
+                        $location.path("/");
                     }]
                 }
             ).when("/", {

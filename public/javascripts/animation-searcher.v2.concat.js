@@ -154,7 +154,7 @@
         angular.element(window).on("load", function () {
             var image = document.querySelector("#greeting-background");
             var themeColor = $colorThief.getThemeColor(image);
-            $timeout(function () { $splashScreen.hide(); }, 3000);
+            $timeout(function () { $splashScreen.hide(); }, 1000 + Math.ceil(Math.random() * 2000));
             $timeout(function () { $colorChange.change(themeColor); }, 1000)
         });
 
@@ -922,13 +922,14 @@
         });
 
         // SplashScreen Listener. | 启动画面广播监听.
+        // 启动画面模糊.
         // ---------------------------------------------
-        $scope.$on("splashScreen", function (event, value) {
-            $timeout(function () {
-                $scope.backgroundBlur = "blur";
-                $scope.blurButtonTimeout = $timeout(function () { $scope.blurButton = "show"; }, 5000);  // Show Blur Toggle Button after blur finished.
-            }, 4000);
-        });
+        //$scope.$on("splashScreen", function (event, value) {
+        //    $timeout(function () {
+        //        $scope.backgroundBlur = "blur";
+        //        $scope.blurButtonTimeout = $timeout(function () { $scope.blurButton = "show"; }, 5000);  // Show Blur Toggle Button after blur finished.
+        //    }, 4000);
+        //});
 
 
         // Blur Toggle. | 模糊切换方法.
@@ -949,7 +950,7 @@
         // ---------------------------------------------
         $scope.resultToolbar = {
             show: false,
-            open: true,
+            open: false,
             mode: "md-scale",  // md-fling || md-scale
             copyLinkButton: false,
             checkAllResult: checkAllResult,
@@ -1521,8 +1522,10 @@
                 }
             ).when("/powered-by", {
                     template: "",
-                    controller: ["$charMsg", function ($charMsg) {
-                        $charMsg.show("Powered By ...", "This site is powered by Angular.JS, Node.JS, Nginx @ Aliyun.");
+                    controller: ["$location", "$toast", function ($location, $toast) {
+                        $toast.showSimpleToast("Powered by Angular.JS, Angular-Material and Node.JS.");
+                        //$charMsg.show("Powered By ...", "This site is powered by Angular.JS, Node.JS, Nginx @ Aliyun.");
+                        $location.path("/");
                     }]
                 }
             ).when("/", {

@@ -82,7 +82,7 @@
         angular.element(window).on("load", function () {
             var image = document.querySelector("#greeting-background");
             var themeColor = $colorThief.getThemeColor(image);
-            $timeout(function () { $splashScreen.hide(); }, 3000);
+            $timeout(function () { $splashScreen.hide(); }, 1000 + Math.ceil(Math.random() * 2000));
             $timeout(function () { $colorChange.change(themeColor); }, 1000)
         });
 

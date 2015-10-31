@@ -39,13 +39,14 @@
         });
 
         // SplashScreen Listener. | 启动画面广播监听.
+        // 启动画面模糊.
         // ---------------------------------------------
-        $scope.$on("splashScreen", function (event, value) {
-            $timeout(function () {
-                $scope.backgroundBlur = "blur";
-                $scope.blurButtonTimeout = $timeout(function () { $scope.blurButton = "show"; }, 5000);  // Show Blur Toggle Button after blur finished.
-            }, 4000);
-        });
+        //$scope.$on("splashScreen", function (event, value) {
+        //    $timeout(function () {
+        //        $scope.backgroundBlur = "blur";
+        //        $scope.blurButtonTimeout = $timeout(function () { $scope.blurButton = "show"; }, 5000);  // Show Blur Toggle Button after blur finished.
+        //    }, 4000);
+        //});
 
 
         // Blur Toggle. | 模糊切换方法.
@@ -66,7 +67,7 @@
         // ---------------------------------------------
         $scope.resultToolbar = {
             show: false,
-            open: true,
+            open: false,
             mode: "md-scale",  // md-fling || md-scale
             copyLinkButton: false,
             checkAllResult: checkAllResult,
