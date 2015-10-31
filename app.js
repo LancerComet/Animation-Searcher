@@ -48,7 +48,8 @@ var io = require("socket.io")(http);
 require("./services/controllers/ctrl-index-websocket")(io);
 
 http.listen(port, function () {
-    console.log(appConfig.appInfo.appName + " By © 2015 " + appConfig.appInfo.appName + ".");
+    console.log(appConfig.appInfo.appName + " By © 2015 " + appConfig.appInfo.author + ".");
+    console.log("Version: " + appConfig.appInfo.version);
     console.log(appConfig.appInfo.sign);
     console.log("Server is running at port " + app.get("port") + " in " + app.get("env") + " enviroument.");
 });
