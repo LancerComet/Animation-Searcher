@@ -2059,7 +2059,7 @@
 
     // Definition: Search Service. | 搜索功能服务.
     var searchService = angular.module("searchService", []);
-    searchService.factory("$search", ["$rootScope", "$http", "$toast", "$splashLayout", "appConfig", function ($rootScope, $http, $toast, $splashLayout, appConfig) {
+    searchService.factory("$search", ["$rootScope", "$http", "$toast", "$splashLayout", "$resultCheck", "appConfig", function ($rootScope, $http, $toast, $splashLayout, $resultCheck, appConfig) {
 
         return {
             search: search,
@@ -2075,6 +2075,10 @@
 
         // Definition: Search-requesting Function. | 搜索请求发起函数.
         function search (keywords) {
+
+            // Empty Magnet result array before new search. | 新的搜索前清空之前已勾选磁力链数组.
+            $resultCheck.clear();
+
             // Fire Async Requesting. | 循环发起搜索请求.
             Object.keys(appConfig.site).filter(function (prop) {
                 if (appConfig.site[prop].disabled === true) return;
@@ -2113,7 +2117,6 @@
              *  @ codename: 目标站点.
              *  @ link: 搜索目标链接.
              */
-
             $http.post("/search/" + codename, {
                 mode: "switchPage",
                 link: link
@@ -2164,7 +2167,8 @@
         return {
             checkIt: checkIt,
             checkAll: checkAll,
-            linkCopy: linkCopy
+            linkCopy: linkCopy,
+            clear: clear
         };
 
         function checkIt (magnetLink) {
@@ -2187,6 +2191,10 @@
                 content: selectedMagnet.join("\n"),
                 resultPanel: true
             })
+        }
+
+        function clear () {
+            selectedMagnet = [];
         }
 
     }]);
