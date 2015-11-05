@@ -13,7 +13,7 @@ var configuration = Object.create(null);
 configuration.appInfo = {
 	appName: "Animation Seacher V2.0",
 	author: "LancerComet",
-	version: "0.2.3",
+	version: "0.2.3.1",
 	codeName: "Renascence.",
 	sign: "# Carry Your Word #",
 	devStatus: global.devStatus  // If set to true, the application will require uncompressed javascript-files for debugging.
