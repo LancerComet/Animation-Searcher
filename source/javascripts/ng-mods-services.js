@@ -554,7 +554,7 @@
                     }
                     $rootScope.$broadcast("searchResult", {
                         codeName: prop,
-                        status: data.status || 408
+                        status: 408
                     });  // Broadcast result.
                 });
             });
