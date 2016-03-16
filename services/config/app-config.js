@@ -42,4 +42,9 @@ configuration.site = {
 	dmhy: { name: "动漫花园", codeName: "dmhy", fullName: "DongMan HuaYuan",  url: "https://share.dmhy.org", icon: "http://tp2.sinaimg.cn/1926582581/180/22817929400/0", disabled: false }
 };
 
+// Others configuration. | 其他配置信息.
+configuration.others = {
+    proxy: "http://127.0.0.1:1080"  // HTTP Proxy Server URL. SuperAgent will request some sites via this server.    
+}
+
 module.exports = configuration;
