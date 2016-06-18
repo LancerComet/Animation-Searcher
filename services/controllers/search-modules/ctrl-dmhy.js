@@ -1,6 +1,6 @@
 /*
  *  Dongman Huayuan Search Module By LancerComet at 23:14, 2015/10/21.
- *  © 2015 LancerComet.
+ *  ? 2015 LancerComet.
  *  # Carry Your World #
  *  ---
  *
@@ -12,16 +12,12 @@
  *
  *  ChangeLog:
  *  ---
- *  V0.2.0 - 15:18, 2016.03.16.
- *   + 增加代理访问: superagent-proxy. [https://github.com/TooTallNate/superagent-proxy] 
- * 
  *  V0.1.9 - 23:19, 2015.10.21.
  *   + 初版.
  */
 
 var superAgent = require("superagent");
 var cheerio = require("cheerio");
-require("superagent-proxy")(superAgent);  // Load SuperAgent-Proxy.
 
 var appConfig = require("../../config/app-config");
 
@@ -34,8 +30,6 @@ var dmhyCookie = {
     visitStatus: true,  // @ False: Prevent Application from visiting DMHY.
     visitInterval: 3  // Visit Interval: 3 minutes.
 };
-
-var proxyAddress = appConfig.others.proxy;  // Local HTTP Proxy Server.
 
 // Definition: DMHY Cookie Refresher. | 动漫花园 Cookie 刷新函数.
 (function dmhyCookieFunction () {
@@ -58,7 +52,6 @@ var proxyAddress = appConfig.others.proxy;  // Local HTTP Proxy Server.
             console.log("Search Module DMHY: 即将开始预先访问动漫花园取得 Cookie...");
             superAgent
                 .get(appConfig.site.dmhy.url)
-                .proxy(proxyAddress)
                 .set('Accept', 'text/html, application/xhtml+xml, */*')
                 .set('Accept-Encoding', 'gzip, deflate')
                 .set('Accept-Language', 'zh-CN')
@@ -95,7 +88,6 @@ function dmhyModule (req, res, next) {
 
     superAgent
         .get(requestingLink)
-        .proxy(proxyAddress)        
         .set('Accept-Encoding', 'gzip, deflate')
         .set('Accept-Language', 'zh-CN')
         .set("Connection", "Keep-Alive")
