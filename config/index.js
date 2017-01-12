@@ -4,10 +4,8 @@
 	---
 	程序设置文件.
 */
-
-// Definition: Configuration Object. | 设置对象本体.
-// Total a blank object.
-var configuration = Object.create(null);
+const packageJSON = require('../package.json')
+const configuration = Object.create(null);
 
 // Application Information. | 应用基本信息.
 configuration.appInfo = {
@@ -15,8 +13,7 @@ configuration.appInfo = {
 	author: "LancerComet",
 	version: "0.2.3.2",
 	codeName: "Renascence.",
-	sign: "# Carry Your Word #",
-	devStatus: global.devStatus  // If set to true, the application will require uncompressed javascript-files for debugging.
+	sign: "# Carry Your Word #"
 };
 
 // Console Text Prefix. | 控制台文字前缀.
