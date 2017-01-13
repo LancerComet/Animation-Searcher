@@ -1,0 +1,29 @@
+//
+  Animation Searcher V3.0 By © 2015-2017 LancerComet.
+  # Carry Your World #
+
+doctype
+html(lang="zh-cmn-Hans")
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
+    meta(name="renderer", content="webkit")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title #{APNAME}
+    meta(http-equiv="Cache-Control" content="no-siteapp")
+    meta(name="keywords" content="动画,漫画,动漫,音乐,二次元,宅,资源,搜索,下载,Animation,ACG,Download,Searcher,Resource,LancerComet")
+    meta(name="description" content="Carry Your World.")
+    meta(name="author" content="LancerComet")
+    meta(name="version" content="#{VERSION}")
+    meta(name="robots" content="index,follow")
+    link(rel="shortcut icon" type="image/ico" href="/favicon.ico")
+    base(href="/")
+    each css in htmlWebpackPlugin.files.css
+      link(href="#{css}", rel="stylesheet")
+
+  body
+    div.app-ctnr
+      main#app-main
+      div.script-requirement
+        each chunk in htmlWebpackPlugin.files.chunks
+          script(src="#{chunk.entry}")

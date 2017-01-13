@@ -3,7 +3,12 @@
  * Development enviroument.
  */
 process.env.NODE_ENV = 'development'
+
 const APP_CONFIG = {
-    port: 3000
+  port: 3000,
+  env: process.env.NODE_ENV
 }
-requir('./app')(APP_CONFIG)
+
+require('./app')(APP_CONFIG)
+
+module.exports = APP_CONFIG

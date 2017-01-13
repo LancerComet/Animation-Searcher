@@ -14,19 +14,18 @@ const favicon = require('serve-favicon')
 const logger = require('morgan')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
-const ejs = require('ejs')
+const jade = require('jade')
 const app = express()
 
 const service = require('./be/services')
 
-module.exports = function ({ port }) {
+module.exports = function ({ port, env }) {
   // Setup port.
   app.set('port', port)
 
   // View Engine.
   app.set('views', path.join(__dirname, 'views'))
-  app.engine('html', ejs.__express)
-  app.set('view engine', 'html')
+  app.set('view engine', jade)
 
   // Setup http server.
   const http = require('http').Server(app)
@@ -36,7 +35,7 @@ module.exports = function ({ port }) {
     console.log(`${appConfig.appInfo.appName} By © 2015 - 2017 ${appConfig.appInfo.author}.`)
     console.log(`Version: ${appConfig.appInfo.version}`)
     console.log(appConfig.appInfo.sign)
-    console.log(`Server is running at port ${app.get('port')} in ${app.get('env')} enviroument.`)
+    console.log(`Server is running at port ${app.get('port')} in ${env} enviroument.`)
   })
 
   // WebSocket Service Initialization.
@@ -59,39 +58,19 @@ module.exports = function ({ port }) {
   app.use(express.static(path.join(__dirname, 'public')))
 
   // Router.
-  const routes = require('./be/')
-}
+  const routes = require('./app/be/src.backend/routes')
+  app.use('/', routes)
 
-
-
-// Routes Requirement. | 路由引用.
-var routes = require('./services/main-route')
-app.use('/', routes)
-
-
-// error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  // Error Handlers.
+  app.use((err, req, res, next) => {
     res.status(err.status || 500)
-    res.render('error', {
-      message: err.message,
-      error: err
-    })
+      .render('error', {
+        message: err.message,
+        error: env === 'development'
+          ? err
+          : {}
+      })
   })
 }
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500)
-  res.render('error', {
-    message: err.message,
-    error: {}
-  })
-})
-
 
 module.exports = app
