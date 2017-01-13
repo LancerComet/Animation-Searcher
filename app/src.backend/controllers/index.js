@@ -1,6 +1,6 @@
 /**
  * Controller file.
- * 
+ *
  * Changelog:
  * ---
  * V0.3.0 @ 1:12, 2017.01.13.
@@ -8,14 +8,11 @@
  */
 
 const index = require('./ctrl.index')
-const search = require('./ctrl.search')
-
-const error = requir('./ctrl.error.js')
 const changeLog = require('./ctrl.change-log')
+const search = require('./ctrl.search')
 
 module.exports = {
   index,
-  search,
   changeLog,
-  error
+  search
 }

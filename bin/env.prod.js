@@ -9,6 +9,6 @@ const APP_CONFIG = {
   env: process.env.NODE_ENV
 }
 
-require('./app')(APP_CONFIG)
+require('../app')(APP_CONFIG)
 
 module.exports = APP_CONFIG

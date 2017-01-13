@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "allowJs": false,
+    "allowJs": true,
+    "module": "commonjs",
     "lib": [
       "dom", "es2015"
     ],
