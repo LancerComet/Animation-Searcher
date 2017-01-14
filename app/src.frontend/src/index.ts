@@ -57,15 +57,45 @@ import * as Vue from 'vue'
 import * as VueRouter from 'vue-router'
 import * as VueMaterial from 'vue-material'
 
-const App = require('./components/App.vue')
+// Components.
+import * as components from './components'
+
+// Style.
+require('./style/index.styl')
+require('vue-material/dist/vue-material.css')
+
+// Others.
+import EventBus from './event-bus'
 
 Vue.use(VueRouter)
 Vue.use(VueMaterial)
 
+// Router config.
+const router = new VueRouter({
+  mode: 'history',
+  routes: []
+})
+
 // Root instance.
 const Root = new Vue({
   el: '#app-main',
+
+  router,
+
   components: {
-    App
+    SplashScreen: components.SplashScreen
+  },
+
+  methods: {
+    init () {
+      if (process.env.NODE_ENV === 'development') {
+        console.info('[Info] App inited.')
+      }
+      EventBus.$emit('SplashScreen:Process')
+    }
+  },
+
+  mounted () {
+    this['init']()  // Why does typescript throw an error when calling "this.init()" ?
   }
 })

@@ -5,12 +5,7 @@
     "lib": [
       "dom", "es2015"
     ],
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true
-  },
-  "include": [
-    "*.ts",
-    "*.js",
-    "*.jade",
-    "*.vue"
-  ]
+  }
 }

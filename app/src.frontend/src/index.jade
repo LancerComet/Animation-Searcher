@@ -24,7 +24,8 @@ html(lang="zh-cmn-Hans")
   body
     div.animation-searcher
       main#app-main
-        app
+        router-view
+        splash-screen
 
       div.script-requirement
         each chunk in htmlWebpackPlugin.files.chunks
