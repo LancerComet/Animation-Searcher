@@ -5,9 +5,9 @@
  *  更新日志读取控制器.
  */
 
-const changeLog = require('../change-log')
+const changeLogData = require('../change-log')
 const { ResponseJSON } = require('../define')
 
 module.exports = function (req, res, next) {
-  res.json(new ResponseJSON(200, 'ok', changeLog))
+  res.json(new ResponseJSON(200, 'ok', changeLogData))
 }

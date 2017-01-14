@@ -2,6 +2,9 @@
  *  CASO Search Module By LancerComet at 23:14, 2015/10/21.
  *  # Carry Your World #
  *  ---
+ *  ** This module is ABANDONED because there is no more caso site. :( **
+ *  Code in module is old and useless.
+ *  RIP.
  *
  *  Info:
  *  ---
@@ -12,130 +15,110 @@
  *
  *  ChangeLog:
  *  ---
+ *  V0.3.0 - 14:24, 2017.01.14.
+ *  + New update.
+ *
  *  V0.1.9 - 23:20, 2015.10.21.
  *   + 初版.
  */
 
-var superAgent = require("superagent");
-var cheerio = require("cheerio");
+const superAgent = require('superagent')
+const cheerio = require('cheerio')
 
-var appConfig = require("../../config/app-config");
-var codeName = "caso";
+const appConfig = require('../../../config')
+const { ResponseJSON } = require('../../define')
 
-function searchModule (req, res, next) {
-    "use strict";
+const MODULE_NAME = 'caso'
 
-    var requestingLink = null;  // Requesting Link for superAgent.
-    if (req.body.mode === "switchPage") {
-        requestingLink = req.body.link;
-    } else {
-        var keywords = req.body.keywords;  // Keywords for look-up. | 查询关键字.
-        requestingLink = appConfig.site[codeName].url + "/search.php?keyword=" + encodeURIComponent(keywords);
-    }
+module.exports = function (req, res, next) {
+  'use strict'
 
-    console.log(appConfig.consoleText.info + "华盟：即将搜索 " + keywords + " ...");
+  let requestingLink = null
+  let keywords = null
+  const requestMode = req.body.mode
 
-    superAgent
-        .get(requestingLink)
-        .set('Accept-Encoding', 'gzip, deflate')
-        .set('Accept-Language', 'zh-CN')
-        .set("Connection", "Keep-Alive")
-        .set("DNT","1")
-        .set('User-Agent', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko')
-        .end(function (superAgentError, superAgentResponse) {
+  if (requestMode === 'switchPage') {
+    requestingLink = req.body.link
+  } else {
+    keywords = req.body.keywords
+    requestingLink = appConfig.site[MODULE_NAME].url + '/search.php?keyword=' + encodeURIComponent(keywords)
+  }
 
-            // Error Handler.
-            if (superAgentError) {
-                res.status(500).json({
-                    status: 500,
-                    type: "error",
-                    info: "华萌姐：华……华萌姐才没有傲娇呢 ~~ 哼！,,Ծ‸Ծ,,",
-                    action: "华萌姐萌死了！",
-                    detail: superAgentError
-                });
-                console.log(appConfig.consoleText.error + "SuperAgent for " + appConfig.site[codeName].codeName + " failed:");
-                console.log(superAgentError);
-                return false;
-            }
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`[Info] 华盟: 即将搜索 ${keywords} ...`)
+  }
 
+  superAgent
+    .get(requestingLink)
+    .set('Accept-Encoding', 'gzip, deflate')
+    .set('Accept-Language', 'zh-CN')
+    .set('Connection', 'Keep-Alive')
+    .set('DNT', '1')
+    .set('User-Agent', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko')
+    .end((err, sres) => {
+      // Request failed.
+      if (err) {
+        const status = 500
+        return res.status(status).json(new ResponseJSON(status, '华萌姐：华……华萌姐才没有傲娇呢 ~~ 哼！,,Ծ‸Ծ,,'))
+      }
 
-            /*
-             *     华盟的页面结构
-             *     --------------------------------------
-             *     结果全部位于 "#main .list_table" 中。
-             *     结果 Dom 是 $("#main .list_table").children("tr:gt(0)").
-             *     标题位于 $("#main .list_table").children("tr:gt(0)").children("td.title_name").children("a").eq(0).text() 中。
-             *     发布日期位于 $("#main .list_table").children("tr:gt(0)").children("td.publishtime").text() 中。
-             *     种子链接位于 $("#main .list_table").children("tr:gt(0)").children("td.title_name").children("a").eq(1).children("a").attr("href") 中。
-             *     磁力链位于 $("#main .list_table").children("tr:gt(0)").children("td.title_name").children("a").eq(2).children("a").attr("href") 中。
-             *     翻页链接位于 $("#footer_content .pager").html();
-             *
-             */
+      /*
+       *  华盟的页面结构
+       *  --------------------------------------
+       *  结果全部位于 "#main .list_table" 中。
+       *  结果 Dom 是 $("#main .list_table").children("tr:gt(0)").
+       *  标题位于 $("#main .list_table").children("tr:gt(0)").children("td.title_name").children("a").eq(0).text() 中。
+       *  发布日期位于 $("#main .list_table").children("tr:gt(0)").children("td.publishtime").text() 中。
+       *  种子链接位于 $("#main .list_table").children("tr:gt(0)").children("td.title_name").children("a").eq(1).children("a").attr("href") 中。
+       *  磁力链位于 $("#main .list_table").children("tr:gt(0)").children("td.title_name").children("a").eq(2).children("a").attr("href") 中。
+       *  翻页链接位于 $("#footer_content .pager").html();
+       */
 
-            // Initialize Cheerio and refer to "$" just like jQuery.
-            // 初始化 Cheerio.
-            var $ = cheerio.load(superAgentResponse.text);
+      const $ = cheerio.load(sres.text)
 
-            // No Result Handler. | 无搜索结果.
-            var $listTable = $(".list_table");
-            if ($listTable.find("tr").length === 0) {
-                console.log(appConfig.consoleText.info + "华盟: 未搜索到内容.");
-                res.status(404).json({
-                    status: 404,
-                    type: "info",
-                    info: "华萌姐：没有找到内容~ ＞︿＜",
-                    action:"摸摸华萌姐~"
-                });
-                return true;
-            }
+      const $listTable = $('.list_table')
+      const $resultList = $listTable.find('tr')
 
-            // We have got result ! | 有搜索结果.
-            // Definition: DMHY Result Data Object. | 动漫花园搜索结果数据对象.
-            var resultObject = Object.create(null);  // Empty object for clean data restoring.
-            resultObject.result = [];  // Restore result data. | 存放搜索结果.
-                                           // @ Item in "resultObject.result" : { title: String, link: String, magnet: String, Date: String }
-            resultObject.pageLink = $("#footer_content").find(".pager").html();  // Page Switcher HTML Fragment. | 翻页按钮 HTML.
+      if ($resultList.length === 0) {
+        const status = 404
+        return res.status(status).json(new ResponseJSON(status, '华... 华萌姐没找到内容啦~ ＞︿＜'))
+      }
 
-            // If there comes pageLink, take replacing action with regexp.
-            // 如果存在翻页按钮数据, 进行正则替换.
-            if (resultObject.pageLink) {
-                var regExp = /href="/g;
-                resultObject.pageLink = resultObject.pageLink.replace(regExp, 'href="javascript:void(0)" class="pagination-item" ng-click="switchPage($event, \'' + codeName + '\')" data-request-link="' + appConfig.site[codeName].url + "/");
-            }
+      /**
+       * Object that contains result data.
+       */
+      const resultObj = {
+        result: [],  // Item in this array: { title: string, link: string, magnet: string, Date: string }
+        pageLink: $('#footer_content').find('.papger').html()
+      }
 
-            // Push results to "resultObject.result". | 推送搜索结果到结果对象.
-            var $resultTr = $listTable.find("tr");
-            var resultLength = $resultTr.length;
-            $resultTr.each(function () {
-                var $titleName = $(this).find(".title_name");
-                var resultKey = {
-                    title: $titleName.children("a").first().text(),
-                    link: appConfig.site[codeName].url + $titleName.children("a").eq(0).attr("href"),
-                    torrent: appConfig.site[codeName].url + $titleName.children("a").eq(1).attr("href"),
-                    magnet: $titleName.children("a").eq(2).attr("href"),
-                    date: $(this).children(".publishtime").text()
-                };
-                resultObject.result.push(resultKey);
-                resultObject.result.length === resultLength ? returnResult() : void(0);
-            });
+      if (resultObj.pageLink) {
+        const regExp = /href="/g
+        resultObj.pageLink = resultObj.pageLink
+          .replace(regExp, 'href="javascript:void(0)" class="pagination-item" ng-click="switchPage($event, \'' + MODULE_NAME + '\')" data-request-link="' + appConfig.site[MODULE_NAME].url + '/')
 
-            // Definition: Result-returning function. | 结果返回函数.
-            function returnResult () {
-                resultObject.result.splice(0, 1);  // Remove First Empty Result.
-                var returnObj = {
-                    status: 200,
-                    info: "华萌姐搜索完毕~~(●'◡'●)ﾉ♥",
-                    action: "华萌姐辛苦了！",
-                    codeName: codeName
-                };
-                returnObj[codeName] = resultObject;  // { result: [], pageLink: "" }
-                res.status(200).json(returnObj);
-            }
+        const $resultTr = $listTable.find('tr')
 
+        // jQuery each function.
+        // And has context binding.
+        $resultTr.each(function () {
+          const $titleName = $(this).find('.title_name')
+          const resultKey = {
+            title: $titleName.children('a').first().text(),
+            link: appConfig.site[MODULE_NAME].url + $titleName.children('a').eq(0).attr('href'),
+            torrent: appConfig.site[MODULE_NAME].url + $titleName.children('a').eq(1).attr('href'),
+            magnet: $titleName.children('a').eq(2).attr('href'),
+            date: $(this).children('.publishtime').text()
+          }
+          resultObj.result.push(resultKey)
+        })
 
-        });
+        // The first item is always empty, just remove it.
+        resultObj.result.splice(0, 1)
 
-
+        const status = 200
+        res.status(status).json(new ResponseJSON(status, `华萌姐搜索完毕~~ (●'◡'●)ﾉ♥`, resultObj))
+      }
+    })
 }
 
-module.exports = searchModule;

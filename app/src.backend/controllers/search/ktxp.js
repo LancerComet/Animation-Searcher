@@ -2,7 +2,9 @@
  *  KTXP Search Module By LancerComet at 23:14, 2015/10/21.
  *  # Carry Your World #
  *  ---
- *
+ *  ** This module is ABANDONED because there is no more ktxp site. :( **
+ *  Code in module is old and useless.
+ *  RIP.
  *
  *  ChangeLog:
  *  ---

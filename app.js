@@ -14,25 +14,24 @@ const favicon = require('serve-favicon')
 const logger = require('morgan')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
-const jade = require('jade')
 const app = express()
 
 const appConfig = require('./app/config')
 const service = require('./app/src.backend/services')
 
-module.exports = function ({ port, env }) {
+module.exports = ({ port, env }) => {
   // Setup port.
   app.set('port', port)
 
   // View Engine.
   app.set('views', path.join(__dirname, 'views'))
-  app.set('view engine', jade)
+  app.set('view engine', 'jade')
 
   // Setup http server.
   const http = require('http').Server(app)
   const io = require('socket.io')(http)
 
-  http.listen(port, function () {
+  http.listen(port, () => {
     console.log(`${appConfig.appInfo.name} By © 2015 - 2017 LancerComet.`)
     console.log(`Version: ${appConfig.appInfo.version}`)
     console.log('--------------------')
@@ -43,7 +42,7 @@ module.exports = function ({ port, env }) {
   service.webSocket(io)
 
   // CORS is allowed.
-  app.all('*', function (req, res, next) {
+  app.all('*', (req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*.lancercomet.com')
     res.header('Access-Control-Allow-Headers', 'X-Requested-With')
     res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
@@ -59,7 +58,7 @@ module.exports = function ({ port, env }) {
   app.use(express.static(path.join(__dirname, 'public')))
 
   // Router.
-  const routes = require('./app/be/src.backend/routes')
+  const routes = require('./app/src.backend/routes')
   app.use('/', routes)
 
   // Error Handlers.

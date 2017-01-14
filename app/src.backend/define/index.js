@@ -7,7 +7,7 @@ class ResponseJSON {
   constructor (status = 200, message = 'ok', data) {
     this.status = status
     this.message = message
-    if (data) { this.data = data }
+    if (data !== undefined) { this.data = data }
   }
 }
 
