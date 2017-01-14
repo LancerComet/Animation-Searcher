@@ -17,7 +17,7 @@ const bodyParser = require('body-parser')
 const app = express()
 
 const appConfig = require('./app/config')
-const service = require('./app/src.backend/services')
+const service = require('./app/src.server/services')
 
 module.exports = ({ port, env }) => {
   // Setup port.
@@ -58,7 +58,7 @@ module.exports = ({ port, env }) => {
   app.use(express.static(path.join(__dirname, 'public')))
 
   // Router.
-  const routes = require('./app/src.backend/routes')
+  const routes = require('./app/src.server/routes')
   app.use('/', routes)
 
   // Error Handlers.

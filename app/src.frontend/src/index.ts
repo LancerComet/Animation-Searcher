@@ -8,7 +8,7 @@
  *  ChangeLog:
  *  ---
  *  V0.3.0 - 15:52, 2017.01.13.
- *   + Vue 重构.
+ *   + New update.
  *
  *  V0.1.8 - 22:25, 2015.10.20.
  *   + 历史记录面板.
@@ -55,4 +55,17 @@
 
 import * as Vue from 'vue'
 import * as VueRouter from 'vue-router'
+import * as VueMaterial from 'vue-material'
 
+const App = require('./components/App.vue')
+
+Vue.use(VueRouter)
+Vue.use(VueMaterial)
+
+// Root instance.
+const Root = new Vue({
+  el: '#app-main',
+  components: {
+    App
+  }
+})

@@ -4,8 +4,9 @@
   "description": "New Version Animation Searcher.",
   "main": "app.js",
   "scripts": {
-    "start": "npm run production",
-    "dev": "node ./bin/env.dev.js",
+    "fe-dev": "node ./app/src.frontend/build/utils/dev-server.js",
+    "fe-build": "node ./app/src.frontend/build/utils/build.js",
+    "server-dev": "node ./bin/env.dev.js",
     "production": "node ./bin/env.prod.js"
   },
   "keywords": [
@@ -19,6 +20,7 @@
   },
   "license": "GPLv3",
   "dependencies": {
+    "axios": "^0.15.3",
     "body-parser": "^1.15.2",
     "cheerio": "^0.22.0",
     "cookie-parser": "^1.4.3",
@@ -94,13 +96,16 @@
     "ts-loader": "^1.3.3",
     "typescript": "^2.1.4",
     "url-loader": "^0.5.7",
-    "vue-hot-reload-api": "^1.3.3",
-    "vue-html-loader": "^1.0.0",
-    "vue-loader": "^8.3.0",
+    "vue-loader": "^10.0.0",
     "vue-style-loader": "^1.0.0",
+    "vue-template-compiler": "^2.1.0",
     "webpack": "^1.13.2",
     "webpack-dev-middleware": "^1.8.3",
     "webpack-hot-middleware": "^2.12.2",
     "webpack-merge": "^0.14.1"
+  },
+  "engines": {
+    "node": ">= 4.0.0",
+    "npm": ">= 3.0.0"
   }
 }

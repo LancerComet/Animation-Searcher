@@ -1,10 +1,16 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "module": "commonjs",
+    "target": "es5",
     "lib": [
       "dom", "es2015"
     ],
     "experimentalDecorators": true
-  }
+  },
+  "include": [
+    "*.ts",
+    "*.js",
+    "*.jade",
+    "*.vue"
+  ]
 }

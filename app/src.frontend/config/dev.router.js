@@ -12,7 +12,7 @@
  */
 'use strict'
 
-const DEV_SERVER_PORT = require('../../../env.dev').port
+const DEV_SERVER_PORT = require('../../../bin/env.dev').port
 
 class RouterConfig {
   constructor (url) {
@@ -38,7 +38,7 @@ const config = {};
 // 目标不匹配的特例.
 (function () {
   const specialRoles = [
-    { origin: '/i/api/liveinfo', target: '/IApI/liveinfo' }  // 个人中心账号信息.
+    // { origin: '/test', target: '/api/v1/test' }
   ]
 
   specialRoles.forEach(item => {

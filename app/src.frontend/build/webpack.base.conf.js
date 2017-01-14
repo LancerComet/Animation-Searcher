@@ -22,7 +22,7 @@ const srcPath = projectIncludePaths[0]
 
 // Root path.
 const feRoot = path.resolve(__dirname, '../')
-const projectRoot = path.resovle(__dirname, '../../../')
+const projectRoot = path.resolve(__dirname, '../../../')
 const nodeModulesPath = path.resolve(projectRoot, 'node_modules/')
 
 // Auto prefixer configuration.
@@ -59,12 +59,12 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'eslint',
-        include: srcPath
+        include: [srcPath]
       },
       {
         test: /\.js$/,
         loader: 'eslint',
-        include: srcPath
+        include: [srcPath]
       }
     ],
 

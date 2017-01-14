@@ -9,7 +9,7 @@ html(lang="zh-cmn-Hans")
     meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
     meta(name="renderer", content="webkit")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title #{APNAME}
+    title #{APPNAME}
     meta(http-equiv="Cache-Control" content="no-siteapp")
     meta(name="keywords" content="动画,漫画,动漫,音乐,二次元,宅,资源,搜索,下载,Animation,ACG,Download,Searcher,Resource,LancerComet")
     meta(name="description" content="Carry Your World.")
@@ -22,8 +22,10 @@ html(lang="zh-cmn-Hans")
       link(href="#{css}", rel="stylesheet")
 
   body
-    div.app-ctnr
+    div.animation-searcher
       main#app-main
+        app
+
       div.script-requirement
         each chunk in htmlWebpackPlugin.files.chunks
           script(src="#{chunk.entry}")

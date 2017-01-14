@@ -8,11 +8,13 @@
  */
 
 const index = require('./ctrl.index')
+const bgUrl = require('./ctrl.bg-url')
 const changeLog = require('./ctrl.change-log')
 const search = require('./ctrl.search')
 
 module.exports = {
   index,
+  bgUrl,
   changeLog,
   search
 }

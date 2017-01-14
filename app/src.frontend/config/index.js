@@ -14,7 +14,7 @@ const projectRoot = path.resolve(__dirname, '../../../')
 module.exports = {
   // 基础设置.
   base: {
-    app: feRoot + '/src/index.js',  // 项目入口 JS 文件.
+    app: feRoot + '/src/index.ts',  // 项目入口 JS 文件.
     template: feRoot + '/src/index.jade'  // 项目入口模板路径.
   },
 

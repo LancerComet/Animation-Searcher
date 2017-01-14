@@ -15,6 +15,5 @@
  *  + 新版的初版.
  */
 module.exports = function (req, res, next) {
-  res.render('index', {
-  })
+  res.render('index', {})
 }
