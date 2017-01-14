@@ -4,10 +4,13 @@
   "description": "New Version Animation Searcher.",
   "main": "app.js",
   "scripts": {
+    "prestart": "npm install && npm run fe-build",
+    "start": "npm run server-prod",
+    "dev": "node ./bin/env.dev.all.js",
     "fe-dev": "node ./app/src.frontend/build/utils/dev-server.js",
     "fe-build": "node ./app/src.frontend/build/utils/build.js",
     "server-dev": "node ./bin/env.dev.js",
-    "production": "node ./bin/env.prod.js"
+    "server-prod": "node ./bin/env.prod.js"
   },
   "keywords": [
     "Animation",
@@ -17,6 +20,14 @@
   "author": {
     "name": "LancerComet",
     "email": "chw644@hotmail.com"
+  },
+  "engines": {
+    "node": ">= 4.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "port": {
+    "dev": 3000,
+    "prod": 50001
   },
   "license": "GPLv3",
   "dependencies": {
@@ -105,9 +116,5 @@
     "webpack-dev-middleware": "^1.8.3",
     "webpack-hot-middleware": "^2.12.2",
     "webpack-merge": "^0.14.1"
-  },
-  "engines": {
-    "node": ">= 4.0.0",
-    "npm": ">= 3.0.0"
   }
 }

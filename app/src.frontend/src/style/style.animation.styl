@@ -10,13 +10,27 @@
     transform: translate(0, 0)
 
 .a-move-in-top
-  animation: move-in-top $cubicEase .4s
+  animation: move-in-top $cubicEase .5s
 
 @keyframes move-in-bottom
   from
     transform: translate(0, -100%)
   to
     transform: translate(0, 0)
+
+.a-move-in-bottom
+  animation: move-in-bottom $cubicEase .5s
+
+@keyframes move-in-left
+  from
+    opacity: 0
+    transform: translate(100%, 0)
+  to
+    opacity: 1
+    transform: translate(0, 0)
+
+.a-move-in-left
+  animation: move-in-left $cubicEase .5s
 
 @keyframes move-out-top
   from
