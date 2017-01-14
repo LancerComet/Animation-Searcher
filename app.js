@@ -35,7 +35,7 @@ module.exports = ({ port, env }) => {
     console.log(`${appConfig.appInfo.name} By © 2015 - 2017 LancerComet.`)
     console.log(`Version: ${appConfig.appInfo.version}`)
     console.log('--------------------')
-    console.log(`Server is running at port ${app.get('port')} in ${env} enviroument.`)
+    console.log(`Server is running at port ${app.get('port')} in ${env} enviroument.\n`)
   })
 
   // WebSocket Service Initialization.
@@ -50,7 +50,7 @@ module.exports = ({ port, env }) => {
   })
 
   // Middlewares.
-  app.use(favicon(path.resolve(__dirname, '/public/favicon.ico')))
+  app.use(favicon(path.resolve(__dirname, './public/favicon.ico')))
   app.use(logger('dev'))
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: false }))
@@ -72,5 +72,3 @@ module.exports = ({ port, env }) => {
       })
   })
 }
-
-module.exports = app
