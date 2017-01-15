@@ -32,3 +32,6 @@ node_modules
 
 # Public files.
 public/
+
+# PM2 Ecosystem.
+ecosystem.config.js

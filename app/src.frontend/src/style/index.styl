@@ -4,22 +4,19 @@
 @import "./style.class-based.styl"
 @import "./style.vue-transition.styl"
 
-// Fontello,
-@import "../../libs/fontello/css/fontello.css"
-
 // Restyling.
 html
   font-size: $rootFontSize
 
-a
-p
 html
-input
-label
-button
-textarea
+a, p,
+input, label, textarea, button
 h1, h2, h3, h4, h5, h6
   font-family: Microsoft Yahei, "微软雅黑", sans-serif, Tahoma, Helvetica, Arial !important
+
+.md-button
+  min-width: 0 !important
+  min-height: 0 !important
 
 // Custom style.
 .main-section
@@ -28,3 +25,4 @@ h1, h2, h3, h4, h5, h6
   position: absolute
   top: 0
   left: 0
+

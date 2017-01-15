@@ -1,12 +1,20 @@
 <template lang="jade">
-  div.search-bar-ctnr.w-100.p-absolute.m-auto(:class="currentStatus")
-    div.dp-flex.flex-row.flex-center-h.m-auto
-      div.drawer-menu-btn(ref="drawerMenuBtn")
-      div.search-bar
-        md-input-container(style="margin: 0")
-          label(v-text="quote")
-          md-input
-      md-button.search-btn
+  div.search-bar-ctnr.w-100.p-absolute.m-auto(:class="searchBarStatus")
+    form(name="search-form" @submit.prevent="search")
+      div.dp-flex.flex-row.flex-center-h.m-auto
+        //- Drawer Menu Button.
+        md-button.drawer-menu-btn(@click="toggleDrawerMenuStatus")
+          div.menu-icon.m-auto(ref="drawerMenuBtn")
+
+        //- Search bar.
+        div.search-bar
+          md-input-container.search-input-ctnr
+            label(v-text="quote")
+            md-input.search-input(v-model="keyword")
+
+        //- Search Button.
+        md-button.search-btn.v-bottom
+          i.material-icons.v-middle search
 </template>
 
 <style lang="stylus" scoped>
@@ -14,8 +22,8 @@
 
   .search-bar-ctnr
     width: 90%
-    max-width: size(800px)
-    background-color: green
+    max-width: size(700px)
+    // background-color: green
 
     &.greeting
       @media screen and (max-height: size(480px))
@@ -27,23 +35,59 @@
       @media screen and (min-height: size(600px))
         top: 35%
 
-    $btnSize = size(48px)
+    $searchBarHeight = size(48px)
+
     .drawer-menu-btn
+      $btnSize = size(35px)
       width: $btnSize
       height: @width
-      background-color: red
+      padding: 0
+      margin-top: $searchBarHeight - $btnSize
+      // background-color: red
+
+      .menu-icon
+        $iconSize = size(25px)
+        width: $iconSize
+        height: @width
+        background-image: url('./assets/icon.drawer-menu.png')
 
     .search-btn
-      width: $btnSize
+      $size = size(35px)
+      width: $size
       height: @width
       min-width: @width
       min-height: @height
-      margin: 0
-      background-color: yellow
+      padding: 0
+      margin: $searchBarHeight - $size 0 0 0
+      // background-color: yellow
 
     .search-bar
-      width: s("calc(100% - %s - %s)", $btnSize, $btnSize)
-      background-color: blue
+      width: s("calc(100% - %s - %s)", $searchBarHeight, $searchBarHeight)
+      // background-color: blue
+
+      .search-input-ctnr
+        $color = rgba(255, 255, 255, .8)
+        margin: 0
+        color: $color
+
+        label
+        input
+          font-weight: 100
+          color: inherit
+
+        label
+          font-size: size(14px)
+
+        &.md-input-focused
+          label
+            font-size: size(12px)
+
+          input
+            color: $color !important
+            -webkit-text-fill-color: #fff !important
+
+        &:after
+          background-color: $color
 </style>
 
 <script lang="ts" src="./index.ts"></script>

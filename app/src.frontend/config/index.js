@@ -6,7 +6,9 @@
  */
 
 const path = require('path')
+
 const appConfig = require('../../config')
+const port = require('../../../port.json')
 
 const feRoot = path.resolve(__dirname, '../')
 const projectRoot = path.resolve(__dirname, '../../../')
@@ -24,8 +26,8 @@ module.exports = {
     // App 名称.
     APPNAME: JSON.stringify(appConfig.appInfo.name),
 
-    // 静态资源版本号, 取代后端模板版本号.
-    STATIC_RANDOM_VERSION: JSON.stringify(randomStr()),
+    // 开发服务器端口.
+    DEV_SERVER_PORT: JSON.stringify(port.server.dev),
 
     // App 版本号.
     VERSION: JSON.stringify(appConfig.appInfo.version)

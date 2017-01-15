@@ -20,6 +20,13 @@ require('vue-material/dist/vue-material.css')
 Vue.use(VueRouter)
 Vue.use(VueMaterial)
 
+Vue['material'].registerTheme('default', {
+  primary: 'indigo',
+  accent: 'red',
+  warn: 'red',
+  background: 'teal'
+})
+
 // Root instance.
 const Root = new Vue({
   el: '#app-main',
@@ -58,7 +65,7 @@ const Root = new Vue({
   }
 })
 
-// Definition goes below.
+/* Definition goes below. */
 
 /**
  * Router Configuration.

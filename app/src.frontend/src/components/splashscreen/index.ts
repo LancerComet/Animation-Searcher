@@ -16,7 +16,9 @@ const SPLASH_SCREEN_SHOWING_TIME = 2500
  */
 @Component
 export default class SplashScreen extends Vue {
-  isShown = true  // Whether SplashScreen is shown.
+  // Whether SplashScreen is shown.
+  isShown = true
+
   showAvatar = false
   showText = false
   showProgress = false

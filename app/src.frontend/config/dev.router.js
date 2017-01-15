@@ -15,10 +15,15 @@
 const DEV_SERVER_PORT = require('../../../port.json').server.dev
 
 class RouterConfig {
-  constructor (url) {
-    this.target = `http://localhost:${DEV_SERVER_PORT}${url}`
+  constructor (srcUrl, targetUrl) {
+    if (srcUrl !== targetUrl) {
+      const rewriterObj = {}
+      rewriterObj[srcUrl] = targetUrl
+      this.pathRewrite = rewriterObj
+    }
+
+    this.target = `http://localhost:${DEV_SERVER_PORT}`
     this.changeOrigin = true
-    this.pathRewrite = {}
     this.onProxyReq = function (proxyRes, req, res) {}
     this.onProxyRes = function (proxyRes, req, res) {}
   }
@@ -29,11 +34,13 @@ const config = {};
 // 同目标路由转发.
 (function () {
   const proxyURLS = [
-    '/api/v2/greeting-bg'
+    '/api/v2/greeting-bg',
+    '/libs/**',
+    '/images/**'
   ]
 
   proxyURLS.forEach(url => {
-    config[url] = new RouterConfig(url)
+    config[url] = new RouterConfig(url, url)
   })
 })();
 
@@ -44,16 +51,16 @@ const config = {};
   ]
 
   specialRoles.forEach(item => {
-    config[item.origin] = new RouterConfig(item.target)
+    config[item.origin] = new RouterConfig(item.origin, item.target)
   })
 })()
 
 module.exports = config
 
 // Cookie domain rewriter.
-function cookieRewriter (proxyRes) {
-  if (!proxyRes.headers['set-cookie']) return
-  proxyRes.headers['set-cookie'].forEach((value, index) => {
-    proxyRes.headers['set-cookie'][index] = value.replace(/domain=.+/, 'domain=localhost')
-  })
-}
+// function cookieRewriter (proxyRes) {
+//   if (!proxyRes.headers['set-cookie']) return
+//   proxyRes.headers['set-cookie'].forEach((value, index) => {
+//     proxyRes.headers['set-cookie'][index] = value.replace(/domain=.+/, 'domain=localhost')
+//   })
+// }
