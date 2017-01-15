@@ -18,6 +18,7 @@ const app = express()
 
 const appConfig = require('./app/config')
 const service = require('./app/src.server/services')
+const middlewares = require('./app/src.server/middlewares')
 
 module.exports = ({ port, env }) => {
   // Setup port.
@@ -25,7 +26,7 @@ module.exports = ({ port, env }) => {
 
   // View Engine.
   app.set('views', path.join(__dirname, 'views'))
-  app.set('view engine', 'jade')
+  app.set('view engine', 'ejs')
 
   // Setup http server.
   const http = require('http').Server(app)
@@ -56,6 +57,10 @@ module.exports = ({ port, env }) => {
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(cookieParser())
   app.use(express.static(path.join(__dirname, 'public')))
+
+  if (process.env.NODE_ENV === 'development') {
+    app.use(middlewares.urlNormalizer)
+  }
 
   // Router.
   const routes = require('./app/src.server/routes')

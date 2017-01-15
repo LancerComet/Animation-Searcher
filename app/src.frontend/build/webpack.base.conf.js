@@ -80,7 +80,7 @@ module.exports = {
       },
       {
         test: /\.tsx?$/,
-        loader: 'ts',
+        loader: 'vue-ts-loader',
         include: projectIncludePaths
       },
       {

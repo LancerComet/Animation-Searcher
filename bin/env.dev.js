@@ -2,7 +2,7 @@
  * Application entry.
  * Development enviroument.
  */
-const port = require('../package.json').port.dev
+const port = require('../port.json').server.dev
 process.env.NODE_ENV = 'development'
 
 const APP_CONFIG = {

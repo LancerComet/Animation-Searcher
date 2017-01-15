@@ -1,6 +1,6 @@
 <template lang="jade">
   transition(name="move-out-top")
-    div.splash-screen-ctnr.w-100.h-100.dp-flex.flex-column.flex-center-v.flex-center-h.p-fixed(v-show="isShown")
+    div.splash-screen-ctnr.w-100.h-100.dp-flex.flex-column.flex-center-v.flex-center-h.p-fixed.p-zero(v-show="isShown")
       div.avatar-img.circle.over-hidden.a-scale-in-ease(:class="{ active: showAvatar }")
         img(ref="avatarImg", src="../../assets/images/avatar.lancercomet.jpg")
       p.text.a-move-in-top(:class="{ active: showText }") # Carry Your World #
@@ -38,4 +38,4 @@
         visibility: visible
 </style>
 
-<script src="./index.ts"></script>
+<script lang="ts" src="./index.ts"></script>

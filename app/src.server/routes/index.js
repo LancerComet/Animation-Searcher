@@ -23,7 +23,7 @@ apiRouter.post('/search/:site', controllers.search)
 
 // Router registration.
 router.get('/', controllers.index)
-router.use('/api/v2/', apiRouter)
+router.use('/api/v2', apiRouter)
 
 // 404-to-index redirection.
 router.get('*', controllers.index)

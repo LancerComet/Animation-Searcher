@@ -12,7 +12,7 @@
  */
 'use strict'
 
-const DEV_SERVER_PORT = require('../../../package.json').port.dev
+const DEV_SERVER_PORT = require('../../../port.json').server.dev
 
 class RouterConfig {
   constructor (url) {

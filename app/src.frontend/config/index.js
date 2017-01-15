@@ -47,7 +47,7 @@ module.exports = {
   // 构建环境配置.
   build: {
     env: require(path.resolve(__dirname, './envs/env.prod.js')),
-    index: projectRoot + '/views/index.html',
+    index: projectRoot + '/views/index.ejs',
     assetsRoot: projectRoot + '/public',
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',

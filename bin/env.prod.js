@@ -2,7 +2,7 @@
  * Application entry.
  * Production enviroument.
  */
-const port = require('../package.json').port.prod
+const port = require('../port.json').server.prod
 process.env.NODE_ENV = 'production'
 
 const APP_CONFIG = {

@@ -42,7 +42,8 @@ exports.cssLoaders = function (options) {
     sass: generateLoaders(['css', 'sass?indentedSyntax']),
     scss: generateLoaders(['css', 'sass']),
     stylus: generateLoaders(['css', 'stylus']),
-    styl: generateLoaders(['css', 'stylus'])
+    styl: generateLoaders(['css', 'stylus']),
+    ts: 'vue-ts-loader'
   }
 }
 
