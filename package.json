@@ -37,6 +37,8 @@
     "es6-object-assign": "^1.0.3",
     "es6-promise": "^3.3.1",
     "express": "^4.14.0",
+    "fastclick": "^1.0.6",
+    "ismobilejs": "^0.4.0",
     "jade": "^1.11.0",
     "moment": "^2.17.1",
     "morgan": "~1.6.1",

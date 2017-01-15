@@ -1,5 +1,5 @@
 <template lang="jade">
-  div.search-bar-ctnr.w-100.p-absolute.m-auto(:class="searchBarStatus")
+  div.search-bar-ctnr.w-100.p-absolute.m-auto.ts-dot-4(:class="searchBarStatus")
     form(name="search-form" @submit.prevent="search")
       div.dp-flex.flex-row.flex-center-h.m-auto
         //- Drawer Menu Button.
@@ -7,9 +7,9 @@
           div.menu-icon.m-auto(ref="drawerMenuBtn")
 
         //- Search bar.
-        div.search-bar
-          md-input-container.search-input-ctnr
-            label(v-text="quote")
+        div.search-bar(@click="switchToSearchingMode")
+          md-input-container.search-input-ctnr.ts-dot-8
+            label.w-100.text-hidden(v-text="quote")
             md-input.search-input(v-model="keyword")
 
         //- Search Button.
@@ -34,6 +34,16 @@
 
       @media screen and (min-height: size(600px))
         top: 35%
+
+    &.searching
+      @media screen and (max-height: size(480px))
+        top: 5%
+
+      @media screen and (min-height: size(481px)) and (max-height: size(660px))
+        top: 6%
+
+      @media screen and (min-height: size(600px))
+        top: 8%
 
     $searchBarHeight = size(48px)
 

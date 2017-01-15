@@ -1,5 +1,10 @@
 @import "./def.styl"
 
+// Transition.
+for item in 2 4 6 8
+  .ts-dot-{item}
+    transition: all $cubicEase (item * .1)s
+
 // Animation.
 @keyframes move-in-top
   from

@@ -18,7 +18,7 @@ const { getRandomQuote } = require('../../../../config/index.js')
 @Component
 export default class SearchBar extends Vue {
   // Status of search bar. Different gives different position.
-  currentStatus: 'greeting' | 'searching' = 'greeting'
+  searchBarStatus: 'greeting' | 'searching' = 'greeting'
 
   // If drawer menu button is actived.
   drawerMenuActived = false
@@ -64,7 +64,7 @@ export default class SearchBar extends Vue {
    * @returns void
    */
   switchToSearchingMode () {
-    this.currentStatus = 'searching'
+    this.searchBarStatus = 'searching'
   }
 
   /**

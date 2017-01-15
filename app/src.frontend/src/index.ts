@@ -14,18 +14,33 @@ import * as components from './components'
 import router from './router'
 import EventBus from './event-bus'
 
+import * as isMobile from 'ismobilejs'
+
 require('./style/index.styl')
 require('vue-material/dist/vue-material.css')
 
 Vue.use(VueRouter)
 Vue.use(VueMaterial)
 
+// Setup Vue-Material Theme.
 Vue['material'].registerTheme('default', {
   primary: 'indigo',
   accent: 'red',
   warn: 'red',
   background: 'teal'
 })
+
+// Mobile device detection.
+// And activate fastclick.
+if (isMobile.phone || isMobile.tablet) {
+  require.ensure(['fastclick'], function () {
+    if (process.env.NODE_ENV === 'development') {
+      console.info('[Info] Mobile device, fastclick is going to be activated.')
+    }
+    const FastClick = require('fastclick')
+    FastClick.attach(document.body)
+  })
+}
 
 // Root instance.
 const Root = new Vue({
