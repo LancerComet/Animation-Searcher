@@ -16,8 +16,9 @@ const apiRouter = express.Router()
 const controllers = require('../controllers')
 
 // API router.
+// Prefix: /api/v2/
 apiRouter.get('/change-log', controllers.changeLog)
-apiRouter.get('/bg-url', controllers.bgUrl)
+apiRouter.get('/greeting-bg', controllers.bgUrl)
 apiRouter.post('/search/:site', controllers.search)
 
 // Router registration.

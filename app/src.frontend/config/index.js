@@ -34,7 +34,7 @@ module.exports = {
   // 开发环境配置.
   dev: {
     env: require(path.resolve(__dirname, './envs/env.dev.js')),
-    port: 8080,
+    port: 3001,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: require(path.resolve(__dirname, './dev.router.js')),

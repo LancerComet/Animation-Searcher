@@ -73,7 +73,12 @@ Vue.use(VueMaterial)
 // Router config.
 const router = new VueRouter({
   mode: 'history',
-  routes: []
+  routes: [
+    { path: '/' },
+    { path: '/drawer' },
+    { path: '/greeting', component: components.GreetingImg },
+    { path: '/search', component: components.Main }
+  ]
 })
 
 // Root instance.
@@ -83,7 +88,8 @@ const Root = new Vue({
   router,
 
   components: {
-    SplashScreen: components.SplashScreen
+    SplashScreen: components.SplashScreen,
+    SearchBar: components.SearchBar
   },
 
   methods: {

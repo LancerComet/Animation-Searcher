@@ -28,7 +28,9 @@ const config = {};
 
 // 同目标路由转发.
 (function () {
-  const proxyURLS = []
+  const proxyURLS = [
+    '/api/v2/greeting-bg'
+  ]
 
   proxyURLS.forEach(url => {
     config[url] = new RouterConfig(url)

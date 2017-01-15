@@ -13,7 +13,7 @@ V3.0 is rebuilt by using Vue 2.0.
     - Startup server in dev-env: `npm run server-dev`, running at port `3000`.
     - Startup server in prod-env: `npm start` or `npm run server-prod`, running at port `50001`.
   - Commands for frontend:
-    - Startup frontend dev-server: `npm run fe-dev`, running at port `8080`
+    - Startup frontend dev-server: `npm run fe-dev`, running at port `3001`
     - Build frontend files: `npm run fe-build`
 
 ## License
