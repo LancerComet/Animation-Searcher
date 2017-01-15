@@ -36,6 +36,17 @@
 
       &.active
         visibility: visible
+
+    @media screen and (max-width: size(320px))
+      $avatarSize = size(250px)
+
+      .avatar-img
+        width: $avatarSize
+        height: @width
+
+      .progress
+        width: $avatarSize
+
 </style>
 
 <script lang="ts" src="./index.ts"></script>

@@ -4,13 +4,23 @@
  */
 
 import { Vue, Component, Lifecycle } from 'av-ts'
+
 import { getGreetingImgUrl } from '../../api'
 import { xhrErrorHandler } from '../../utils'
 
+const appConfig = require('../../../../config')
 const devPort = require('../../../../../port.json').server.dev
 
+/**
+ * Greeting Image Component.
+ *
+ * @export
+ * @class GreetingImg
+ * @extends {Vue}
+ */
 @Component
 export default class GreetingImg extends Vue {
+  APPNAME = appConfig.appInfo.name
   bgUrl = ''
 
   /**

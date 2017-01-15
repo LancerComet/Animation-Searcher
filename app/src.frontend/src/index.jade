@@ -16,8 +16,9 @@ html(lang="zh-cmn-Hans")
     meta(name="author" content="LancerComet")
     meta(name="version" content="#{VERSION}")
     meta(name="robots" content="index,follow")
-    link(rel="shortcut icon" type="image/ico" href="/favicon.ico")
     base(href="/")
+    link(rel="shortcut icon" type="image/ico" href="/favicon.ico")
+    link(rel="stylesheet", href="libs/fontello/css/fontello.css")
     each css in htmlWebpackPlugin.files.css
       link(href="#{css}", rel="stylesheet")
 
@@ -25,7 +26,7 @@ html(lang="zh-cmn-Hans")
     div.animation-searcher
       main#app-main.w-100.h-100.p-fixed.p-zero
         router-view
-        search-bar
+        search-bar.p-relative
         splash-screen
 
       div.script-requirement
