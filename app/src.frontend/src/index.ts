@@ -9,10 +9,10 @@
 import * as Vue from 'vue'
 import * as VueRouter from 'vue-router'
 import * as VueMaterial from 'vue-material'
+import VueEvents from 'vue-events'
 
 import * as components from './components'
 import router from './router'
-import EventBus from './event-bus'
 
 import * as isMobile from 'ismobilejs'
 
@@ -21,6 +21,7 @@ require('vue-material/dist/vue-material.css')
 
 Vue.use(VueRouter)
 Vue.use(VueMaterial)
+Vue.use(VueEvents)
 
 // Setup Vue-Material Theme.
 Vue['material'].registerTheme('default', {
@@ -49,6 +50,7 @@ const Root = new Vue({
   router,
 
   components: {
+    Drawer: components.Drawer,
     SplashScreen: components.SplashScreen,
     SearchBar: components.SearchBar
   },
@@ -60,7 +62,7 @@ const Root = new Vue({
      * @return void
      */
     init () {
-      EventBus.$emit('SplashScreen:Process', () => {
+      this.$events.$emit('SplashScreen:Process', () => {
         this['goToGreeting']()  // Navigate to '/greeting'
       })
     },

@@ -16,6 +16,6 @@ module.exports = function () {
     'Carry Your World.',
     '用自己的喜好压制别人的风格.'
   ]
-  const randomIndex = Math.ceil(Math.random() * texts.length)
+  const randomIndex = Math.floor(Math.random() * texts.length)
   return texts[randomIndex]
 }

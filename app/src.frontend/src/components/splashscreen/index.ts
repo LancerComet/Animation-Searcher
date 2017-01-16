@@ -3,7 +3,6 @@
  * # Carry Your World #
  */
 import { Vue, Component, Lifecycle } from 'av-ts'
-import EventBus from '../../event-bus'
 
 const SPLASH_SCREEN_SHOWING_TIME = 2500
 
@@ -54,9 +53,9 @@ export default class SplashScreen extends Vue {
    * Register events on EventBus.
    */
   registerEvent () {
-    EventBus.$on('SplashScreen:Show', this.show)
-    EventBus.$on('SplashScreen:Hide', this.hide)
-    EventBus.$on('SplashScreen:Process', this.process)
+    this.$events.$on('SplashScreen:Show', this.show)
+    this.$events.$on('SplashScreen:Hide', this.hide)
+    this.$events.$on('SplashScreen:Process', this.process)
   }
 
   /**

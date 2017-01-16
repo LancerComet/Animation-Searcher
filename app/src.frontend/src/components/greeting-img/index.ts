@@ -19,8 +19,14 @@ const appConfig = require('../../../../config')
  */
 @Component
 export default class GreetingImg extends Vue {
+  // Name of application.
   APPNAME = appConfig.appInfo.name
+
+  // Background image url.
   bgUrl = ''
+
+  // Whether create this component.
+  isExisted = true
 
   /**
    * Get backgroumd image url from server.
@@ -60,7 +66,27 @@ export default class GreetingImg extends Vue {
     this.bgUrl = url
   }
 
+  /**
+   * Time to get out.
+   *
+   * @returns void
+   */
+  exit () {
+    if (process.env.NODE_ENV === 'development') {
+      console.info('[Info] Greeting image is exited.')
+    }
+    this.isExisted = false
+  }
+
+  /**
+   * Register events when component created.
+   */
+  registerEvents () {
+    this.$events.$on('GreetingImg:Exit', this.exit)
+  }
+
   @Lifecycle created () {
+    this.registerEvents()
     this.getGreetingImgUrl()
   }
 }

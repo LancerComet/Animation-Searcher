@@ -1,22 +1,23 @@
 <template lang="jade">
-  div.greeting-img-ctnr.full-size
-    //- Background image.
-    div.img.full-size.bg-cover.bg-center(role="img", :style="{'background-image': 'url(' + bgUrl + ')'}")
-    div.bg-merge.full-size
+  transition(name="fade-out")
+    div.greeting-img-ctnr.full-size(v-if="isExisted")
+      //- Background image.
+      div.img.full-size.bg-cover.bg-center(role="img", :style="{'background-image': 'url(' + bgUrl + ')'}")
+      div.bg-merge.full-size
 
-    //- Title.
-    div.title-ctnr.full-size.dp-flex.flex-center-v.flex-center-h.t-center.dp-flex.flex-column
-      h1.title
-        span Hello, I'm {{APPNAME}}
-        br
-        small
-          span.v-middle Just have a try.
-          i.icon-emo-happy.v-middle(style="margin-left: 10px")
+      //- Title.
+      div.title-ctnr.full-size.dp-flex.flex-center-v.flex-center-h.t-center.dp-flex.flex-column
+        h1.title
+          span Hello, I'm {{APPNAME}}
+          br
+          small
+            span.v-middle Just have a try.
+            i.icon-emo-happy.v-middle(style="margin-left: 10px")
 
-      div.powered-by-btn-ctnr.p-absolute
-        md-button.powered-by-btn
-          i.icon-emo-devil(style="margin: 0 5px")
-          span POWERED BY...
+        div.powered-by-btn-ctnr.p-absolute
+          md-button.powered-by-btn
+            i.icon-emo-devil(style="margin: 0 5px")
+            span POWERED BY...
 </template>
 
 <style lang="stylus" scoped>

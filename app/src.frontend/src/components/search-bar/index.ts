@@ -3,7 +3,7 @@
  * # Carry Your World #
  */
 
-import { Vue, Component, Watch } from 'av-ts'
+import { Vue, Component, Watch, Lifecycle } from 'av-ts'
 import { imageXAnimation } from '../../utils'
 
 const { getRandomQuote } = require('../../../../config/index.js')
@@ -21,7 +21,7 @@ export default class SearchBar extends Vue {
   searchBarStatus: 'greeting' | 'searching' = 'greeting'
 
   // If drawer menu button is actived.
-  drawerMenuActived = false
+  drawerMenuActived: boolean = false
 
   // Search keyword.
   keyword = ''
@@ -41,8 +41,19 @@ export default class SearchBar extends Vue {
    * @returns void
    */
   toggleDrawerMenuStatus () {
-    console.log('clicked')
-    this.drawerMenuActived = !this.drawerMenuActived
+    this.setDrawerMenuState(!this.drawerMenuActived)
+  }
+
+  /**
+   * Set drawer menu button status.
+   *
+   * @param {boolean} isToArrow
+   */
+  setDrawerMenuState (isToArrow: boolean) {
+    if (process.env.NODE_ENV === 'development') {
+      console.info('[Info] setDrawerState: ', isToArrow)
+    }
+    this.drawerMenuActived = isToArrow
   }
 
   /**
@@ -50,12 +61,12 @@ export default class SearchBar extends Vue {
    */
   @Watch('drawerMenuActived')
   handler (toArrow) {
-    console.log(toArrow)
     imageXAnimation(<HTMLElement> this.$refs['drawerMenuBtn'],
       toArrow
         ? { startPosition: 0, width: 27.75, step: 16, interval: 17 }
         : { startPosition: 444, endPosition: 0, width: 27.75, step: 16, interval: 17 }
     )
+    this.$events.$emit('Drawer:Toggle', toArrow ? 'open' : 'close')
   }
 
   /**
@@ -65,13 +76,29 @@ export default class SearchBar extends Vue {
    */
   switchToSearchingMode () {
     this.searchBarStatus = 'searching'
+    this.$events.$emit('GreetingImg:Exit')
   }
 
   /**
    * Search data submit function.
+   *
+   * @return void
    */
   search () {
 
+  }
+
+  /**
+   * Register events.
+   *
+   * @return void
+   */
+  registerEvents () {
+    this.$events.$on('DrawerMenu:SetState', this.setDrawerMenuState)
+  }
+
+  @Lifecycle created () {
+    this.registerEvents()
   }
 
 }
