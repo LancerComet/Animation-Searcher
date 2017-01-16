@@ -1,7 +1,22 @@
 import { Vue, Component, Lifecycle } from 'av-ts'
 
+const appConfig = require('../../../../config/app-config')
+
 @Component
 export default class Drawer extends Vue {
+  // Application info.
+  appInfo: Object = appConfig.appInfo
+
+  get thisYear () {
+    return new Date().getFullYear()
+  }
+
+  // Control buttons.
+  ctrlBtns = [
+    { label: '关闭侧栏', icon: 'keyboard_arrow_left', onClick: this.toggleDrawer.bind(this, 'close') },
+    { label: 'Github', icon: 'code', onClick: () => window.open('https://github.com/LancerComet/Animation-Searcher') }
+  ]
+
   /**
    * Would be triggered when drawer is open.
    *
