@@ -1,6 +1,6 @@
 <template lang="jade">
-  transition(name="fade-out")
-    div.greeting-img-ctnr.full-size(v-if="isExisted")
+  transition(name="fade")
+    div.greeting-img-ctnr.full-size
       //- Background image.
       div.img.full-size.bg-cover.bg-center(role="img", :style="{'background-image': 'url(' + bgUrl + ')'}")
       div.bg-merge.full-size

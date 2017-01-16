@@ -12,7 +12,7 @@
 
   .splash-screen-ctnr
     background-color: #fff
-    color: rgb(105, 141, 218)
+    color: #698dda
     animation-duration: .9s !important
 
     $avatarSize = size(300px)
@@ -20,7 +20,7 @@
     .avatar-img
       width: $avatarSize
       height: @width
-      background-color: rgb(105, 141, 218)
+      background-color: #698dda
 
     .text
       animation-delay: .4s

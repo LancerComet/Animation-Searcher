@@ -6,9 +6,13 @@
 import { Vue, Component, Lifecycle } from 'av-ts'
 
 import { getGreetingImgUrl } from '../../api'
-import { xhrErrorHandler } from '../../utils'
+import { changeMetaColor, xhrErrorHandler } from '../../utils'
 
+// App config.
 const appConfig = require('../../../../config')
+
+// Default Image Path.
+const DEFAULT_IMAGE = '/images/splash-screen/White-Album-Yuki.jpg'
 
 /**
  * Greeting Image Component.
@@ -36,9 +40,7 @@ export default class GreetingImg extends Vue {
   getGreetingImgUrl () {
     return new Promise((resolve, reject) => {
       getGreetingImgUrl().then(xhrObject => {
-        if (xhrObject.statusText !== 'OK') {
-          return xhrError(`${xhrObject.status} - ${xhrObject.statusText}`)
-        }
+        if (xhrObject.statusText !== 'OK') { return xhrError(`${xhrObject.status} - ${xhrObject.statusText}`) }
         const url = xhrObject.data.data
         this.setImage(url)
       }).catch(err => {
@@ -49,20 +51,11 @@ export default class GreetingImg extends Vue {
   }
 
   /**
-   * Default image url.
-   *
-   * @returns {string}
-   */
-  get DEFAULT_IMAGE () {
-    return '/images/splash-screen/White-Album-Yuki.jpg'
-  }
-
-  /**
    * Set background image url.
    *
    * @param {string} [url=DEFAULT_IMAGE]
    */
-  setImage (url = this.DEFAULT_IMAGE) {
+  setImage (url = DEFAULT_IMAGE) {
     this.bgUrl = url
   }
 
@@ -79,15 +72,19 @@ export default class GreetingImg extends Vue {
   }
 
   /**
-   * Register events when component created.
+   * Change theme color in meta.
+   *
+   * @returns void
    */
-  registerEvents () {
-    this.$events.$on('GreetingImg:Exit', this.exit)
+  changeMetaColor () {
+    const color = '#372346'
+    changeMetaColor(color)
   }
 
+
   @Lifecycle created () {
-    this.registerEvents()
     this.getGreetingImgUrl()
+    this.changeMetaColor()
   }
 }
 

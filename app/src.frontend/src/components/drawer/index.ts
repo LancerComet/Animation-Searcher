@@ -1,4 +1,12 @@
+/**
+ * Drawer By LancerComet at 01:18, 2017.01.17.
+ * # Carry Your World #
+ * ---
+ * Drawer Component.
+ */
+
 import { Vue, Component, Lifecycle } from 'av-ts'
+import * as PS from 'perfect-scrollbar'
 
 const appConfig = require('../../../../config/app-config')
 
@@ -7,9 +15,8 @@ export default class Drawer extends Vue {
   // Application info.
   appInfo: Object = appConfig.appInfo
 
-  get thisYear () {
-    return new Date().getFullYear()
-  }
+  // This year.
+  thisYear = new Date().getFullYear()
 
   // Control buttons.
   ctrlBtns = [
@@ -63,7 +70,26 @@ export default class Drawer extends Vue {
     this.$events.$on('Drawer:Toggle', this.toggleDrawer)
   }
 
+  /**
+   * Setup perfect scrollbar.
+   *
+   * @return void
+   */
+  initScrollbar () {
+    const ctrlBtnCtnr = <HTMLElement> this.$refs['ctrlBtnCtnr']
+    PS.initialize(ctrlBtnCtnr, {
+      wheelSpeed: 2,
+      wheelPropagation: true,
+      minScrollbarLength: 20
+    })
+  }
+
+
   @Lifecycle created () {
     this.registerEvents()
+  }
+
+  @Lifecycle mounted () {
+    this.initScrollbar()
   }
 }

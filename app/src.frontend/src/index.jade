@@ -8,16 +8,17 @@ html(lang="zh-cmn-Hans")
     meta(charset="utf-8")
     meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
     meta(name="renderer", content="webkit")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(name="viewport", content="width=device-width, initial-scale=1, user-scalable=no")
     title #{APPNAME}
-    meta(http-equiv="Cache-Control" content="no-siteapp")
-    meta(name="keywords" content="动画,漫画,动漫,音乐,二次元,宅,资源,搜索,下载,Animation,ACG,Download,Searcher,Resource,LancerComet")
-    meta(name="description" content="Carry Your World.")
-    meta(name="author" content="LancerComet")
-    meta(name="version" content="#{VERSION}")
-    meta(name="robots" content="index,follow")
+    meta(http-equiv="Cache-Control", content="no-siteapp")
+    meta(name="keywords", content="动画,漫画,动漫,音乐,二次元,宅,资源,搜索,下载,Animation,ACG,Download,Searcher,Resource,LancerComet")
+    meta(name="description", content="Carry Your World.")
+    meta(name="author", content="LancerComet")
+    meta(name="version", content="#{VERSION}")
+    meta(name="robots", content="index,follow")
+    meta#theme-color-meta(name="theme-color", content="#372346")
     base(href="/")
-    link(rel="shortcut icon" type="image/ico" href="/favicon.ico")
+    link(rel="shortcut icon", type="image/ico", href="/favicon.ico")
     link(rel="stylesheet", href="/libs/material-icon/material-icons.css")
     link(rel="stylesheet", href="/libs/fontello/css/fontello.css")
     each css in htmlWebpackPlugin.files.css
@@ -26,7 +27,7 @@ html(lang="zh-cmn-Hans")
   body
     div.animation-searcher
       main#app-main.w-100.h-100.p-fixed.p-zero
-        router-view
+        router-view.w-100.h-100.p-absolute.p-zero
         search-bar.p-relative
         drawer
         splash-screen

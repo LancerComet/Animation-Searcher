@@ -18,6 +18,7 @@ import * as isMobile from 'ismobilejs'
 
 require('./style/index.styl')
 require('vue-material/dist/vue-material.css')
+require('perfect-scrollbar/dist/css/perfect-scrollbar.css')
 
 Vue.use(VueRouter)
 Vue.use(VueMaterial)
@@ -57,24 +58,33 @@ const Root = new Vue({
 
   methods: {
     /**
+     * Process SplashScreen.
+     *
+     * @return void
+     */
+    processSplashScreen () {
+      this.$events.$emit('SplashScreen:Process', this['goToGreeting'])
+    },
+
+    /**
+     * Go to '/greeting' page.
+     * Only when path is root path.
+     *
+     * @return void
+     */
+    goToGreeting () {
+      const path = this.$route.path
+      path === '/' && this.$router.push('/greeting')
+    },
+
+    /**
      * Initialization.
      *
      * @return void
      */
     init () {
-      this.$events.$emit('SplashScreen:Process', () => {
-        this['goToGreeting']()  // Navigate to '/greeting'
-      })
+      this['processSplashScreen']()
     },
-
-    /**
-     * Go to '/greeting' page.
-     *
-     * @return void
-     */
-    goToGreeting () {
-      this.$router.push('/greeting')
-    }
   },
 
   mounted () {

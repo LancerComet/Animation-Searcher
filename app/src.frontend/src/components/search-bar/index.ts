@@ -3,7 +3,7 @@
  * # Carry Your World #
  */
 
-import { Vue, Component, Watch, Lifecycle } from 'av-ts'
+import { Vue, Component, Data, Watch, Lifecycle } from 'av-ts'
 import { imageXAnimation } from '../../utils'
 
 const { getRandomQuote } = require('../../../../config/index.js')
@@ -26,14 +26,8 @@ export default class SearchBar extends Vue {
   // Search keyword.
   keyword = ''
 
-  /**
-   * Search input random quote.
-   *
-   * @returns {string}
-   */
-  get quote () : string {
-    return getRandomQuote()
-  }
+  // Random quote.
+  quote = getRandomQuote()
 
   /**
    * Toggle drawer menu button status.
@@ -57,16 +51,22 @@ export default class SearchBar extends Vue {
   }
 
   /**
-   * Watch "drawerMenuActived" to change button status.
+   * Switch to Searching Mode and go Index.
+   *
+   * @return void
    */
-  @Watch('drawerMenuActived')
-  handler (toArrow) {
-    imageXAnimation(<HTMLElement> this.$refs['drawerMenuBtn'],
-      toArrow
-        ? { startPosition: 0, width: 27.75, step: 16, interval: 17 }
-        : { startPosition: 444, endPosition: 0, width: 27.75, step: 16, interval: 17 }
-    )
-    this.$events.$emit('Drawer:Toggle', toArrow ? 'open' : 'close')
+  switchToSearchingMode () {
+    this.switchMode('searching')
+    this.goIndex()
+  }
+
+  /**
+   * Go to '/'.
+   *
+   * @return void
+   */
+  goIndex () {
+    this.$router.push('/main')
   }
 
   /**
@@ -74,9 +74,8 @@ export default class SearchBar extends Vue {
    *
    * @returns void
    */
-  switchToSearchingMode () {
-    this.searchBarStatus = 'searching'
-    this.$events.$emit('GreetingImg:Exit')
+  switchMode (mode: 'searching' | 'greeting') {
+    this.searchBarStatus = mode
   }
 
   /**
@@ -97,8 +96,36 @@ export default class SearchBar extends Vue {
     this.$events.$on('DrawerMenu:SetState', this.setDrawerMenuState)
   }
 
+  /**
+   * Created event.
+   */
   @Lifecycle created () {
     this.registerEvents()
+  }
+
+  /**
+   * Watch "drawerMenuActived" to change button status.
+   */
+  @Watch('drawerMenuActived')
+  watchDrawerMenuActived (toArrow) {
+    imageXAnimation(<HTMLElement> this.$refs['drawerMenuBtn'],
+      toArrow
+        ? { startPosition: 0, width: 27.75, step: 16, interval: 17 }
+        : { startPosition: 444, endPosition: 0, width: 27.75, step: 16, interval: 17 }
+    )
+    this.$events.$emit('Drawer:Toggle', toArrow ? 'open' : 'close')
+  }
+
+  /**
+   * Watch "this.$route" to emulate "beforeRouteEnter" function.
+   * Because I don't know how to use "Component.register" in av-ts to create "@beforeRouteEnter".
+   *
+   * Watch path and switch between greeting and searching mode.
+   */
+  @Watch('$route')
+  watchRoute ($route) {
+    const path = $route.path
+    this.switchMode(path === '/greeting' ? 'greeting' : 'searching')
   }
 
 }
