@@ -34,7 +34,7 @@ const config = {};
 // 同目标路由转发.
 (function () {
   const proxyURLS = [
-    '/api/v2/greeting-bg',
+    '/api/v2/**',
     '/libs/**',
     '/images/**'
   ]

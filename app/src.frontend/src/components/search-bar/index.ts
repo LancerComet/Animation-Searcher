@@ -4,9 +4,11 @@
  */
 
 import { Vue, Component, Data, Watch, Lifecycle } from 'av-ts'
-import { imageXAnimation } from '../../utils'
+import axios from 'axios'
 
-const { getRandomQuote } = require('../../../../config/index.js')
+import { imageXAnimation, xhrErrorHandler } from '../../utils'
+
+const { getRandomQuote, sites } = require('../../../../config/index.js')
 
 /**
  * SearchBar Component.
@@ -84,7 +86,21 @@ export default class SearchBar extends Vue {
    * @return void
    */
   search () {
-
+    if (process.env.NODE_ENV === 'development') {
+      console.info('[Info] Search: ', this.keyword)
+    }
+    if (!this.keyword) { return }
+    this.$events.$emit('Search:Start')
+    Object.keys(sites).forEach(siteName => {
+      const url = '/api/v2/search/' + sites[siteName].codeName
+      axios.post(url, { keywords: this.keyword })
+        .then(data => {
+          console.info(data)
+        })
+        .catch(error => {
+          xhrErrorHandler('搜索请求', error)
+        })
+    })
   }
 
   /**

@@ -41,8 +41,11 @@ const dmhyCookie = {
 
   function cookieRenew () {
     if (!dmhyCookie.allowVisit) { return }
+    if (process.env.NODE_ENV === 'development') {
+      console.info('[Info] DMHY module is going to fetch cookie...')
+    }
     superAgent
-      .get(appConfig.site[MODULE_NAME].url)
+      .get(appConfig.sites[MODULE_NAME].url)
       .set('Accept', 'text/html, application/xhtml+xml, */*')
       .set('Accept-Encoding', 'gzip, deflate')
       .set('Accept-Language', 'zh-CN')
@@ -55,6 +58,9 @@ const dmhyCookie = {
           return console.log('[Caution] DMHY Cookie updating failed.')
         }
         dmhyCookie.cookie = res.header['set-cookie']
+        if (process.env.NODE_ENV === 'development') {
+          console.info('[Info] DMHY cookie is updated.')
+        }
       })
   }
 })()
@@ -70,7 +76,7 @@ module.exports = function (req, res, next) {
     requestingLink = req.body.link
   } else {
     keywords = req.body.keywords
-    requestingLink = appConfig.site[MODULE_NAME].url + '/topics/list?keyword=' + encodeURIComponent(keywords)
+    requestingLink = appConfig.sites[MODULE_NAME].url + '/topics/list?keyword=' + encodeURIComponent(keywords)
   }
 
   superAgent
@@ -86,7 +92,7 @@ module.exports = function (req, res, next) {
       dmhyCookie.allowVisit = true
 
       if (err) {
-        const status = 500
+        const status = err.status
         return res.status(status).json(new ResponseJSON(status, '动漫花园搜索粗错，又炸了吧~ (╯╬▔皿▔)╯︵┻━┻'))
       }
 
@@ -113,7 +119,8 @@ module.exports = function (req, res, next) {
       let pageLinkHTML = $topicList.siblings('.nav_title').html()
 
       if (pageLinkHTML) {
-        pageLinkHTML = pageLinkHTML.trim()
+        pageLinkHTML = pageLinkHTML.trim().replace('&#x53EA;&#x6709;&#x4E00;&#x9801;', '第1页')
+
         const currentPage = pageLinkHTML.match(/第\d/)
           .map(item => item.replace('第', ''))
           .map(item => parseInt(item, 10))[0]
@@ -136,7 +143,7 @@ module.exports = function (req, res, next) {
         $resultTr.each(function () {
           const resultItem = {
             title: $(this).find('td.title a').text(),
-            link: appConfig.site.dmhy.url + $(this).find('td.title a').attr('href'),
+            link: appConfig.sites.dmhy.url + $(this).find('td.title a').attr('href'),
             magnet: $(this).children('td').eq(3).children('a').attr('href'),
             date: $(this).children('td').eq(0).children('span').text()
           }

@@ -7,7 +7,7 @@
  *
  * 程序引用了 Socket.io, 为了正常使用其内置路由 '/socket.io', 已不再使用 Express 框架的 www 文件, 转在 app.js 中直接设置服务器.
  */
-
+const debug = require('debug')('animation-searcher')
 const express = require('express')
 const path = require('path')
 const favicon = require('serve-favicon')
@@ -36,6 +36,7 @@ module.exports = ({ port, env }) => {
     console.log(`Version: ${appConfig.appInfo.version}`)
     console.log('--------------------')
     console.log(`Server is running at port ${app.get('port')} in ${env} enviroument.\n`)
+    debug('listening')
   })
 
   // WebSocket Service Initialization.
