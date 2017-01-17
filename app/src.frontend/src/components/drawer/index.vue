@@ -14,9 +14,15 @@
           p.supporting-text Version: {{appInfo.version}} | {{appInfo.codeName}}
 
         div.ctrl-btn-ctnr.p-relative(ref="ctrlBtnCtnr")
-          md-button.ctrl-btn.w-100(v-for="item in ctrlBtns", @click="item.onClick")
-            i.material-icons.v-middle(v-text="item.icon")
-            span.v-middle(v-text="item.label")
+          template(v-for="item in ctrlBtns")
+            md-button.ctrl-btn.w-100(v-if="!item.link", @click="item.onClick")
+              i.material-icons.v-middle(v-text="item.icon")
+              span.v-middle(v-text="item.label")
+
+            router-link.router-link.md-button.w-100(v-else, :to="item.link")
+              md-button.ctrl-btn.w-100(@click="closeDrawer")
+                i.material-icons.v-middle(v-text="item.icon")
+                span.v-middle(v-text="item.label")
 
         div.w-100.p-fixed.version-info
           p
@@ -76,6 +82,10 @@
 
           i
             margin-right: size(5px)
+
+        .router-link
+          padding: 0
+          margin: 0
 
       .version-info
         height: $bottomPadding

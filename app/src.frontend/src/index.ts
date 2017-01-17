@@ -65,18 +65,7 @@ const Root = new Vue({
      * @return void
      */
     processSplashScreen () {
-      this.$events.$emit('SplashScreen:Process', this['goToGreeting'])
-    },
-
-    /**
-     * Go to '/greeting' page.
-     * Only when path is root path.
-     *
-     * @return void
-     */
-    goToGreeting () {
-      const path = this.$route.path
-      path === '/' && this.$router.push('/greeting')
+      this.$events.$emit('SplashScreen:Process')
     },
 
     /**

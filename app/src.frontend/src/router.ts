@@ -5,8 +5,8 @@ import * as VueRouter from 'vue-router'
 
 // Router config.
 const routerConfig = [
-  { path: '/main', componentPath: './components/main/index', component: null },
-  { path: '/greeting', componentPath: './components/greeting-img/index', component: null }
+  { path: '/', alias: '/greeting', componentPath: './components/greeting-img/index', component: null },
+  { path: '/main', componentPath: './components/main/index', component: null }
 ]
 
 const router = new VueRouter({

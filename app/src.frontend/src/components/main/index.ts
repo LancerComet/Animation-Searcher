@@ -10,7 +10,14 @@ import { changeMetaColor } from '../../utils'
 
 @Component
 export default class Main extends Vue {
-  @Lifecycle mounted () {
+  /**
+   * Change meta color.
+   */
+  changeMetaColor () {
     changeMetaColor('#54b1e3')
+  }
+
+  @Lifecycle mounted () {
+    this.changeMetaColor()
   }
 }

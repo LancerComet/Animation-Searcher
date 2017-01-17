@@ -20,7 +20,8 @@ export default class Drawer extends Vue {
 
   // Control buttons.
   ctrlBtns = [
-    { label: '关闭侧栏', icon: 'keyboard_arrow_left', onClick: this.toggleDrawer.bind(this, 'close') },
+    { label: '关闭侧栏', icon: 'keyboard_arrow_left', onClick: this.closeDrawer },
+    { label: '欢迎界面', icon: 'tag_faces', link: '/' },
     { label: 'Github', icon: 'code', onClick: () => window.open('https://github.com/LancerComet/Animation-Searcher') }
   ]
 
@@ -46,6 +47,15 @@ export default class Drawer extends Vue {
       console.log('Drawer is closed.')
     }
     this.$events.$emit('DrawerMenu:SetState', false)  // "DrawerMenu:SetState" receives true or false.
+  }
+
+  /**
+   * Close Drawer.
+   *
+   * @returns void
+   */
+  closeDrawer () {
+    this.toggleDrawer('close')
   }
 
   /**

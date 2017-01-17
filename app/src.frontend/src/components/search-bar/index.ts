@@ -125,7 +125,7 @@ export default class SearchBar extends Vue {
   @Watch('$route')
   watchRoute ($route) {
     const path = $route.path
-    this.switchMode(path === '/greeting' ? 'greeting' : 'searching')
+    this.switchMode(path === '/' ? 'greeting' : 'searching')
   }
 
 }
