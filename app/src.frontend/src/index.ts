@@ -1,3 +1,5 @@
+/// <reference path="./types/index.d.ts" />
+
 /**
  * Animation Searcher V3.0 By LancerComet at 15:47, 2017.01.13.
  * # Carry Your World #
